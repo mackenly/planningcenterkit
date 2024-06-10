@@ -69,7 +69,7 @@ jobs:
             - name: Configure npm for public registry
               run: |
                 npm config set registry https://registry.npmjs.org/
-                echo "@mackenly:registry=https://npm.pkg.github.com" > ~/.npmrc
+                echo "@mackenly:registry=https://registry.npmjs.org/" > .npmrc
                 echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
