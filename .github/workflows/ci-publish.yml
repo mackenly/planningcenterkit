@@ -68,9 +68,11 @@ jobs:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Configure npm for public registry
               run: |
-                npm config set registry https://registry.npmjs.org/
                 echo "@mackenly:registry=https://registry.npmjs.org/" > .npmrc
                 echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+                npm config set registry https://registry.npmjs.org/
+                npm adduser --registry https://registry.npmjs.org/ --scope=@mackenly --always-auth
+                npm whoami --registry https://registry.npmjs.org/
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish to npm
