@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest';
-import { run } from './index';
+import { PcoPeople, PcoClientConfigOAuth, PcoClientConfigPersonalAccessToken } from './index';
 
-test('run', () => {
-    expect(run()).toBe('Hello World');
-});
+test('PcoPeople is exported', () => {
+    expect(PcoPeople).toBeDefined();
+    }
+);
