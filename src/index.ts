@@ -1,6 +1,5 @@
-export function run() {
-    console.log('Hello World');
-    return 'Hello World';
-}
+import { PcoPeople } from './modules/people';
+import { PcoClientConfigOAuth, PcoClientConfigPersonalAccessToken } from './client';
 
-export default run;
+export { PcoPeople };
+export type { PcoClientConfigOAuth, PcoClientConfigPersonalAccessToken };
