@@ -58,8 +58,8 @@ jobs:
                   minor-wording: 'bump-minor,adds,Adds,new'
                   major-wording: 'bump-major,MAJOR,removes,Removes,delete,Delete'
                   patch-wording: 'bump-patch,fixes,Fixes,bugfix,Bugfix,patch,hotfix,Hotfix'
-                  preid: ${{ contains(github.ref, 'beta') && 'beta' }}
-                  tag-suffix: ${{ contains(github.ref, 'beta') && '-beta' }}
+                  preid: ${{ contains(github.ref, 'beta') && 'beta' || '' }}
+                  tag-suffix: ${{ contains(github.ref, 'beta') && '-beta' || '' }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Publish to GitHub Packages
