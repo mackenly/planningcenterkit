@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - main
-            - '*beta*'
         tags:
             - 'v*'
         paths-ignore:
@@ -36,7 +35,7 @@ jobs:
     publish:
         needs: build-and-test
         runs-on: ubuntu-latest
-        if : github.repository_owner == 'mackenly' && (github.ref == 'refs/heads/main' || contains(github.ref, 'beta'))
+        if : github.repository_owner == 'mackenly' && github.ref == 'refs/heads/main'
         permissions:
             contents: write
             packages: write
@@ -58,8 +57,6 @@ jobs:
                   minor-wording: 'bump-minor,adds,Adds,new'
                   major-wording: 'bump-major,MAJOR,removes,Removes,delete,Delete'
                   patch-wording: 'bump-patch,fixes,Fixes,bugfix,Bugfix,patch,hotfix,Hotfix'
-                  preid: ${{ contains(github.ref, 'beta') && 'beta' || '' }}
-                  tag-suffix: ${{ contains(github.ref, 'beta') && '-beta' || '' }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Publish to GitHub Packages
@@ -77,12 +74,7 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish to npm
-              run: |
-                if [[ "${{ github.ref }}" == *beta* ]]; then
-                  npm publish --access public --tag beta
-                else
-                  npm publish --access public --tag latest
-                fi
+              run: npm publish --access public --tag latest
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Create GitHub Release
@@ -94,4 +86,4 @@ jobs:
                   release_name: Release ${{ steps.versioning.outputs.newTag }}
                   body: ${{ steps.versioning.outputs.changelog }}
                   draft: false
-                  prerelease: ${{ contains(github.ref, 'beta') }}
+                  prerelease: false
