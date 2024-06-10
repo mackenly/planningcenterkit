@@ -90,8 +90,8 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  tag_name: ${{ steps.versioning.outputs.tag }}
-                  release_name: Release ${{ steps.versioning.outputs.tag }}
+                  tag_name: ${{ steps.versioning.outputs.newTag }}
+                  release_name: Release ${{ steps.versioning.outputs.newTag }}
                   body: ${{ steps.versioning.outputs.changelog }}
                   draft: false
                   prerelease: ${{ contains(github.ref, 'beta') }}
