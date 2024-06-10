@@ -36,7 +36,7 @@ jobs:
     publish:
         needs: build-and-test
         runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/main' || contains(github.ref, 'beta')
+        if : github.repository_owner == 'mackenly' && (github.ref == 'refs/heads/main' || contains(github.ref, 'beta'))
         permissions:
             contents: write
             packages: write
@@ -69,15 +69,16 @@ jobs:
             - name: Configure npm for public registry
               run: |
                 npm config set registry https://registry.npmjs.org/
-                echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+                echo "@mackenly:registry=https://npm.pkg.github.com" > ~/.npmrc
+                echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish to npm
               run: |
                 if [[ "${{ github.ref }}" == *beta* ]]; then
-                  npm publish --tag beta
+                  npm publish --access public --tag beta
                 else
-                  npm publish --tag latest
+                  npm publish --access public --tag latest
                 fi
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
