@@ -35,7 +35,7 @@ jobs:
     publish:
         needs: build-and-test
         runs-on: ubuntu-latest
-        if : github.repository_owner == 'mackenly' && github.ref == 'refs/heads/main'
+        if: github.repository_owner == 'mackenly' && github.ref == 'refs/heads/main'
         permissions:
             contents: write
             packages: write
@@ -70,7 +70,7 @@ jobs:
                   scope: '@mackenly'
             - name: Configure npm registry
               run: |
-                echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+                  echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Publish to npm
@@ -78,12 +78,12 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Create GitHub Release
-              uses: actions/create-release@v1
+              uses: ncipollo/release-action@v1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  tag_name: ${{ steps.versioning.outputs.newTag }}
-                  release_name: Release ${{ steps.versioning.outputs.newTag }}
-                  body: ${{ steps.versioning.outputs.changelog }}
+                  tag: ${{ steps.versioning.outputs.newTag }}
+                  name: ${{ steps.versioning.outputs.newTag }}
+                  generateReleaseNotes: true
                   draft: false
                   prerelease: false
