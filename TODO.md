@@ -1,0 +1,6 @@
+- TODO: Build enums for queries
+- TODO: Build out various modules w/types for responses
+- TODO: Build a better way to do error handling
+- TODO: Determine a testing strategy - vitest sounds good
+- TODO: Determine how to package and distribute this as an NPM package
+- TODO: Create an accompanying UI kit using this package for React (favoring Next.js)
