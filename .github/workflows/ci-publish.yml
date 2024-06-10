@@ -1,0 +1,79 @@
+name: Node.js CI/CD
+
+on:
+    push:
+        branches:
+            - main
+            - '*beta*'
+        tags:
+            - 'v*'
+        paths-ignore:
+            - '**/*.md'
+    pull_request:
+        branches:
+            - main
+        paths-ignore:
+            - '**/*.md'
+    workflow_dispatch:
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [18.x, 20.x, 22.x]
+
+        steps:
+            - uses: actions/checkout@v4
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - run: npm install
+            - run: npm run build
+            - run: npm test
+
+    publish:
+        needs: build-and-test
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main' || contains(github.ref, 'beta')
+        permissions:
+            contents: write
+            packages: write
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20.x'
+                  registry-url: 'https://npm.pkg.github.com'
+                  scope: '@${{ github.repository_owner }}'
+            - run: npm ci
+            - run: npm run build
+            - name: Bump version and tag commit
+              id: versioning
+              uses: phips28/gh-action-bump-version@master
+              with:
+                  tag-prefix: 'v'
+                  minor-wording: 'bump-minor,adds,Adds,new'
+                  major-wording: 'bump-major,MAJOR,removes,Removes,delete,Delete'
+                  patch-wording: 'bump-patch,fixes,Fixes,bugfix,Bugfix,patch,hotfix,Hotfix'
+                  preid: ${{ contains(github.ref, 'beta') && 'beta' }}
+                  tag-suffix: ${{ contains(github.ref, 'beta') && '-beta' }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Publish to GitHub Packages
+              run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Configure npm for public registry
+              run: npm config set registry https://registry.npmjs.org/
+            - name: Publish to npm
+              run: |
+                if [[ "${{ github.ref }}" == *beta* ]]; then
+                  npm publish --tag beta
+                else
+                  npm publish --tag latest
+                fi
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

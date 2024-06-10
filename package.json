@@ -1,0 +1,42 @@
+{
+  "name": "@mackenly/planningcenterkit",
+  "version": "0.0.0",
+  "description": "Unofficial ORM for Planning Center Online",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mackenly/planningcenterkit.git"
+  },
+  "keywords": [
+    "planning",
+    "center",
+    "pco",
+    "planning",
+    "center",
+    "online",
+    "church",
+    "management",
+    "system",
+    "church"
+  ],
+  "author": "mackenly",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/mackenly/planningcenterkit/issues"
+  },
+  "homepage": "https://github.com/mackenly/planningcenterkit#readme",
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}
