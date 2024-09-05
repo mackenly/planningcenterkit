@@ -89,6 +89,9 @@ export abstract class PcoClient {
             this.authentication = `Basic ${btoa(config.appId + ':' + config.personalAccessToken)}`;
             this.customApiBaseUrl = config.customApiBaseUrl ?? false;
         } else if ('token' in config) {
+            if (!PcoClient.validateToken(config.token)) {
+                throw new Error('Invalid token format');
+            }
             this.authentication = `Bearer ${config.token}`;
             this.customApiBaseUrl = config.customApiBaseUrl ?? false;
         } else {
@@ -130,6 +133,19 @@ export abstract class PcoClient {
     protected static formatDate(date: Date): string {
         // Nothing much going on here, but may be useful in the future
         return date.toISOString();
+    }
+
+    /**
+     * Validate a token to ensure it is in the correct format
+     * There's two formats for tokens:
+     * Legacy: 64 hexadecimal digits, 0-9 and a-f
+     * Current: prefix like pco_tok_, followed by 72 hexadecimal digits; 80 characters total
+     * TODO: Remove support for legacy tokens by 2025. It should end September 23, 2024
+     * @param token Token to validate
+     * @returns Whether the token is valid
+     */
+    protected static validateToken(token: string): boolean {
+        return token.match(/^[0-9a-f]{64}$|^pco_tok_[0-9a-f]{72}$/) !== null;
     }
 
     /**

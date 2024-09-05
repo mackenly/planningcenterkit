@@ -54,9 +54,9 @@ jobs:
               uses: phips28/gh-action-bump-version@master
               with:
                   tag-prefix: 'v'
+                  patch-wording: 'bump-patch,fixes,Fixes,bugfix,Bugfix,patch,hotfix,Hotfix'
                   minor-wording: 'bump-minor,adds,Adds,new'
                   major-wording: 'bump-major,MAJOR,removes,Removes,delete,Delete'
-                  patch-wording: 'bump-patch,fixes,Fixes,bugfix,Bugfix,patch,hotfix,Hotfix'
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Publish to GitHub Packages
