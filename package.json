@@ -1,6 +1,6 @@
 {
   "name": "@mackenly/planningcenterkit",
-  "version": "0.4.35",
+  "version": "0.4.36",
   "description": "Unofficial ORM for Planning Center Online",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
