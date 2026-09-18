@@ -27,6 +27,9 @@
   ],
   "author": "mackenly",
   "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
