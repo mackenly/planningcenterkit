@@ -39,6 +39,7 @@ jobs:
         permissions:
             contents: write
             packages: write
+            id-token: write
         steps:
             - uses: actions/checkout@v4
             - name: Set up Node.js
@@ -68,15 +69,9 @@ jobs:
                   node-version: '24.x'
                   registry-url: 'https://registry.npmjs.org/'
                   scope: '@mackenly'
-            - name: Configure npm registry
-              run: |
-                  echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            # Authenticates via npm trusted publishing (OIDC); no NPM_TOKEN needed
             - name: Publish to npm
               run: npm publish --access public --tag latest
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
             - name: Create GitHub Release
               uses: ncipollo/release-action@v1
               env:
