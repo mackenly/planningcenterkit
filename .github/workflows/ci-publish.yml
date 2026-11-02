@@ -71,7 +71,7 @@ jobs:
                   scope: '@mackenly'
             # Authenticates via npm trusted publishing (OIDC); no NPM_TOKEN needed
             - name: Publish to npm
-              run: npm publish --access public --tag latest
+              run: npm publish --access public --tag latest --provenance
             - name: Create GitHub Release
               uses: ncipollo/release-action@v1
               env:
