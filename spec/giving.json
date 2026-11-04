@@ -1,0 +1,2831 @@
+{
+  "basePath": "/giving/v2",
+  "entry": "organization",
+  "openApi": true,
+  "product": "giving",
+  "slug": "giving",
+  "title": "Planning Center Giving",
+  "version": "2019-10-18",
+  "vertices": {
+    "batch": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": "Used to commit an in progress batch.",
+          "name": "commit",
+          "path": "/giving/v2/batches/{batch_id}/commit"
+        }
+      ],
+      "attributes": [
+        {
+          "description": "The date and time that a batch was committed at. If it's `null`, the batch is still in progress or updating. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "committed_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The date and time at which a batch was created. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A brief description of what a batch is for. This is displayed in Giving to help differentiate different batches from one another. If no description is provided for a batch, it will be referred to as `Untitled batch` within Giving.",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": 1,
+          "name": "donations_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The unique identifier for a batch. For batches and batch groups, these identifiers are unique not across all of Planning Center, but only per organization. As such, it is possible to see the same batch `id` in multiple organizations.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "One of `in_progress`, `updating`, or `committed`. The `updating` state is temporary and describes a Batch that is currently being changed in some way (e.g. moving from `in_progress` to `committed`). Certain changes to Batches in this state (or their Donations) will be restricted until the Batch has finished updating.",
+          "example": "string",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The gross total of cents donated within the batch.",
+          "example": 1,
+          "name": "total_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency used to calculate `total_cents`.",
+          "example": "string",
+          "name": "total_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a batch was last updated. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Batch` is a collection of `Donation`s. When creating `Donation`'s via the API, you're required to put them in a `Batch`.\n\nWhen a `Batch` is first created, it's in the `in_progress` or \"uncommitted\" state. You can freely add/remove/modify `Donation`s in this `Batch` and they won't show up in a donor's donation history online, they won't appear in any donor statements issued by the Giving admin, and changes to these donations are not flagged in the system log. Think of it as a staging area for donations.\n\nWhen a `Batch` is committed (see more in the Actions section), all of the `Donation`s within it are also marked as \"committed\". At that point, they're visible to donors in their online history, and any further edits made to those `Donation`s are logged and visible to Giving admins.\n\nWith all of that in mind, you can use `Batch`es in one of two ways:\n\n  1.  Create an uncommitted `Batch`, add `Donation`s to it, then commit the `Batch`.\n  2.  Create a `Batch` with a least one donation, commit it, then add more `Donation`s to it.\n\nIn both cases, the end result is the same. The main difference is that option #2 does not provide you/other admins the opportunity to fix any mistakes before changes are logged and `Donation`s are made visible to donors. Any `Donation`s added to a committed `Batch` will automatically be committed as well. Note, batches can't be committed until they have at least one donation.\n\nWhichever route you decide to take, it's helpful to make use of the `Batch`'s description to help differentiate these groupings from each other and from other `Batch`es that the Giving admins might be creating on their own.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "batch_group",
+          "id": "batchgroup-batch-batch_group",
+          "name": "batch_group",
+          "path": "/giving/v2/batches/{batch_id}/batch_group",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "donation",
+          "id": "donation-batch-donations",
+          "name": "donations",
+          "path": "/giving/v2/batches/{batch_id}/donations",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-batch-owner",
+          "name": "owner",
+          "path": "/giving/v2/batches/{batch_id}/owner",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "batch_group",
+        "owner"
+      ],
+      "name": "Batch",
+      "orders": [
+        "committed_at",
+        "updated_at"
+      ],
+      "path": "/giving/v2/batches",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "description"
+        ],
+        "edges": [
+          "batch-batchgroup-batches",
+          "batch-organization-batches"
+        ],
+        "updateAssignable": [
+          "description"
+        ]
+      },
+      "queries": [
+        {
+          "name": "committed_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "BatchGroup",
+          "name": "batch_group",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "batch_group": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": "Used to commit an in progress batch group.",
+          "name": "commit",
+          "path": "/giving/v2/batch_groups/{batch_group_id}/commit"
+        }
+      ],
+      "attributes": [
+        {
+          "description": "Returns `true` if a batch group has been committed, and `false` if it hasn't.",
+          "example": true,
+          "name": "committed",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The date and time at which a batch group was created. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A brief description of what a batch group is for. This is displayed in Giving to help differentiate different batch groups from one another. If no description is provided for a batch group, it will be referred to as `Untitled group` within Giving.",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The unique identifier for a batch group. For batches and batch groups, these identifiers are unique not across all of Planning Center, but only per organization. As such, it is possible to see the same batch group `id` in multiple organizations.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "One of `uncommitted`, `updating`, or `committed`. The `updating` state is temporary and describes a BatchGroup that is currently being changed in some way (e.g. moving from `uncommitted` to `committed`). Certain changes to BatchGroups in this state (or their Batches or Donations) will be restricted until the BatchGroup has finished updating.",
+          "example": "string",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The gross total of cents donated within the batch group. Factors in all donations made to each batch within the group.",
+          "example": 1,
+          "name": "total_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency used to calculate `total_cents`.",
+          "example": "string",
+          "name": "total_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a batch group was last updated. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `BatchGroup` is a collection of `Batch`es.\n\n`BatchGroup`s are an optional way of organizing your `Batch`es into groups that share common characteristics. These are completely customizable and can be used in whatever way makes sense to your organization's workflow.\n\nSimilarly to `Batch`es, you can `commit` (see more in the Actions section) a `BatchGroup`, and by doing so, all `Batches` and `Donations` contained in the `BatchGroup` will also be committed.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "committed",
+            "in_progress"
+          ],
+          "head": "batch",
+          "id": "batch-batchgroup-batches",
+          "name": "batches",
+          "path": "/giving/v2/batch_groups/{batch_group_id}/batches",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-batchgroup-owner",
+          "name": "owner",
+          "path": "/giving/v2/batch_groups/{batch_group_id}/owner",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "owner"
+      ],
+      "name": "BatchGroup",
+      "orders": [
+        "updated_at"
+      ],
+      "path": "/giving/v2/batch_groups",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "description"
+        ],
+        "edges": [
+          "batchgroup-organization-batch_groups"
+        ],
+        "updateAssignable": [
+          "description"
+        ]
+      },
+      "queries": [
+        {
+          "name": "description",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "campus": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The address for a campus. Campus descriptions can be set via Accounts or the People API.",
+          "example": {},
+          "name": "address",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "object"
+        },
+        {
+          "description": "The unique identifier for a campus.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name for a campus. Campus names can be set via Accounts or the People API.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Campus` that has been added to your `Organization`.\n\n`Campus`es can be especially useful in filtering `Donation`s across the various locations of your `Organization`.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "donation",
+          "id": "donation-campus-donations",
+          "name": "donations",
+          "path": "/giving/v2/campuses/{campus_id}/donations",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Campus",
+      "orders": [],
+      "path": "/giving/v2/campuses",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "designation": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Required. The number of cents being donated to a designation's associated fund.",
+          "example": 1,
+          "name": "amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency of `amount_cents`. Set to the currency of the associated organization.",
+          "example": "string",
+          "name": "amount_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The fee amount distributed to a donation's designation in proportion to the amount of the designation. This should either be 0 or a negative integer.",
+          "example": 1,
+          "name": "fee_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The unique identifier for a designation.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Designation` conveys how much of a `Donation` goes to a particular `Fund`.\n\n`Designation` details are required when creating a `Donation`. If all of a `Donation` is going to a single `Fund`, it will only have one `Designation`. Similarly, to split a `Donation` between multiple `Fund`s, you can use multiple `Designation`s.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "fund",
+          "id": "fund-designation-fund",
+          "name": "fund",
+          "path": "/giving/v2/donations/{donation_id}/designations/{designation_id}/fund",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "fund"
+      ],
+      "name": "Designation",
+      "orders": [],
+      "path": "/giving/v2/donations/{donation_id}/designations",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Fund",
+          "name": "fund",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "designation_refund": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The number of cents being refunded.",
+          "example": 1,
+          "name": "amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency of `amount_cents`.",
+          "example": "string",
+          "name": "amount_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "fee_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The unique identifier for a designation refund.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A record that links a `Refund` with a `Designation`",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "designation",
+          "id": "designation-designationrefund-designation",
+          "name": "designation",
+          "path": "/giving/v2/donations/{donation_id}/refund/designation_refunds/{designation_refund_id}/designation",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "designation"
+      ],
+      "name": "DesignationRefund",
+      "orders": [],
+      "path": "/giving/v2/donations/{donation_id}/refund/designation_refunds",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Designation",
+          "name": "designation",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Fund",
+          "name": "fund",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "donation": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": "Used to refund a batch donation",
+          "name": "issue_refund",
+          "path": "/giving/v2/donations/{donation_id}/issue_refund"
+        },
+        {
+          "deprecated": false,
+          "description": "Used to mark a donation as failed",
+          "name": "mark_failed",
+          "path": "/giving/v2/donations/{donation_id}/mark_failed"
+        }
+      ],
+      "attributes": [
+        {
+          "description": "The number of cents being donated. Derived from the total of all of a donation's associated designation's `amount_cents` values.",
+          "example": 1,
+          "name": "amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency of `amount_cents`. Based on the organization's currency.",
+          "example": "USD",
+          "name": "amount_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "currency_abbreviation"
+        },
+        {
+          "description": "The date and time at which a donation was completely processed. For card and ACH donations processed by Stripe, this is the moment when the donation was marked as fully processed by Stripe. For committed batch donations, this is the moment that the batch was committed. For uncommitted batch donations, this should return `null`. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "completed_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The date and time at which a donation was created. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The fee to process a donation. This should either be 0 or a negative integer. For a donation processed by Giving via Stripe, this is the amount the associated organization paid Stripe to process it. For donations not processed by Stripe, this can be used to record fees from other systems. Note: while `amount_cents` is assigned via a donation's designations, `fee_cents` is set here, and used by Giving to distribute fees across all designations in proportion to the amount of each designation.",
+          "example": 1,
+          "name": "fee_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "A boolean indicating whether the donor chose to cover the Stripe processing fee for this donation.Note that `fee_covered` can only be true for donations processed through Stripe.",
+          "example": true,
+          "name": "fee_covered",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The currency of `fee_cents`. Based on the organization's currency.",
+          "example": "USD",
+          "name": "fee_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "currency_abbreviation"
+        },
+        {
+          "description": "The unique identifier for a donation.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "An optional short note donors can add to specify their gift intention (e.g. \"In memory of...\"). Only available when enabled by the church for specific funds.",
+          "example": "string",
+          "name": "memo",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "For cards, this is the card brand (eg Visa, Mastercard, etc). For checks and bank accounts, this is the bank name. For cash donations, this should be `null`.",
+          "example": "string",
+          "name": "payment_brand",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The channel through which the donation was created.\n\n Possible values: `api`, `sms`, `mobile_app`, `web`, `admin`, or `other`",
+          "example": "string",
+          "name": "payment_channel",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The check date for donations made by check. Example: `2000-01-01`",
+          "example": "2000-01-01",
+          "name": "payment_check_dated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date"
+        },
+        {
+          "description": "The check number for donations made by check.",
+          "example": 1,
+          "name": "payment_check_number",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The last 4 digits of a donation's payment method number. For cards, this is the last 4 digits of the card number. For bank accounts, this is the last 4 digits of the bank account number. For cash and check donations, this should be `null`. Note: In cases where we don't have all 4 digits on file, a `*` will be used to pad the number. For example: `*321`",
+          "example": "string",
+          "name": "payment_last4",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Required. The payment method used to make a donation.\n\nPossible values: `ach`, `cash`, `check`, or `card`",
+          "example": "value",
+          "name": "payment_method",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "For cards, this will be the card subtype. Will be `null` for other payment method types.\n\nPossible values: `credit`, `debit`, `prepaid`, or `unknown`",
+          "example": "value",
+          "name": "payment_method_sub",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "For Stripe donations, this is the payment status. For batch donations, `pending` means that the donation has not yet been committed, whereas `succeeded` refers to a committed donation.\n\nPossible values: `pending`, `succeeded`, or `failed`",
+          "example": "value",
+          "name": "payment_status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a donation was received. For card and ACH donations processed by Stripe, this is the moment when the donation was created in Giving. For batch donations, this is a customizable value that can be set via the Giving UI or API to any date. This allows for batch donations recieved on a previous day to be dated in the past, as well as for postdated checks to have a date in the future. It is important to ensure that this attribute is set accurately, as this is the date used to filter donations in the Giving admin UI. When creating new donations via the API, this attribute will default to the current date and time. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "received_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A boolean indicating whether this donation can be refunded via the API. Note that for some donations, this may be false, even though the donation _can_ be refunded in the UI.",
+          "example": true,
+          "name": "refundable",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Returns `true` if a donation has been refunded, or `false` if it hasn't.",
+          "example": true,
+          "name": "refunded",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The date and time at which a donation was last updated. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Donation` record corresponds to a gift given to an `Organization` at a particular point in time.\n\n`Donation`s are added by first associating them to a `Batch` of donations, and then committing the `Batch`. When adding a `Donation` to an already-committed `Batch`, the `Donation` will automatically be committed as well, and immediately added to the donor's online history.\n\n#### Totals\n\nOn donation collection endpoints, pass `?with_totals=true` to add the received total to the response `meta`. It respects any `where[...]` filters and is unaffected by pagination. Totals are not available when filtering by `fund_id`.\n\n- `received_total_amount_cents`: the total received, excluding refunded and failed donations.\n- `currency`: the currency of the totals above, based on the organization's currency.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "campus",
+          "id": "campus-donation-campus",
+          "name": "campus",
+          "path": "/giving/v2/donations/{donation_id}/campus",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "designation",
+          "id": "designation-donation-designations",
+          "name": "designations",
+          "path": "/giving/v2/donations/{donation_id}/designations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "label",
+          "id": "label-donation-labels",
+          "name": "labels",
+          "path": "/giving/v2/donations/{donation_id}/labels",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "note",
+          "id": "note-donation-note",
+          "name": "note",
+          "path": "/giving/v2/donations/{donation_id}/note",
+          "post": false,
+          "response": "resource"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "refund",
+          "id": "refund-donation-refund",
+          "name": "refund",
+          "path": "/giving/v2/donations/{donation_id}/refund",
+          "post": false,
+          "response": "resource"
+        }
+      ],
+      "includes": [
+        "designations",
+        "labels",
+        "note",
+        "refund"
+      ],
+      "name": "Donation",
+      "orders": [
+        "completed_at",
+        "created_at",
+        "received_at",
+        "updated_at"
+      ],
+      "path": "/giving/v2/donations",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "campus_id",
+          "fee_cents",
+          "payment_brand",
+          "payment_check_dated_at",
+          "payment_check_number",
+          "payment_last4",
+          "payment_method",
+          "payment_method_sub",
+          "payment_source_id",
+          "person_id",
+          "received_at"
+        ],
+        "edges": [
+          "donation-batch-donations"
+        ],
+        "updateAssignable": [
+          "campus_id",
+          "fee_cents",
+          "payment_brand",
+          "payment_check_dated_at",
+          "payment_check_number",
+          "payment_last4",
+          "payment_method",
+          "payment_method_sub",
+          "payment_source_id",
+          "person_id",
+          "received_at"
+        ]
+      },
+      "queries": [
+        {
+          "name": "completed_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "payment_method",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "received_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Batch",
+          "name": "batch",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Campus",
+          "name": "campus",
+          "note": "`Campus` is automatically assigned based on the donor's primary campus. If you pass an explicit value (a relationship reference or `null`), it will override the default.",
+          "polymorphic": null
+        },
+        {
+          "association": "to_many",
+          "graphType": "Labels",
+          "name": "labels",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "PaymentSource",
+          "name": "payment_source",
+          "note": "`PaymentSource` is required, but cannot be `planning_center`, as that is reserved for Donations created in the Planning Center Giving Web UI.",
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": "`Person` is _not_ required. If it is not present, the donation will show up in the web interface as having an \"Anonymous Donor,\" and the `person` relationship in the API will be `null`.",
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "RecurringDonation",
+          "name": "recurring_donation",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "donor_summary": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The number of donations this donor made over the requested date range, including refunded and failed donations.",
+          "example": 1,
+          "name": "donation_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The donor number for the person, if donor numbers are visible for this organization.",
+          "example": "string",
+          "name": "donor_number",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Timestamp of the donor's first donation ever (lifetime, not scoped to the requested date range).",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "first_donated",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The unique identifier for the donor (the person's id).",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The donor's full name.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The total received donation amount (in the currency's smallest unit) for this donor over the requested date range.",
+          "example": 1,
+          "name": "total_received_donation_amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The ISO currency code for the total (the organization's currency).",
+          "example": "USD",
+          "name": "total_received_donation_amount_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "currency_abbreviation"
+        }
+      ],
+      "collectionOnly": true,
+      "deprecated": false,
+      "description": "A donor and their aggregate giving to an `Organization` (name, donor number, total received, donation count, and first gift date), summed over a requested date range, defaulting to the last 30 days.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-donorsummary-joint_giver",
+          "name": "joint_giver",
+          "path": "/giving/v2/donor_summaries/{donor_summary_id}/joint_giver",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "joint_giver"
+      ],
+      "name": "DonorSummary",
+      "orders": [
+        "donation_count",
+        "first_donated",
+        "name",
+        "total_received_donation_amount_cents"
+      ],
+      "path": "/giving/v2/donor_summaries",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "campus_id",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "person_id",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "received_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "fund": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The hex color code that is used to help differentiate the fund from others in Giving, as determined by `color_identifier`.",
+          "example": "string",
+          "name": "color",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a fund was created. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "This attribute is set to `true` if a fund is the associated organization's default fund, or `false` if it isn't. More information on default funds can be found in our product documentation: https://help.planningcenter.com/en/138385-create-and-manage-funds.html",
+          "example": true,
+          "name": "default",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Boolean that tells if you if the fund can be deleted or not. Read more in our product documentation: https://help.planningcenter.com/en/138385-create-and-manage-funds.html",
+          "example": true,
+          "name": "deletable",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "A short description that describes how the money given to the fund will be used. 255 characters maximum.",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The unique identifier for a fund.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "If an organization's general ledger software tracks funds by code, this attribute can be used to store the fund's code for reference.",
+          "example": "string",
+          "name": "ledger_code",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Required. The name for a fund. Must be unique within the associated organization.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A URL-friendly identifier for a fund, derived from the fund name.",
+          "example": "string",
+          "name": "slug",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a fund was last updated. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Required. Controls how a fund is visible on Church Center. `everywhere` will allow anyone to donate to the fund on Church Center. `admin_only` will hide the fund on Church Center, allowing only permitted Giving Users to designate donations to it. `nowhere` will prevent donations from being designated to the fund altogether, while still displaying fund data in historical reports. `hidden` will hide the fund from the list of funds in the default Church Center donation form, but allow donors to give to it via direct link, or through Text-to-Give.\n\nPossible values: `everywhere`, `admin_only`, `nowhere`, or `hidden`",
+          "example": "value",
+          "name": "visibility",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Fund` is a way of tracking the intent of `Donation`.\n\nAll `Organization`s have a default `Fund` (usually named \"General\"), and creating additional `Fund`s allows donors to allocate their gift to a particular cause/effort.\n\nYou can query for the default `Fund` using the `default` param:\n```\nGET https://api.planningcenteronline.com/giving/v2/funds?where[default]=true\n```",
+      "edges": [],
+      "includes": [],
+      "name": "Fund",
+      "orders": [],
+      "path": "/giving/v2/funds",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "description",
+          "ledger_code",
+          "name",
+          "visibility"
+        ],
+        "edges": [
+          "fund-organization-funds"
+        ],
+        "updateAssignable": [
+          "description",
+          "ledger_code",
+          "name",
+          "visibility"
+        ]
+      },
+      "queries": [
+        {
+          "name": "default",
+          "ops": [],
+          "type": "boolean"
+        },
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "visibility",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "in_kind_donation": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The timestamp of when the acknowledgment letter was last sent for this in-kind donation. This value is set automatically and cannot be manually changed.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "acknowledgment_last_sent_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The date and time at which an in-kind donation was created.\n\nExample: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Required. Brief description of an in-kind donation gift.\n\nExample: `2019 Toyota Corolla (used)`",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Optional. Records whether any goods or services were exchanged for an in-kind donation.\n\nExample: `In exchange, a charity event ticket for $100 was provided.`",
+          "example": "string",
+          "name": "exchange_details",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Optional. The fair market value of an in-kind donation in cents. Must be greater than $0 and less than or equal to $21,000,000.",
+          "example": 1,
+          "name": "fair_market_value_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "USD",
+          "name": "fair_market_value_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "currency_abbreviation"
+        },
+        {
+          "description": "The unique identifier for an in-kind donation.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Required. The date an in-kind donation was received.\n\nFormat: `YYYY-MM-DD` (e.g. `2025-04-09`).",
+          "example": "2000-01-01",
+          "name": "received_on",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date"
+        },
+        {
+          "description": "The date and time at which an in-kind donation was last updated.\n\nExample: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Optional. The fair market for an in-kind donation which should be determined by donors and appraisers. Maximum 255 characters. Example: `Appraised by Bob Johnson CPA (123 Easy Street, Carlsbad CA 92008)`",
+          "example": "string",
+          "name": "valuation_details",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An `InKindDonation` record represents a non-cash gift given to an `Organization` at a specific time.\n\nThese include items like furniture, vehicles, services, or stocks. `InKindDonations` do not trigger\nacknowledgment letter emails via the API — these must be sent from the Giving Admin UI.\n\n[More info](https://help.planningcenter.com/en/138390-in-kind-donations.html)",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "campus",
+          "id": "campus-inkinddonation-campus",
+          "name": "campus",
+          "path": "/giving/v2/in_kind_donations/{in_kind_donation_id}/campus",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "fund",
+          "id": "fund-inkinddonation-fund",
+          "name": "fund",
+          "path": "/giving/v2/in_kind_donations/{in_kind_donation_id}/fund",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-inkinddonation-person",
+          "name": "person",
+          "path": "/giving/v2/in_kind_donations/{in_kind_donation_id}/person",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "campus",
+        "fund",
+        "person"
+      ],
+      "name": "InKindDonation",
+      "orders": [
+        "created_at",
+        "received_on",
+        "updated_at"
+      ],
+      "path": "/giving/v2/in_kind_donations",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "campus_id",
+          "description",
+          "exchange_details",
+          "fair_market_value_cents",
+          "fair_market_value_currency",
+          "fund_id",
+          "person_id",
+          "received_on",
+          "valuation_details"
+        ],
+        "edges": [
+          "inkinddonation-organization-in_kind_donations"
+        ],
+        "updateAssignable": [
+          "campus_id",
+          "description",
+          "exchange_details",
+          "fair_market_value_cents",
+          "fair_market_value_currency",
+          "fund_id",
+          "person_id",
+          "received_on",
+          "valuation_details"
+        ]
+      },
+      "queries": [
+        {
+          "name": "campus_id",
+          "ops": [],
+          "type": "integer"
+        },
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "fund_id",
+          "ops": [],
+          "type": "integer"
+        },
+        {
+          "name": "received_on",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Campus",
+          "name": "campus",
+          "note": "`Campus` is automatically assigned based on the donor's primary campus. If you pass an explicit value (a relationship reference or `null`), it will override the default.",
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Fund",
+          "name": "fund",
+          "note": "`Fund` is required.",
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": "`Person` is required.",
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "label": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The unique identifier for a label.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The label text itself. Made up solely of lowercase letters, numbers, and dashes. When creating or updating a label, the string you provide will be formatted automatically. For example: `My awesome label!` will be saved as `my-awesome-label`",
+          "example": "string",
+          "name": "slug",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Label` is a way for Admins to manage and categorize `Donation`s.\n\nMultiple `Label`s can be added for each `Donation`, and these will only be displayed in the Giving admin interface, so donors never see them.",
+      "edges": [],
+      "includes": [],
+      "name": "Label",
+      "orders": [],
+      "path": "/giving/v2/labels",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "slug"
+        ],
+        "edges": [
+          "label-organization-labels"
+        ],
+        "updateAssignable": [
+          "slug"
+        ]
+      },
+      "queries": [
+        {
+          "name": "slug",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "note": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "body",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Note` is a way for Giving Admins and Bookkeepers to communicate internally about a donation.\nNotes are only visible in the Giving admin interface, not shown to donors. Each `Donation` can only\nhave a single note associated with it.\n\nTo record notes from donors, consider using the [memo line feature](https://help.planningcenter.com/en/143011-manage-your-online-donation-form.html#UUID-0949cfc8-d262-e23a-0635-fa100ae331ba_section-id235309330415896-how-do-memo-lines-work-) instead.",
+      "edges": [],
+      "includes": [],
+      "name": "Note",
+      "orders": [],
+      "path": "/giving/v2/donations/{donation_id}/note",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [
+          "body"
+        ],
+        "edges": [
+          "note-donation-note"
+        ],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "organization": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The unique identifier for an organization.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name for an organization.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "`true` if this organization is accepting Text2Give donations, `false` otherwise.",
+          "example": true,
+          "name": "text2give_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The time zone for an organization.",
+          "example": "string",
+          "name": "time_zone",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The root level `Organization` record which serves as a link to `Donation`s, `People`, `Fund`s, etc.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "committed",
+            "in_progress"
+          ],
+          "head": "batch_group",
+          "id": "batchgroup-organization-batch_groups",
+          "name": "batch_groups",
+          "path": "/giving/v2/batch_groups",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "committed",
+            "in_progress"
+          ],
+          "head": "batch",
+          "id": "batch-organization-batches",
+          "name": "batches",
+          "path": "/giving/v2/batches",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "campus",
+          "id": "campus-organization-campuses",
+          "name": "campuses",
+          "path": "/giving/v2/campuses",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "succeeded"
+          ],
+          "head": "donation",
+          "id": "donation-organization-donations",
+          "name": "donations",
+          "path": "/giving/v2/donations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "has_joint_giver"
+          ],
+          "head": "donor_summary",
+          "id": "donorsummary-organization-donor_summaries",
+          "name": "donor_summaries",
+          "path": "/giving/v2/donor_summaries",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "fund",
+          "id": "fund-organization-funds",
+          "name": "funds",
+          "path": "/giving/v2/funds",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "in_kind_donation",
+          "id": "inkinddonation-organization-in_kind_donations",
+          "name": "in_kind_donations",
+          "path": "/giving/v2/in_kind_donations",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "label",
+          "id": "label-organization-labels",
+          "name": "labels",
+          "path": "/giving/v2/labels",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "payment_source",
+          "id": "paymentsource-organization-payment_sources",
+          "name": "payment_sources",
+          "path": "/giving/v2/payment_sources",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "has_donated"
+          ],
+          "head": "person",
+          "id": "person-organization-people",
+          "name": "people",
+          "path": "/giving/v2/people",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "pledge_campaign",
+          "id": "pledgecampaign-organization-pledge_campaigns",
+          "name": "pledge_campaigns",
+          "path": "/giving/v2/pledge_campaigns",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "recurring_donation",
+          "id": "recurringdonation-organization-recurring_donations",
+          "name": "recurring_donations",
+          "path": "/giving/v2/recurring_donations",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Organization",
+      "orders": [],
+      "path": "/giving/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "payment_method": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "For cards, this is the card brand (eg Visa, Mastercard, etc). For bank accounts, this is the bank name.",
+          "example": "string",
+          "name": "brand",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a payment method was created. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "For cards only. String representation of the expiration date in the `MM/YYYY` form (without leading zeros). Will be `null` for bank accounts.",
+          "example": "2000-01-01",
+          "name": "expiration",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date"
+        },
+        {
+          "description": "The unique identifier for a payment method.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The last 4 digits of the payment method's number. For cards, this is the last 4 digits of the card number. For bank accounts, this is the last 4 digits of the bank account number. Note: In cases where we don't have all 4 digits on file, a `*` will be used to pad the number. For example: `*321`",
+          "example": "string",
+          "name": "last4",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "For cards, either `credit`, `debit`, `prepaid`, or `unknown`. For bank accounts, either `checking` or `savings`.",
+          "example": "string",
+          "name": "method_subtype",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Determines whether or not the payment method is a card or bank account.\n\nPossible values: `card`, `us_bank_account`, or `au_becs_debit`",
+          "example": "value",
+          "name": "method_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a payment method was last updated. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "For bank accounts only. Will be `null` for cards.",
+          "example": true,
+          "name": "verified",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Stored `PaymentMethod` information (`card` or `bank_account`) used by donors to make online `Donation`s.\n\n`PaymentMethod` data is for informational purposes only and cannot be used to create charges through the API.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "recurring_donation",
+          "id": "recurringdonation-paymentmethod-recurring_donations",
+          "name": "recurring_donations",
+          "path": "/giving/v2/people/{person_id}/payment_methods/{payment_method_id}/recurring_donations",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "PaymentMethod",
+      "orders": [],
+      "path": "/giving/v2/people/{person_id}/payment_methods",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "payment_source": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The date and time at which a payment source was created. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The unique identifier for a payment source.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Required. The name of a payment source. Must be unique within the associated organization.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The status of the payment source. Can be either `active` or `archived`. `active` payment sources can be assigned to donations, while `archived` payment sources cannot. Payment sources are `active` by default upon creation. Archiving a payment source will keep all historical records intact and can be undone.\n\nPossible values: `active` or `archived`",
+          "example": "value",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a payment source was last updated. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A donation's `PaymentSource` refers to the platform it originated from.\n\n`Donation`s made through Giving will be assigned the built-in `PaymentSource` \"Planning Center\". `Donation`s made through external platforms (Square, Pushpay, ect.) can be assigned a `PaymentSource` identifying them as such.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "donation",
+          "id": "donation-paymentsource-donations",
+          "name": "donations",
+          "path": "/giving/v2/payment_sources/{payment_source_id}/donations",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "PaymentSource",
+      "orders": [],
+      "path": "/giving/v2/payment_sources",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "name",
+          "payment_source_type",
+          "status"
+        ],
+        "edges": [
+          "paymentsource-organization-payment_sources"
+        ],
+        "updateAssignable": [
+          "name",
+          "payment_source_type",
+          "status"
+        ]
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "person": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "An array of addresses for a person. Can be managed via People. Example:\n```\n  [\n    {\n      \"street_line_1\": \"2790 Gateway Rd\",\n      \"street_line_2\": \"\",\n      \"city\": \"Carlsbad\",\n      \"state\": \"CA\",\n      \"zip\": \"92009\",\n      \"location\": \"Home\",\n      \"primary\": true,\n      \"street\": \"2790 Gateway Rd\",\n      \"line_1\": \"2790 Gateway Rd\",\n      \"line_2\": \"Carlsbad, CA 92009\"\n    }\n  ]\n```",
+          "example": [],
+          "name": "addresses",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": "The donor number for a person, if applicable. See our product documentation for more information on [donor numbers](https://help.planningcenter.com/en/138370-donor-numbers.html#138370-donor-numbers).",
+          "example": 1,
+          "name": "donor_number",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "An array of email addresses for a person. Can be managed via People. Example:\n```\n  [\n    {\n      \"address\": \"support@planningcenter.com\",\n      \"location\": \"Home\",\n      \"blocked\": false,\n      \"primary\": true\n    }\n  ]\n```",
+          "example": [],
+          "name": "email_addresses",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": "Timestamp of a person's first donation or `null` if they have never donated.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "first_donated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A person's first name.",
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The unique identifier for a person.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "A person's last name.",
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The level of Giving access granted to a person. See our product documentation for more information on [permissions in Giving](https://help.planningcenter.com/en/140716-permissions-in-giving.html).\n\nPossible values: `administrator`, `reviewer`, `counter`, or `bookkeeper`",
+          "example": "string",
+          "name": "permissions",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "An array of phone numbers for a person. Can be managed via People. Example:\n```\n  [\n    {\n      \"number\": \"(123) 456-7890\",\n      \"carrier\": \"PC Mobile\",\n      \"location\": \"Mobile\",\n      \"primary\": true\n    }\n  ]\n```",
+          "example": [],
+          "name": "phone_numbers",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A Planning Center `Person` record that has been added to Giving.\n\nThe `Person` object in Planning Center is so crucial that we have an entire product dedicated to managing, keeping track of, editing, and creating these records and metadata around them. For additional info, take a look at the [Planning Center People API Docs](https://developer.planning.center/docs/#/apps/people).",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "committed",
+            "in_progress"
+          ],
+          "head": "batch_group",
+          "id": "batchgroup-person-batch_groups",
+          "name": "batch_groups",
+          "path": "/giving/v2/people/{person_id}/batch_groups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "committed",
+            "in_progress"
+          ],
+          "head": "batch",
+          "id": "batch-person-batches",
+          "name": "batches",
+          "path": "/giving/v2/people/{person_id}/batches",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "donation",
+          "id": "donation-person-donations",
+          "name": "donations",
+          "path": "/giving/v2/people/{person_id}/donations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "in_kind_donation",
+          "id": "inkinddonation-person-in_kind_donations",
+          "name": "in_kind_donations",
+          "path": "/giving/v2/people/{person_id}/in_kind_donations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "payment_method",
+          "id": "paymentmethod-person-payment_methods",
+          "name": "payment_methods",
+          "path": "/giving/v2/people/{person_id}/payment_methods",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "pledge",
+          "id": "pledge-person-pledges",
+          "name": "pledges",
+          "path": "/giving/v2/people/{person_id}/pledges",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "campus",
+          "id": "campus-person-primary_campus",
+          "name": "primary_campus",
+          "path": "/giving/v2/people/{person_id}/primary_campus",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "recurring_donation",
+          "id": "recurringdonation-person-recurring_donations",
+          "name": "recurring_donations",
+          "path": "/giving/v2/people/{person_id}/recurring_donations",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Person",
+      "orders": [],
+      "path": "/giving/v2/people",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": true,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": [
+          "donor_number"
+        ]
+      },
+      "queries": [
+        {
+          "name": "first_name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Campus",
+          "name": "primary_campus",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "pledge": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The amount pledged",
+          "example": 1,
+          "name": "amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "USD",
+          "name": "amount_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "currency_abbreviation"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The amount donated",
+          "example": 1,
+          "name": "donated_total_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The amount pledged by the joint giver, if in a joint giving unit",
+          "example": 1,
+          "name": "joint_giver_amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The amount donated by the joint giver, if in a joint giving unit",
+          "example": 1,
+          "name": "joint_giver_donated_total_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Pledge` made by a `Person` toward a particular `PledgeCampaign`.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-pledge-joint_giver",
+          "name": "joint_giver",
+          "path": "/giving/v2/people/{person_id}/pledges/{pledge_id}/joint_giver",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "pledge_campaign",
+          "id": "pledgecampaign-pledge-pledge_campaign",
+          "name": "pledge_campaign",
+          "path": "/giving/v2/people/{person_id}/pledges/{pledge_id}/pledge_campaign",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "joint_giver",
+        "pledge_campaign"
+      ],
+      "name": "Pledge",
+      "orders": [
+        "created_at",
+        "updated_at"
+      ],
+      "path": "/giving/v2/people/{person_id}/pledges",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "amount_cents",
+          "person_id",
+          "pledge_campaign_id"
+        ],
+        "edges": [
+          "pledge-organization-pledges",
+          "pledge-person-pledges"
+        ],
+        "updateAssignable": [
+          "amount_cents"
+        ]
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "PledgeCampaign",
+          "name": "pledge_campaign",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "pledge_campaign": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Optional. During the donation period of this campaign, the running total of donations will be tracked against this number",
+          "example": 1,
+          "name": "goal_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "USD",
+          "name": "goal_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "currency_abbreviation"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "received_total_from_pledges_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "received_total_outside_of_pledges_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "In addition to seeing their personal pledge progress within their donor profile, this option allows donors to see the the collective progress towards the campaign’s overall goal (if set).",
+          "example": true,
+          "name": "show_goal_in_church_center",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `PledgeCampaign` is a way to request and track long-terms commitments to a particular goal or project.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "fund",
+          "id": "fund-pledgecampaign-fund",
+          "name": "fund",
+          "path": "/giving/v2/pledge_campaigns/{pledge_campaign_id}/fund",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "pledge",
+          "id": "pledge-pledgecampaign-pledges",
+          "name": "pledges",
+          "path": "/giving/v2/pledge_campaigns/{pledge_campaign_id}/pledges",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "fund"
+      ],
+      "name": "PledgeCampaign",
+      "orders": [
+        "ends_at",
+        "starts_at"
+      ],
+      "path": "/giving/v2/pledge_campaigns",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "description",
+          "ends_at",
+          "fund_id",
+          "goal_cents",
+          "name",
+          "show_goal_in_church_center",
+          "starts_at"
+        ],
+        "edges": [
+          "pledgecampaign-organization-pledge_campaigns"
+        ],
+        "updateAssignable": [
+          "description",
+          "ends_at",
+          "fund_id",
+          "goal_cents",
+          "name",
+          "show_goal_in_church_center",
+          "starts_at"
+        ]
+      },
+      "queries": [
+        {
+          "name": "ends_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "fund_id",
+          "ops": [],
+          "type": "integer"
+        },
+        {
+          "name": "starts_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Fund",
+          "name": "fund",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "recurring_donation": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The number of cents scheduled to be donated.",
+          "example": 1,
+          "name": "amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency of `amount_cents`.",
+          "example": "USD",
+          "name": "amount_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "currency_abbreviation"
+        },
+        {
+          "description": "The date and time at which a recurring donation was created. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The unique identifier for a recurring donation.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The date and time that the last donation was made for a recurring donation. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "last_donation_received_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The date that the next donation will be made for a recurring donation. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "next_occurrence",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The date when the hold on a recurring donation with a status of `temporary_hold` will be released.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "release_hold_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "JSON representation of the billing schedule. See the repeatable Ruby gem for more details on the structure and meaning: https://github.com/molawson/repeatable#time-expressions",
+          "example": {
+            "day_in_month": {
+              "day": 1
+            }
+          },
+          "name": "schedule",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "repeatable_schedule"
+        },
+        {
+          "description": "Determines if a recurring donation is active or on hold, and if on hold, the kind of hold that has been placed on it.\n\nPossible values: `active`, `indefinite_hold` or `temporary_hold`.",
+          "example": "string",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a recurring donation was last updated. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `RecurringDonation` is represents a `Donation` that repeats on a set schedule (weekly, monthly, etc.)\n\nData for `RecurringDonation`s is read-only; they can not be created or edited through the API.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "recurring_donation_designation",
+          "id": "recurringdonationdesignation-recurringdonation-designations",
+          "name": "designations",
+          "path": "/giving/v2/recurring_donations/{recurring_donation_id}/designations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "payment_method",
+          "id": "paymentmethod-recurringdonation-payment_method",
+          "name": "payment_method",
+          "path": "/giving/v2/recurring_donations/{recurring_donation_id}/payment_method",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "designations"
+      ],
+      "name": "RecurringDonation",
+      "orders": [],
+      "path": "/giving/v2/recurring_donations",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "fund_id",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "recurring_donation_designation": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Required. The number of cents that will be donated to a recurring donation designation's associated fund.",
+          "example": 1,
+          "name": "amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency of `amount_cents`. Set to the currency of the associated organization.",
+          "example": "string",
+          "name": "amount_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The unique identifier for a recurring donation designation.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Much like a `Designation`, A `RecurringDonationDesignation` conveys how much of a `RecurringDonation` goes to a particular `Fund`.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "fund",
+          "id": "fund-recurringdonationdesignation-fund",
+          "name": "fund",
+          "path": "/giving/v2/recurring_donations/{recurring_donation_id}/designations/{recurring_donation_designation_id}/fund",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "fund"
+      ],
+      "name": "RecurringDonationDesignation",
+      "orders": [],
+      "path": "/giving/v2/recurring_donations/{recurring_donation_id}/designations",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Fund",
+          "name": "fund",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "refund": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The number of cents being refunded.",
+          "example": 1,
+          "name": "amount_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency of `amount_cents`.",
+          "example": "string",
+          "name": "amount_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time at which a refund was created. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The payment processing fee returned by Stripe, if any.",
+          "example": 1,
+          "name": "fee_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The currency of `fee_cents`.",
+          "example": "USD",
+          "name": "fee_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "currency_abbreviation"
+        },
+        {
+          "description": "The unique identifier for a refund.",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The date and time at which a refund was processed. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "refunded_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The date and time at which a refund was last updated. Example: `2000-01-01T12:00:00Z`",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Refund` record holds information pertaining to a refunded `Donation`.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "designation_refund",
+          "id": "designationrefund-refund-designation_refunds",
+          "name": "designation_refunds",
+          "path": "/giving/v2/donations/{donation_id}/refund/designation_refunds",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "designation_refunds"
+      ],
+      "name": "Refund",
+      "orders": [],
+      "path": "/giving/v2/donations/{donation_id}/refund",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    }
+  }
+}

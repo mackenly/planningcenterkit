@@ -1,0 +1,134 @@
+---
+title: "Getting started"
+description: "Install Planning Center Kit, get credentials, and make your first queries and writes."
+sidebar:
+  order: 1
+---
+
+This guide takes you from install to your first queries and writes. The other guides cover each
+feature in depth, and the [reference](/reference/) lists every resource, attribute, and query option.
+
+## 1. Install
+
+<PackageManagers pkg="@mackenly/planningcenterkit" />
+
+Requires Node.js 22+ (or Bun, Deno, Cloudflare Workers, or any runtime with `fetch` and WebCrypto).
+There are no dependencies to install alongside it.
+
+## 2. Get credentials
+
+For a script or server that works with your own church's data, create a **personal access token**:
+
+1. Sign in at [api.planningcenteronline.com/oauth/applications](https://api.planningcenteronline.com/oauth/applications).
+2. Under *Personal Access Tokens*, create a token.
+3. Copy the **Application ID** and **Secret** into environment variables:
+
+```bash
+export PCO_APP_ID=your-application-id
+export PCO_SECRET=your-secret
+```
+
+If you're building an app that other organizations connect to, use OAuth instead; see
+[Authentication](/guides/authentication/).
+
+## 3. Create a client
+
+```ts
+import { PlanningCenter } from '@mackenly/planningcenterkit';
+
+const pco = new PlanningCenter({
+    auth: { applicationId: process.env.PCO_APP_ID!, secret: process.env.PCO_SECRET! },
+    userAgent: 'my-church-sync/1.0', // optional, helps Planning Center support identify your app
+});
+```
+
+One client covers every product: `pco.people`, `pco.services`, `pco.checkIns`, `pco.groups`,
+`pco.giving`, `pco.calendar`, `pco.registrations`, `pco.publishing`, `pco.webhooks`, `pco.api`,
+and `pco.current`. Create it once and reuse it: the products share one connection pool, rate
+limiter, and set of credentials.
+
+## 4. Read data
+
+Each product has a property for each top-level collection in Planning Center's docs, named exactly
+as in the URL (`/people/v2/people` is `pco.people.people`, `/services/v2/service_types` is
+`pco.services.service_types`).
+
+```ts
+// Who am I? (the person the credentials belong to: GET /people/v2/me)
+const { data: me } = await pco.people.me.get();
+console.log(`Signed in as ${me?.attributes.name}`);
+
+// The organization
+const { data: org } = await pco.people.get();
+console.log(org.attributes.name);
+
+// One page of people
+const page = await pco.people.people.order('last_name').perPage(25).list();
+console.log(`${page.totalCount} people; showing ${page.data.length}`);
+
+// One person by id
+const { data: person } = await pco.people.people.get('123');
+console.log(person.attributes.first_name, person.attributes.birthdate);
+
+// Everyone, across every page
+for await (const p of pco.people.people.where('status', 'active').all()) {
+    console.log(p.id, p.attributes.name);
+}
+```
+
+Results are JSON:API resources: `{ type, id, attributes, relationships }`. Attribute names are
+`snake_case` exactly as documented, and their types come from the docs (most are `T | null`).
+
+## 5. Follow relationships
+
+Use `id()` to point at one resource, then follow any of its edges:
+
+```ts
+const emails = await pco.people.people.id('123').emails.list();
+const plans = await pco.services.service_types.id('1').plans.filter('future').order('sort_date').list();
+```
+
+Or side-load related resources in the same request with `include()` and read them with `related()`:
+
+```ts
+const { data, related } = await pco.people.people.include('emails', 'phone_numbers').perPage(10).list();
+for (const person of data) {
+    const phones = related(person, 'phone_numbers').map((phone) => phone.attributes.number);
+    console.log(person.attributes.name, phones);
+}
+```
+
+More in [Querying](/guides/querying/).
+
+## 6. Write data
+
+```ts
+const { data: person } = await pco.people.people.create({ first_name: 'Ada', last_name: 'Lovelace' });
+await pco.people.people.id(person.id).emails.create({ address: 'ada@example.com', location: 'Home', primary: true });
+await pco.people.people.id(person.id).update({ nickname: 'Ada' });
+```
+
+More in [Writing data](/guides/writing-data/).
+
+## 7. Handle errors
+
+```ts
+import { PcoNotFoundError } from '@mackenly/planningcenterkit';
+
+try {
+    await pco.people.people.get('does-not-exist');
+} catch (err) {
+    if (err instanceof PcoNotFoundError) console.log('No such person');
+    else throw err;
+}
+```
+
+Rate limits and transient failures are retried for you. More in
+[Errors and retries](/guides/errors-and-retries/).
+
+## Next steps
+
+- Runnable scripts in [examples/](https://github.com/mackenly/planningcenterkit/tree/main/examples): listing people, upcoming plans, a webhook Worker,
+  and a complete OAuth server.
+- [Products](/guides/products/) lists every product's collections.
+- The [reference](/reference/) lists every resource's attributes, query options, writes, and actions.

@@ -1,0 +1,2258 @@
+{
+  "basePath": "/groups/v2",
+  "entry": "organization",
+  "openApi": true,
+  "product": "groups",
+  "slug": "groups",
+  "title": "Planning Center Groups",
+  "version": "2023-07-10",
+  "vertices": {
+    "attendance": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Whether or not the person attended the event.",
+          "example": true,
+          "name": "attended",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The role of the person at the time of event.\n\n\nPossible values: `member`, `leader`, `visitor`, or `applicant`",
+          "example": "value",
+          "name": "role",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": true,
+      "deprecated": false,
+      "description": "Individual event attendance for a person.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "person belonging to this attendance",
+          "filters": [],
+          "head": "person",
+          "id": "person-attendance-person",
+          "name": "person",
+          "path": "/groups/v2/events/{event_id}/attendances/{attendance_id}/person",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "person"
+      ],
+      "name": "Attendance",
+      "orders": [
+        "first_name",
+        "last_name",
+        "role"
+      ],
+      "path": "/groups/v2/events/{event_id}/attendances",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "role",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "campus": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name of the campus",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A campus as defined in Planning Center Accounts",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "groups which have applied this campus",
+          "filters": [],
+          "head": "group",
+          "id": "group-campus-groups",
+          "name": "groups",
+          "path": "/groups/v2/campuses/{campus_id}/groups",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Campus",
+      "orders": [
+        "name"
+      ],
+      "path": "/groups/v2/campuses",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "enrollment": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Whether or not enrollment has been closed automatically due to set limits",
+          "example": true,
+          "name": "auto_closed",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Brief description as to which limit automatically closed enrollment",
+          "example": "string",
+          "name": "auto_closed_reason",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Date when enrollment should automatically close",
+          "example": "string",
+          "name": "date_limit",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Whether or not the `date_limit` has been reached",
+          "example": true,
+          "name": "date_limit_reached",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Total number of members allowed before enrollment should automatically close",
+          "example": 1,
+          "name": "member_limit",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Whether or not the `member_limit` has been reached",
+          "example": true,
+          "name": "member_limit_reached",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Current enrollment status. Possible values:\n* `open` - strategy is not `closed` and no limits have been reached\n* `closed` - strategy is `closed` _or_ limits have been reached\n* `full` - member limit has been reached\n* `private` - group is unlisted",
+          "example": "string",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Sign up strategy. Possible values: `request_to_join`, `open_signup`, or `closed`",
+          "example": "string",
+          "name": "strategy",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Details on how and when members can join a `Group`.",
+      "edges": [],
+      "includes": [],
+      "name": "Enrollment",
+      "orders": [],
+      "path": "/groups/v2/groups/{group_id}/enrollment",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Group",
+          "name": "group",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "This is a group setting that applies to all the events in the group.\nIf selected, an email will be sent to the primary email address of the group leader\n60 minutes before the event start time, asking them to report attendance.",
+          "example": true,
+          "name": "attendance_requests_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "If `true`, we send an event remind some specified time before the event starts\nto all members in the group.",
+          "example": true,
+          "name": "automated_reminder_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not the event has been canceled.",
+          "example": true,
+          "name": "canceled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The date and time the event was canceled.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "canceled_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A longform description of the event. Can contain HTML markup.",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time the event ends.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The image for the event.",
+          "example": {},
+          "name": "image",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": "Either \"physical\" or \"virtual\".",
+          "example": "string",
+          "name": "location_type_preference",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "`true` if the event spans multiple days. Otherwise `false`.",
+          "example": true,
+          "name": "multi_day",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The name/title of the event.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "`true` if reminders have been sent for this event. Otherwise `false`.",
+          "example": true,
+          "name": "reminders_sent",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The date and time reminders were sent for this event.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "reminders_sent_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "`true` if the event is a repeating event. Otherwise `false`.",
+          "example": true,
+          "name": "repeating",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The date and time the event starts.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The URL for the virtual location. Typically we don't show this URL unless\nunless the location_type_preference is \"virtual\".",
+          "example": "string",
+          "name": "virtual_location_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The number of visitors who attended the event. These are people who are not\nmembers of the group.",
+          "example": 1,
+          "name": "visitors_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An event is a meeting of a group. It has a start and end time, and can be\neither physical or virtual.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "attendances recorded for this event",
+          "filters": [
+            "attended"
+          ],
+          "head": "attendance",
+          "id": "attendance-event-attendances",
+          "name": "attendances",
+          "path": "/groups/v2/events/{event_id}/attendances",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "group which the event belongs to",
+          "filters": [],
+          "head": "group",
+          "id": "group-event-group",
+          "name": "group",
+          "path": "/groups/v2/events/{event_id}/group",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "physical location of the event",
+          "filters": [],
+          "head": "location",
+          "id": "location-event-location",
+          "name": "location",
+          "path": "/groups/v2/events/{event_id}/location",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "notes added to the event",
+          "filters": [],
+          "head": "event_note",
+          "id": "eventnote-event-notes",
+          "name": "notes",
+          "path": "/groups/v2/events/{event_id}/notes",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "RSVP responses for the event",
+          "filters": [],
+          "head": "rsvp",
+          "id": "rsvp-event-rsvps",
+          "name": "rsvps",
+          "path": "/groups/v2/events/{event_id}/rsvps",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "group",
+        "location"
+      ],
+      "name": "Event",
+      "orders": [
+        "ends_at",
+        "name",
+        "starts_at"
+      ],
+      "path": "/groups/v2/events",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "ends_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "starts_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "attendance_submitter",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Group",
+          "name": "group",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Location",
+          "name": "location",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "RepeatingEvent",
+          "name": "repeating_event",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event_note": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The body text of the note.",
+          "example": "string",
+          "name": "body",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Notes that group leaders can write for an event, generally related to attendance.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "person who created the note",
+          "filters": [],
+          "head": "owner",
+          "id": "owner-eventnote-owner",
+          "name": "owner",
+          "path": "/groups/v2/event_notes/{event_note_id}/owner",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "owner"
+      ],
+      "name": "EventNote",
+      "orders": [],
+      "path": "/groups/v2/event_notes",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Annotatable",
+          "name": "annotatable",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Owner",
+          "name": "owner",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "group": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "assign_campuses",
+          "path": "/groups/v2/groups/{group_id}/assign_campuses"
+        },
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "disable_chat",
+          "path": "/groups/v2/groups/{group_id}/disable_chat"
+        },
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "duplicate",
+          "path": "/groups/v2/groups/{group_id}/duplicate"
+        },
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "enable_chat",
+          "path": "/groups/v2/groups/{group_id}/enable_chat"
+        }
+      ],
+      "attributes": [
+        {
+          "description": "The date and time the group was archived.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "archived_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A boolean representing the current user's authorization to start a new conversation in the group.\n\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "can_create_conversation",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "A code representing why the current user can or cannot start a new conversation in the group.\nPossible values: `chat_disabled`, `group_archived`, `non_member`, `leaders_only`.\nNil when the user is permitted to create a conversation.\n\n\nOnly available when requested with the `?fields` param",
+          "example": "string",
+          "name": "can_create_conversation_reason_code",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A boolean representing whether or not the group has Chat enabled.",
+          "example": true,
+          "name": "chat_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "If a contact_email is provided, we will display a contact button on the public page\nwhere potential members can ask questions before joining the group.",
+          "example": "string",
+          "name": "contact_email",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The date and time the group was created.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A longform description of the group. Can contain HTML markup.",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The plain text version of the group description.",
+          "example": "string",
+          "name": "description_as_plain_text",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A boolean representing whether or not direct messages are enabled for the group.",
+          "example": true,
+          "name": "direct_messages_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not events are visible to the public on Church Center",
+          "example": true,
+          "name": "events_listed",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The visibility of events for the group.\n\n\nPossible values: `public` or `members`",
+          "example": "value",
+          "name": "events_visibility",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A hash of header image URLs. The keys are `thumbnail`, `medium`, and `original`.\n\n```json\n{\n  \"thumbnail\": \"https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/thumbnail_image-1676676396838.jpg\",\n  \"medium\": \"https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/medium_image-1676676396838.jpg\",\n  \"original\": \"https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/image-1676676396838.jpg\"\n}\n```",
+          "example": {},
+          "name": "header_image",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Whether or not group leaders have access to the entire\nchurch database on the admin side of Groups. (Not recommended)",
+          "example": true,
+          "name": "leaders_can_search_people_database",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not the group is visible on Church Center",
+          "example": true,
+          "name": "listed",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The location type preference for the group.\n\n\nPossible values: `physical` or `virtual`",
+          "example": "value",
+          "name": "location_type_preference",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Whether or not group members can see other members' info",
+          "example": true,
+          "name": "members_are_confidential",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The number of members in the group, includes leaders.\nDoes not include membership requests.",
+          "example": 1,
+          "name": "memberships_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The name/title of the group.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The public URL for the group on Church Center.",
+          "example": "string",
+          "name": "public_church_center_web_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A text summary of the group's typical meeting schedule.\nCan be a string like \"Sundays at 9:30am\" or \"Every other Tuesday at 7pm\".",
+          "example": "string",
+          "name": "schedule",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The IDs of the tags associated with the group.\n\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "tag_ids",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The URL for the group's virtual location. A zoom link, for example.\nThis could be set even if `location_type_preference` is `physical`.\nThis is useful if you want to display a zoom link even if the group is meeting in person.",
+          "example": "string",
+          "name": "virtual_location_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "DEPRECATED: This is a private attribute used by Home widgets that we plan to remove soon.\n\n\nOnly available when requested with the `?fields` param",
+          "example": {},
+          "name": "widget_status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A group of people that meet together regularly.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "requests to join this group",
+          "filters": [],
+          "head": "group_application",
+          "id": "groupapplication-group-applications",
+          "name": "applications",
+          "path": "/groups/v2/groups/{group_id}/applications",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "campuses assigned this group",
+          "filters": [],
+          "head": "campus",
+          "id": "campus-group-campuses",
+          "name": "campuses",
+          "path": "/groups/v2/groups/{group_id}/campuses",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "enrollment details for this group",
+          "filters": [],
+          "head": "enrollment",
+          "id": "enrollment-group-enrollment",
+          "name": "enrollment",
+          "path": "/groups/v2/groups/{group_id}/enrollment",
+          "post": false,
+          "response": "resource"
+        },
+        {
+          "deprecated": false,
+          "details": "events for this group",
+          "filters": [
+            "canceled",
+            "not_canceled"
+          ],
+          "head": "event",
+          "id": "event-group-events",
+          "name": "events",
+          "path": "/groups/v2/groups/{group_id}/events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "group type of this group",
+          "filters": [],
+          "head": "group_type",
+          "id": "grouptype-group-group_type",
+          "name": "group_type",
+          "path": "/groups/v2/groups/{group_id}/group_type",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "default physical location for this group's events",
+          "filters": [],
+          "head": "location",
+          "id": "location-group-location",
+          "name": "location",
+          "path": "/groups/v2/groups/{group_id}/location",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "memberships belonging to this group",
+          "filters": [],
+          "head": "membership",
+          "id": "membership-group-memberships",
+          "name": "memberships",
+          "path": "/groups/v2/groups/{group_id}/memberships",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "the current person's membership for this group",
+          "filters": [],
+          "head": "membership",
+          "id": "membership-group-my_membership",
+          "name": "my_membership",
+          "path": "/groups/v2/groups/{group_id}/my_membership",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "people who have memberships for this group",
+          "filters": [],
+          "head": "person",
+          "id": "person-group-people",
+          "name": "people",
+          "path": "/groups/v2/groups/{group_id}/people",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "file and link resources shared with this group",
+          "filters": [
+            "leaders"
+          ],
+          "head": "resource",
+          "id": "resource-group-resources",
+          "name": "resources",
+          "path": "/groups/v2/groups/{group_id}/resources",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "tags assigned to this group",
+          "filters": [],
+          "head": "tag",
+          "id": "tag-group-tags",
+          "name": "tags",
+          "path": "/groups/v2/groups/{group_id}/tags",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "enrollment",
+        "group_type",
+        "location"
+      ],
+      "name": "Group",
+      "orders": [
+        "chat_enabled",
+        "contact_email",
+        "created_at",
+        "enrollment_limit",
+        "listed",
+        "members_are_confidential",
+        "memberships_count",
+        "name"
+      ],
+      "path": "/groups/v2/groups",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": true,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": [
+          "group_type_id",
+          "name",
+          "schedule",
+          "tag_ids"
+        ]
+      },
+      "queries": [
+        {
+          "name": "archive_status",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "GroupType",
+          "name": "group_type",
+          "note": "The group type that this group belongs to.\nUnique groups do not belong to a group type\nand will return a `null` data set for the relationship.",
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Location",
+          "name": "location",
+          "note": "The group's default location is where the group normally meets.\nBut remember, each group event can have its own location if needed.",
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "group_application": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "approve",
+          "path": "/groups/v2/group_applications/{group_application_id}/approve"
+        },
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "reject",
+          "path": "/groups/v2/group_applications/{group_application_id}/reject"
+        }
+      ],
+      "attributes": [
+        {
+          "description": "Timestamp when this person applied.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "applied_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "An optional personal message from the applicant.",
+          "example": "string",
+          "name": "message",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The approval status of the application.\n\nPossible values: `pending`, `approved`, or `rejected`",
+          "example": "string",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A group application is a request to join a group which can be approved or rejected.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "group being applied to",
+          "filters": [],
+          "head": "group",
+          "id": "group-groupapplication-group",
+          "name": "group",
+          "path": "/groups/v2/group_applications/{group_application_id}/group",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "person who applied",
+          "filters": [],
+          "head": "person",
+          "id": "person-groupapplication-person",
+          "name": "person",
+          "path": "/groups/v2/group_applications/{group_application_id}/person",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "group",
+        "person"
+      ],
+      "name": "GroupApplication",
+      "orders": [
+        "applied_at",
+        "status"
+      ],
+      "path": "/groups/v2/group_applications",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "applied_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "status",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Group",
+          "name": "group",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "group_type": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "`true` if the map view is visible on the public groups list page. Otherwise `false`.",
+          "example": true,
+          "name": "church_center_map_visible",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "`true` if the group type contains any published groups. Otherwise `false`.",
+          "example": true,
+          "name": "church_center_visible",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Hex color value. Color themes are a visual tool for administrators on the admin side of Groups.\nEx: \"#4fd2e3\"",
+          "example": "string",
+          "name": "color",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A JSON object of default settings for groups of this type.",
+          "example": "string",
+          "name": "default_group_settings",
+          "note": null,
+          "permissionLevel": "manage",
+          "type": "string"
+        },
+        {
+          "description": "A description of the group type",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name of the group type",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The position of the group type in relation to other group types.",
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The public URL for the group on Church Center.",
+          "example": "string",
+          "name": "public_church_center_web_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A group type is a category of groups.\nFor example, a church might have group types for \"Small Groups\" and \"Classes\".",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "events of groups with this group type",
+          "filters": [
+            "canceled",
+            "not_canceled",
+            "upcoming"
+          ],
+          "head": "event",
+          "id": "event-grouptype-events",
+          "name": "events",
+          "path": "/groups/v2/group_types/{group_type_id}/events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "groups belonging to this group type",
+          "filters": [],
+          "head": "group",
+          "id": "group-grouptype-groups",
+          "name": "groups",
+          "path": "/groups/v2/group_types/{group_type_id}/groups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "file or link resources shared with all groups in this group type",
+          "filters": [
+            "leaders"
+          ],
+          "head": "resource",
+          "id": "resource-grouptype-resources",
+          "name": "resources",
+          "path": "/groups/v2/group_types/{group_type_id}/resources",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "GroupType",
+      "orders": [
+        "name",
+        "position"
+      ],
+      "path": "/groups/v2/group_types",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "location": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "This preference controls how the location is displayed to non-members for public groups and events.\n\n\nPossible values: `hidden`, `approximate`, or `exact`",
+          "example": "value",
+          "name": "display_preference",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Ex: \"1313 Disneyland Dr\nAnaheim, CA 92802\" (may be approximate or `null`)\nApproximate address would be \"Anaheim, CA 92802\".\nWe obscure Canadian zip codes.",
+          "example": "string",
+          "name": "full_formatted_address",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Ex: `33.815396` (may be approximate or `null`)",
+          "example": 1.42,
+          "name": "latitude",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "float"
+        },
+        {
+          "description": "Ex: `-117.926399` (may be approximate or `null`)",
+          "example": 1.42,
+          "name": "longitude",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "float"
+        },
+        {
+          "description": "Ex: \"Disneyland\"",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The number of miles in a location's approximate address.\nWill be `0` if the strategy is exact, and will be `null` if the strategy is hidden.",
+          "example": "string",
+          "name": "radius",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The display preference strategy used for the current request, based on user permissions.\nEither `hidden`, `approximate`, or `exact`.",
+          "example": "string",
+          "name": "strategy",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A physical event location",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "group that manages this location",
+          "filters": [],
+          "head": "group",
+          "id": "group-location-group",
+          "name": "group",
+          "path": "/groups/v2/events/{event_id}/location/{location_id}/group",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "group"
+      ],
+      "name": "Location",
+      "orders": [],
+      "path": "/groups/v2/events/{event_id}/location",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "membership": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The date and time the person joined the group.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "joined_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The role of the person in the group.\nPossible values: `member` or `leader`",
+          "example": "string",
+          "name": "role",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The state of a `Person` belonging to a `Group`.\n\nA `Person` can only have one active `Membership` to a `Group` at a time.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "group for this membership",
+          "filters": [],
+          "head": "group",
+          "id": "group-membership-group",
+          "name": "group",
+          "path": "/groups/v2/memberships/{membership_id}/group",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-membership-person",
+          "name": "person",
+          "path": "/groups/v2/memberships/{membership_id}/person",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "person"
+      ],
+      "name": "Membership",
+      "orders": [
+        "first_name",
+        "joined_at",
+        "last_name",
+        "role"
+      ],
+      "path": "/groups/v2/memberships",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "joined_at",
+          "person_id",
+          "role"
+        ],
+        "edges": [
+          "membership-group-memberships"
+        ],
+        "updateAssignable": [
+          "joined_at",
+          "role"
+        ]
+      },
+      "queries": [
+        {
+          "name": "role",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Group",
+          "name": "group",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "organization": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name of the organization.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The time zone of the organization.",
+          "example": "string",
+          "name": "time_zone",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The organization represents a single church. Every other resource is scoped to this record.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "campuses for this organization",
+          "filters": [],
+          "head": "campus",
+          "id": "campus-organization-campuses",
+          "name": "campuses",
+          "path": "/groups/v2/campuses",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "event notes for all groups in this organization",
+          "filters": [],
+          "head": "event_note",
+          "id": "eventnote-organization-event_notes",
+          "name": "event_notes",
+          "path": "/groups/v2/event_notes",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "events for all groups in this organization",
+          "filters": [
+            "campus",
+            "canceled",
+            "group",
+            "group_type",
+            "my_groups",
+            "not_canceled",
+            "upcoming"
+          ],
+          "head": "event",
+          "id": "event-organization-events",
+          "name": "events",
+          "path": "/groups/v2/events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "requests to join groups for this organization",
+          "filters": [],
+          "head": "group_application",
+          "id": "groupapplication-organization-group_applications",
+          "name": "group_applications",
+          "path": "/groups/v2/group_applications",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "group types for this organization",
+          "filters": [
+            "church_center_visible",
+            "not_church_center_visible"
+          ],
+          "head": "group_type",
+          "id": "grouptype-organization-group_types",
+          "name": "group_types",
+          "path": "/groups/v2/group_types",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "groups for this organization",
+          "filters": [
+            "campus",
+            "enrollment",
+            "group",
+            "group_type",
+            "hidden",
+            "meeting_schedule",
+            "my_groups",
+            "people_database_searchable",
+            "published",
+            "tag"
+          ],
+          "head": "group",
+          "id": "group-organization-groups",
+          "name": "groups",
+          "path": "/groups/v2/groups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "memberships for all groups in this organization",
+          "filters": [
+            "group",
+            "leader"
+          ],
+          "head": "membership",
+          "id": "membership-organization-memberships",
+          "name": "memberships",
+          "path": "/groups/v2/memberships",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "people for this organization",
+          "filters": [],
+          "head": "person",
+          "id": "person-organization-people",
+          "name": "people",
+          "path": "/groups/v2/people",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "tag groups in this organization",
+          "filters": [
+            "public"
+          ],
+          "head": "tag_group",
+          "id": "taggroup-organization-tag_groups",
+          "name": "tag_groups",
+          "path": "/groups/v2/tag_groups",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Organization",
+      "orders": [],
+      "path": "/groups/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "owner": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The URL of the person's avatar.",
+          "example": "string",
+          "name": "avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The person's first name.",
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The person's last name.",
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The owner/creator of an event note.",
+      "edges": [],
+      "includes": [],
+      "name": "Owner",
+      "orders": [],
+      "path": "/groups/v2/event_notes/{event_note_id}/owner",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "person": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Returns all the addresses associated with this person.",
+          "example": [],
+          "name": "addresses",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": "The URL of the person's avatar.",
+          "example": "string",
+          "name": "avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Whether or not the person is under 13 years old.\nThis is false if a birthdate is not set.\n\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "child",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Date and time this person was first created in Planning Center",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Returns all the email addresses associated with this person.\n\n```json\n[{\n  \"address\": \"sam@example.com\",\n  \"location\": \"Home\",\n  \"primary\": true\n}]\n```",
+          "example": [],
+          "name": "email_addresses",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": "The person's first name.",
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The person's gender (e.g. `Male`, `Female`).",
+          "example": "string",
+          "name": "gender",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The person's last name.",
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Can be `administrator`, `group_type_manager`, `leader`, `member`, or `no access`.",
+          "example": "string",
+          "name": "permissions",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Returns all the phone numbers associated with this person.\n\n```json\n[{\n  \"number\": \"(800) 123-4567\",\n  \"carrier\": null,\n  \"location\": \"Mobile\",\n  \"primary\": true\n}]\n```",
+          "example": [],
+          "name": "phone_numbers",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A person is a user of Planning Center.\nThey can be a member of a group, a leader of a group, or an administrator.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "events of groups which this person is a member",
+          "filters": [
+            "canceled",
+            "not_canceled"
+          ],
+          "head": "event",
+          "id": "event-person-events",
+          "name": "events",
+          "path": "/groups/v2/people/{person_id}/events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "groups of which this person is a member",
+          "filters": [],
+          "head": "group",
+          "id": "group-person-groups",
+          "name": "groups",
+          "path": "/groups/v2/people/{person_id}/groups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "memberships for this person",
+          "filters": [],
+          "head": "membership",
+          "id": "membership-person-memberships",
+          "name": "memberships",
+          "path": "/groups/v2/people/{person_id}/memberships",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Person",
+      "orders": [
+        "first_name",
+        "last_name"
+      ],
+      "path": "/groups/v2/people",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "first_name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "resource": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The description of the resource written by the person who created it.",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The date and time the resource was last updated.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "last_updated",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The name/title of the resource.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Either `FileResource` or `LinkResource`",
+          "example": "string",
+          "name": "type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values: `leaders` or `members`",
+          "example": "value",
+          "name": "visibility",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A file or link resource that can be shared with a group.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "link to download this file resource",
+          "filters": [],
+          "head": "resource",
+          "id": "resource-resource-download",
+          "name": "download",
+          "path": "/groups/v2/group_types/{group_type_id}/resources/{resource_id}/download",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": "link to visit this link resource",
+          "filters": [],
+          "head": "resource",
+          "id": "resource-resource-visit",
+          "name": "visit",
+          "path": "/groups/v2/group_types/{group_type_id}/resources/{resource_id}/visit",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Resource",
+      "orders": [
+        "last_updated",
+        "name",
+        "pinned"
+      ],
+      "path": "/groups/v2/group_types/{group_type_id}/resources",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "created_by",
+          "note": "The person who created this resource",
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "rsvp": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The number of guests the person is bringing. Always `0` unless the response is `yes` or `maybe`.",
+          "example": 1,
+          "name": "guest_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Possible values: `awaiting_response`, `yes`, `no`, `maybe`, or `not_sent`",
+          "example": "value",
+          "name": "response",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": true,
+      "deprecated": false,
+      "description": "A person's RSVP response for a group event.\nRSVPs can be submitted at any point leading up to the event.\nWhen an event reminder is sent, `awaiting_response` RSVPs are generated for\nany remaining members, or `not_sent` if they're missing an email address.",
+      "edges": [],
+      "includes": [],
+      "name": "RSVP",
+      "orders": [
+        "response"
+      ],
+      "path": "/groups/v2/events/{event_id}/rsvps",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "response",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Group",
+          "name": "group",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "tag": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name of the tag",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The position of the tag in relation to other tags",
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Tags are used to filter groups.\nThey can be organized into tag_groups.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "groups which have applied this tag",
+          "filters": [],
+          "head": "group",
+          "id": "group-tag-groups",
+          "name": "groups",
+          "path": "/groups/v2/groups/{group_id}/tags/{tag_id}/groups",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Tag",
+      "orders": [
+        "name",
+        "position"
+      ],
+      "path": "/groups/v2/groups/{group_id}/tags",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "TagGroup",
+          "name": "tag_group",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "tag_group": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Whether or not this tag group is visible to the public on Church Center",
+          "example": true,
+          "name": "display_publicly",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Whether or not a group can belong to many tags within this tag group",
+          "example": true,
+          "name": "multiple_options_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The name of the tag group",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The position of the tag group in relation to other tag groups",
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A way to group related tags.\nFor example you could have a \"Life Stage\" tag group\nwith tags like \"Child\", \"Teen\", \"Adult\", etc.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": "tags belonging to this tag group",
+          "filters": [],
+          "head": "tag",
+          "id": "tag-taggroup-tags",
+          "name": "tags",
+          "path": "/groups/v2/tag_groups/{tag_group_id}/tags",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "TagGroup",
+      "orders": [
+        "name",
+        "position"
+      ],
+      "path": "/groups/v2/tag_groups",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    }
+  }
+}

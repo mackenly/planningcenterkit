@@ -1,0 +1,276 @@
+---
+title: "Webhooks"
+description: "Receive Planning Center webhooks: verify signatures, parse typed events, and manage subscriptions."
+sidebar:
+  order: 6
+---
+
+Planning Center can POST to your server when data changes (a person is created, a plan is
+updated, someone checks in). `@mackenly/planningcenterkit/webhooks` verifies those deliveries and
+parses them into typed events. It uses WebCrypto and no Node built-ins, so it runs on Node 22+,
+Bun, Deno, Cloudflare Workers, and Vercel.
+
+:::note[Two different "webhooks"]
+`@mackenly/planningcenterkit/webhooks` (this guide) is for *receiving* webhooks on your server.
+`pco.webhooks` and `@mackenly/planningcenterkit/webhooks-api` are the Webhooks *product API*, for
+managing subscriptions; see [Managing subscriptions](#managing-subscriptions).
+:::
+
+## How deliveries work
+
+- You create a subscription per event name (for example `people.v2.events.person.created`) at
+  [api.planningcenteronline.com/webhooks](https://api.planningcenteronline.com/webhooks). Each
+  subscription has its own **authenticity secret**.
+- Each delivery is signed: the `X-PCO-Webhooks-Authenticity` header is the hex HMAC-SHA256 of the
+  **raw request body**, keyed with that secret.
+- Respond `200` quickly. Any other status is retried, up to 16 times over about 5 days. A `410`
+  response **deactivates the subscription**, so never send one by accident.
+- The same event can be delivered more than once; dedupe on `event.id` if processing it twice
+  would hurt.
+
+## Fetch-style handlers (`Request` / `Response`)
+
+`handleWebhook(request, { secret })` reads the body once, verifies the signature, and returns the
+parsed events. It works with any standard `Request`: Cloudflare Workers, Next.js App Router, Bun,
+Deno, Hono, Remix, SvelteKit, Astro.
+
+```ts
+import { handleWebhook, isEvent, PcoWebhookError } from '@mackenly/planningcenterkit/webhooks';
+
+export async function onRequest(request: Request): Promise<Response> {
+    try {
+        const events = await handleWebhook(request, { secret: process.env.PCO_WEBHOOK_SECRET! });
+        for (const event of events) {
+            if (isEvent(event, 'people.v2.events.person.created')) {
+                console.log('new person', event.payload.data.id);
+            }
+        }
+        return new Response('ok');
+    } catch (err) {
+        // PcoWebhookVerificationError -> 401, PcoWebhookParseError -> 400
+        const status = err instanceof PcoWebhookError && 'status' in err ? Number(err.status) : 500;
+        return new Response('Rejected', { status });
+    }
+}
+```
+
+### Several subscriptions, several secrets
+
+Each subscription has its own secret. Pass them all, and a delivery is accepted if any matches:
+
+```ts
+import { handleWebhook } from '@mackenly/planningcenterkit/webhooks';
+
+const events = await handleWebhook(request, {
+    secret: [process.env.PCO_PERSON_CREATED_SECRET!, process.env.PCO_PERSON_UPDATED_SECRET!],
+});
+```
+
+Or look the secret up by event name. Events you return `undefined` for are rejected with a 401:
+
+```ts
+import { handleWebhook } from '@mackenly/planningcenterkit/webhooks';
+
+const secrets: Record<string, string | undefined> = {
+    'people.v2.events.person.created': process.env.PCO_PERSON_CREATED_SECRET,
+    'people.v2.events.person.destroyed': process.env.PCO_PERSON_DESTROYED_SECRET,
+};
+
+const events = await handleWebhook(request, { secret: (eventName) => secrets[eventName] });
+```
+
+The resolver may be async (for example, to read secrets from a database).
+
+### Cloudflare Workers
+
+Respond first, then work in `ctx.waitUntil()`:
+
+```ts
+import { handleWebhook, isEvent, PcoWebhookError } from '@mackenly/planningcenterkit/webhooks';
+
+export default {
+    async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+        try {
+            const events = await handleWebhook(request, { secret: env.PCO_WEBHOOK_SECRET });
+            ctx.waitUntil(Promise.all(events.map(async (event) => {
+                if (isEvent(event, 'people.v2.events.person.created')) await onNewPerson(event.payload.data.id);
+            })));
+            return new Response('ok');
+        } catch (err) {
+            const status = err instanceof PcoWebhookError && 'status' in err ? Number(err.status) : 500;
+            return new Response('Rejected', { status });
+        }
+    },
+};
+```
+
+A complete Worker with per-event secrets and dedupe:
+[examples/cloudflare-worker-webhooks.ts](https://github.com/mackenly/planningcenterkit/blob/main/examples/cloudflare-worker-webhooks.ts).
+
+### Next.js App Router
+
+```ts
+// app/api/webhooks/pco/route.ts
+import { after } from 'next/server';
+import { handleWebhook, PcoWebhookParseError, PcoWebhookVerificationError } from '@mackenly/planningcenterkit/webhooks';
+
+export async function POST(request: Request) {
+    try {
+        const events = await handleWebhook(request, { secret: process.env.PCO_WEBHOOK_SECRET! });
+        after(() => processEvents(events)); // respond 200 now, process afterwards
+        return new Response(null, { status: 200 });
+    } catch (err) {
+        if (err instanceof PcoWebhookVerificationError || err instanceof PcoWebhookParseError) {
+            return new Response(err.message, { status: err.status });
+        }
+        throw err;
+    }
+}
+```
+
+:::caution
+Don't call `request.json()` or `request.text()` before `handleWebhook`: it needs the unread body,
+and throws a `PcoWebhookError` if the body was already consumed.
+:::
+
+## Express and other Node frameworks
+
+Without a `Request` object, use the two building blocks. The signature covers the exact bytes
+Planning Center sent, so you need the **raw** body: `express.json()` parses and discards it, and
+`JSON.stringify(req.body)` won't reproduce it byte for byte.
+
+```ts
+import express from 'express';
+import { parseWebhook, verifyWebhookSignature } from '@mackenly/planningcenterkit/webhooks';
+
+const app = express();
+
+// Register before any global express.json() so this route keeps the raw Buffer.
+app.post('/webhooks/pco', express.raw({ type: 'application/json' }), async (req, res) => {
+    const ok = await verifyWebhookSignature({
+        body: req.body, // Buffer
+        signature: req.get('X-PCO-Webhooks-Authenticity'),
+        secret: process.env.PCO_WEBHOOK_SECRET!,
+    });
+    if (!ok) return res.sendStatus(401);
+
+    const events = parseWebhook(req.body);
+    res.sendStatus(200); // acknowledge before slow work
+    for (const event of events) await processEvent(event);
+});
+```
+
+The same pattern works for Fastify (with a raw-body content type parser), Koa, or plain
+`node:http` (collect the chunks into a `Buffer`).
+
+`verifyWebhookSignature` returns `false` (it never throws) for a missing or malformed header, an
+empty secret, or a mismatch, and compares in constant time. `parseWebhook` doesn't verify anything;
+always verify first.
+
+## Events
+
+Each delivery body can hold several events. Each event is:
+
+| Property | Example | Description |
+| --- | --- | --- |
+| `id` | `cac783dc-...` | Delivery id; the same event redelivered keeps it |
+| `name` | `people.v2.events.person.updated` | Full event name |
+| `product` | `people` | Product segment |
+| `resource` | `person` | Resource segment |
+| `action` | `updated` | `created`, `updated`, `destroyed`, or another action |
+| `attempt` | `1` | Delivery attempt number |
+| `payload` | `{ data, included, meta }` | The changed resource as a JSON:API document (already parsed) |
+| `organizationId` | `127` | The organization, when Planning Center included it |
+| `raw` | | The raw `EventDelivery` resource |
+
+`isEvent()` narrows by one name or several, which also narrows `product`, `resource`, and `action`:
+
+```ts
+import { isEvent, parseWebhook } from '@mackenly/planningcenterkit/webhooks';
+
+declare const rawBody: string;
+
+for (const event of parseWebhook(rawBody)) {
+    if (isEvent(event, 'people.v2.events.person.created')) {
+        event.action; // 'created'
+    } else if (isEvent(event, ['people.v2.events.person.updated', 'people.v2.events.person.destroyed'])) {
+        console.log(event.payload.data.id, event.action);
+    }
+}
+```
+
+The payload is typed as a generic resource, since one endpoint can receive any event. Cast it to
+the resource type you subscribed to when you need typed attributes:
+
+```ts
+import type { People } from '@mackenly/planningcenterkit';
+import { parseWebhook } from '@mackenly/planningcenterkit/webhooks';
+
+declare const rawBody: string;
+
+const [event] = parseWebhook(rawBody);
+const person = event!.payload.data as unknown as People.Person;
+console.log(person.attributes.first_name);
+```
+
+`parseEventName('people.v2.events.person.created')` splits a name into
+`{ product, version, resource, action }`. The full list of event names is at
+[api.planningcenteronline.com/webhooks/v2/available_events](https://api.planningcenteronline.com/webhooks/v2/available_events).
+
+## Testing your handler
+
+`signWebhookBody(body, secret)` computes the header Planning Center would send:
+
+```ts
+import { handleWebhook, signWebhookBody } from '@mackenly/planningcenterkit/webhooks';
+
+const body = JSON.stringify({
+    data: [{
+        id: 'test-1',
+        type: 'EventDelivery',
+        attributes: {
+            name: 'people.v2.events.person.created',
+            attempt: 1,
+            payload: JSON.stringify({ data: { type: 'Person', id: '1', attributes: { first_name: 'Ada' } } }),
+        },
+    }],
+});
+const request = new Request('http://localhost/webhooks/pco', {
+    method: 'POST',
+    body,
+    headers: { 'X-PCO-Webhooks-Authenticity': await signWebhookBody(body, 'test-secret') },
+});
+const events = await handleWebhook(request, { secret: 'test-secret' });
+```
+
+## Errors
+
+| Error | `status` | When |
+| --- | --- | --- |
+| `PcoWebhookVerificationError` | `401` | Missing header, no secret for the event, or no secret matched |
+| `PcoWebhookParseError` | `400` | The body or an event's payload isn't valid JSON or isn't a delivery |
+| `PcoWebhookError` | | Base class; thrown directly if the request body was already read |
+
+## Managing subscriptions
+
+The Webhooks product API lists available events and manages subscriptions:
+
+```ts
+const events = await pco.webhooks.available_events.toArray();
+const subscriptions = await pco.webhooks.webhook_subscriptions.toArray();
+
+await pco.webhooks.webhook_subscriptions.create({
+    name: 'people.v2.events.person.created',
+    url: 'https://example.com/webhooks/pco',
+    active: true,
+});
+```
+
+Or, without the rest of the client:
+
+```ts
+import { createWebhooksClient } from '@mackenly/planningcenterkit/webhooks-api';
+
+const webhooks = createWebhooksClient({ auth: { applicationId: '...', secret: '...' } });
+const { data } = await webhooks.webhook_subscriptions.list();
+```

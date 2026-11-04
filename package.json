@@ -1,29 +1,89 @@
 {
   "name": "@mackenly/planningcenterkit",
   "version": "0.4.42",
-  "description": "Unofficial ORM for Planning Center Online",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "description": "Fully typed, zero-dependency client for every Planning Center API: People, Services, Check-Ins, Groups, Giving, Calendar, Registrations, Publishing, and more.",
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    },
+    "./generated/*": {
+      "import": {
+        "types": "./dist/esm/generated/*.d.ts",
+        "default": "./dist/esm/generated/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/generated/*.d.ts",
+        "default": "./dist/cjs/generated/*.js"
+      }
+    },
+    "./*": {
+      "import": {
+        "types": "./dist/esm/entries/*.d.ts",
+        "default": "./dist/esm/entries/*.js"
+      },
+      "require": {
+        "types": "./dist/cjs/entries/*.d.ts",
+        "default": "./dist/cjs/entries/*.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "llms.txt",
+    "LICENSE"
+  ],
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc",
+    "build": "node scripts/build.ts",
     "prepare": "npm run build",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json",
+    "spec:fetch": "node scripts/fetch-spec.ts",
+    "generate": "node scripts/generate.ts",
+    "check": "npm run typecheck && npm test && npm run build",
+    "spec:diff": "node scripts/spec-diff.ts",
+    "docs:reference": "node scripts/generate-reference.ts",
+    "docs:dev": "npm run docs:reference && npm --prefix site run dev",
+    "docs:build": "npm run docs:reference && npm --prefix site run build",
+    "test:live": "vitest run --config vitest.live.config.ts"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mackenly/planningcenterkit.git"
   },
   "keywords": [
-    "planning",
-    "center",
+    "planning center",
+    "planning center online",
     "pco",
-    "planning",
-    "center",
-    "online",
     "church",
-    "management",
-    "system",
-    "church"
+    "church management",
+    "chms",
+    "people",
+    "services",
+    "check-ins",
+    "groups",
+    "giving",
+    "calendar",
+    "registrations",
+    "api client",
+    "sdk",
+    "typescript",
+    "json-api"
   ],
   "author": "mackenly",
   "license": "Apache-2.0",
@@ -35,6 +95,10 @@
   },
   "bugs": {
     "url": "https://github.com/mackenly/planningcenterkit/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/mackenly"
   },
   "homepage": "https://github.com/mackenly/planningcenterkit#readme",
   "devDependencies": {

@@ -1,0 +1,1257 @@
+{
+  "basePath": "/registrations/v2",
+  "entry": "organization",
+  "openApi": true,
+  "product": "registrations",
+  "slug": "registrations",
+  "title": "Registrations",
+  "version": "2025-05-01",
+  "vertices": {
+    "attendee": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Whether or not the attendee is active.",
+          "example": true,
+          "name": "active",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not the attendee is canceled.",
+          "example": true,
+          "name": "canceled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not attendee has completed all necessary items (personal information, questions, forms, add ons).\n\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "complete",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The attendee's name. Derived from the associated person record.\n\n\nOnly available when requested with the `?fields` param",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Whether or not the attendee is waitlisted.",
+          "example": true,
+          "name": "waitlisted",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "UTC time at which the attendee was waitlisted.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "waitlisted_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An `Attendee` is a person registered for a signup.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "emergency_contact",
+          "id": "emergencycontact-attendee-emergency_contact",
+          "name": "emergency_contact",
+          "path": "/registrations/v2/attendees/{attendee_id}/emergency_contact",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-attendee-person",
+          "name": "person",
+          "path": "/registrations/v2/attendees/{attendee_id}/person",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "registration",
+          "id": "registration-attendee-registration",
+          "name": "registration",
+          "path": "/registrations/v2/attendees/{attendee_id}/registration",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "selection_type",
+          "id": "selectiontype-attendee-selection_type",
+          "name": "selection_type",
+          "path": "/registrations/v2/attendees/{attendee_id}/selection_type",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "emergency_contact",
+        "person",
+        "registration",
+        "selection_type"
+      ],
+      "name": "Attendee",
+      "orders": [
+        "created_at"
+      ],
+      "path": "/registrations/v2/attendees",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "campus": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "City where the campus is located.",
+          "example": "string",
+          "name": "city",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Country where the campus is located.",
+          "example": "string",
+          "name": "country",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "full_formatted_address",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Name of the campus.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "State or province where the campus is located.",
+          "example": "string",
+          "name": "state",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Street address of the campus.",
+          "example": "string",
+          "name": "street",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Zip code of the campus.",
+          "example": "string",
+          "name": "zip",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Campus` is a location belonging to an Organization.",
+      "edges": [],
+      "includes": [],
+      "name": "Campus",
+      "orders": [],
+      "path": "/registrations/v2/campuses",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "category": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Name of the category.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Category` is a label used to group together and find signups more easily.",
+      "edges": [],
+      "includes": [],
+      "name": "Category",
+      "orders": [],
+      "path": "/registrations/v2/categories",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "emergency_contact": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Phone number of the emergency contact person.",
+          "example": "string",
+          "name": "phone_number",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "`Emergency_Contact` is the person assigned as the emergency contact for an attendee.",
+      "edges": [],
+      "includes": [],
+      "name": "EmergencyContact",
+      "orders": [],
+      "path": "/registrations/v2/attendees/{attendee_id}/emergency_contact",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "organization": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Name of the Organization.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The root level `Organization` record which serves as a link to `Signup`s.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "attendee",
+          "id": "attendee-organization-attendees",
+          "name": "attendees",
+          "path": "/registrations/v2/attendees",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "campus",
+          "id": "campus-organization-campuses",
+          "name": "campuses",
+          "path": "/registrations/v2/campuses",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "category",
+          "id": "category-organization-categories",
+          "name": "categories",
+          "path": "/registrations/v2/categories",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-organization-people",
+          "name": "people",
+          "path": "/registrations/v2/people",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "registration",
+          "id": "registration-organization-registrations",
+          "name": "registrations",
+          "path": "/registrations/v2/registrations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "archived",
+            "unarchived"
+          ],
+          "head": "signup",
+          "id": "signup-organization-signups",
+          "name": "signups",
+          "path": "/registrations/v2/signups",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Organization",
+      "orders": [],
+      "path": "/registrations/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "person": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": true,
+          "name": "can_search",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "Person",
+      "orders": [],
+      "path": "/registrations/v2/people",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "registration": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The registration's total cost after discounts, formatted with the signup's\ncurrency symbol (for example `\"$120.00\"`). `null` for a free registration.\nAccounts for discounts and every attendee on the registration.",
+          "example": "string",
+          "name": "total_cost",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The registration's total cost after discounts, in cents. `0` for a free\nregistration. Accounts for discounts and every attendee on the registration.",
+          "example": 1,
+          "name": "total_cost_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The registration's outstanding balance, formatted with the signup's currency\nsymbol (for example `\"$120.00\"`). Accounts for discounts and every attendee\non the registration.",
+          "example": "string",
+          "name": "total_due",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The registration's outstanding balance in cents. Accounts for discounts and\nevery attendee on the registration.",
+          "example": 1,
+          "name": "total_due_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The total amount paid toward the registration, formatted with the signup's\ncurrency symbol (for example `\"$120.00\"`).",
+          "example": "string",
+          "name": "total_paid",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The total amount paid toward the registration, in cents.",
+          "example": 1,
+          "name": "total_paid_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-registration-created_by",
+          "name": "created_by",
+          "path": "/registrations/v2/registrations/{registration_id}/created_by",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-registration-registrant_contact",
+          "name": "registrant_contact",
+          "path": "/registrations/v2/registrations/{registration_id}/registrant_contact",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "created_by",
+        "registrant_contact"
+      ],
+      "name": "Registration",
+      "orders": [
+        "created_at",
+        "updated_at"
+      ],
+      "path": "/registrations/v2/registrations",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "selection_type": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Whether the selection type has reached its maximum capacity.\n\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "at_maximum_capacity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Remaining spots for this selection type (`maximum_capacity` minus active\nregistrations). `null` when there is no capacity limit.\n\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "available_capacity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Maximum number of attendees this selection type can hold. `null` when there\nis no capacity limit.",
+          "example": 1,
+          "name": "maximum_capacity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Name of the selection type.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Price of selection type in cents.",
+          "example": 1,
+          "name": "price_cents",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Signup currency code, example `\"USD\"`.\n\n\nOnly available when requested with the `?fields` param",
+          "example": "string",
+          "name": "price_currency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Signup currency symbol, example `\"$\"`.\n\n\nOnly available when requested with the `?fields` param",
+          "example": "string",
+          "name": "price_currency_symbol",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Price of selection type with currency formatting (symbol not included).\n\n\nOnly available when requested with the `?fields` param",
+          "example": "string",
+          "name": "price_formatted",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Whether or not the selection type is available to the public.",
+          "example": true,
+          "name": "publicly_available",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Whether the selection type offers a waitlist once it is full.",
+          "example": true,
+          "name": "waitlist",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "`Selection_Types` are used to present the options people register for in a signup.",
+      "edges": [],
+      "includes": [],
+      "name": "SelectionType",
+      "orders": [],
+      "path": "/registrations/v2/attendees/{attendee_id}/selection_type",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "signup": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Whether the signup is archived or not.",
+          "example": true,
+          "name": "archived",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether the signup has reached its signup-level maximum capacity.\n\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "at_maximum_capacity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "UTC time at which regsitration closes.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "close_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Whether the signup is currently closed to new registrations. A signup is\nclosed when it is archived, has no `open_at`, has an `open_at` in the\nfuture, or has a `close_at` in the past.",
+          "example": true,
+          "name": "closed",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Decription of the signup.",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "URL for the image used for the signup.",
+          "example": "string",
+          "name": "logo_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Maximum number of attendees this signup can hold across all selection types.\n`null` when there is no signup-level capacity limit.",
+          "example": 1,
+          "name": "maximum_capacity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Name of the signup.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "URL to allow people to register for signup.",
+          "example": "string",
+          "name": "new_registration_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Whether the signup is currently open to new registrations. Inverse of\n`closed`.",
+          "example": true,
+          "name": "open",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "UTC time at which regsitration opens.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "open_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A `Signup` is an organization signup that people can register for.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "active",
+            "canceled",
+            "waitlist"
+          ],
+          "head": "attendee",
+          "id": "attendee-signup-attendees",
+          "name": "attendees",
+          "path": "/registrations/v2/signups/{signup_id}/attendees",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "campus",
+          "id": "campus-signup-campuses",
+          "name": "campuses",
+          "path": "/registrations/v2/signups/{signup_id}/campuses",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "category",
+          "id": "category-signup-categories",
+          "name": "categories",
+          "path": "/registrations/v2/signups/{signup_id}/categories",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "signup_time",
+          "id": "signuptime-signup-next_signup_time",
+          "name": "next_signup_time",
+          "path": "/registrations/v2/signups/{signup_id}/next_signup_time",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "registration",
+          "id": "registration-signup-registrations",
+          "name": "registrations",
+          "path": "/registrations/v2/signups/{signup_id}/registrations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "publicly_available"
+          ],
+          "head": "selection_type",
+          "id": "selectiontype-signup-selection_types",
+          "name": "selection_types",
+          "path": "/registrations/v2/signups/{signup_id}/selection_types",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "signup_location",
+          "id": "signuplocation-signup-signup_location",
+          "name": "signup_location",
+          "path": "/registrations/v2/signups/{signup_id}/signup_location",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "future",
+            "past"
+          ],
+          "head": "signup_time",
+          "id": "signuptime-signup-signup_times",
+          "name": "signup_times",
+          "path": "/registrations/v2/signups/{signup_id}/signup_times",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "campuses",
+        "categories",
+        "next_signup_time",
+        "selection_types",
+        "signup_location",
+        "signup_times"
+      ],
+      "name": "Signup",
+      "orders": [
+        "created_at",
+        "updated_at"
+      ],
+      "path": "/registrations/v2/signups",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "signup_location": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The address data of the signup location, which includes details like street, city, state, and postal code.\n\n\nOnly available when requested with the `?fields` param",
+          "example": "json",
+          "name": "address_data",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "json"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The formatted address of the signup location, which may not include subpremise details.",
+          "example": "string",
+          "name": "formatted_address",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The fully formatted address of the signup location, including subpremise details.",
+          "example": "string",
+          "name": "full_formatted_address",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The latitude of the signup location.",
+          "example": "string",
+          "name": "latitude",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The type of location, such as `address`, `coords`, or `online`.",
+          "example": "string",
+          "name": "location_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The longitude of the signup location.",
+          "example": "string",
+          "name": "longitude",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The name of the signup location.",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The subpremise of the signup location, such as an building or room number.",
+          "example": "string",
+          "name": "subpremise",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "The URL for the signup location, if applicable (e.g., for online events).",
+          "example": "string",
+          "name": "url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "`Signup_location` is the location of a signup.",
+      "edges": [],
+      "includes": [],
+      "name": "SignupLocation",
+      "orders": [],
+      "path": "/registrations/v2/signups/{signup_id}/signup_location",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "signup_time": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Whether or not the signup time is all day.",
+          "example": true,
+          "name": "all_day",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "End date and time of signup time.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Start date and time of signup time.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "`Signup_time`s are associated with a signup, which can have multiple signup times.",
+      "edges": [],
+      "includes": [],
+      "name": "SignupTime",
+      "orders": [],
+      "path": "/registrations/v2/signups/{signup_id}/next_signup_time",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    }
+  }
+}

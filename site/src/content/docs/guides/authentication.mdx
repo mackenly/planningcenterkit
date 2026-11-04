@@ -1,0 +1,217 @@
+---
+title: "Authentication"
+description: "Personal access tokens, OAuth with automatic token rotation, the authorization flow with PKCE, and token providers."
+sidebar:
+  order: 2
+---
+
+Planning Center supports two kinds of credentials, and this library adds a third option for when
+you manage tokens yourself. Pass exactly one as `auth` to `new PlanningCenter()` (or to any
+`create{Product}Client()`); mixing them throws a `PcoError` that tells you what's wrong.
+
+| Strategy | Shape | Use it for |
+| --- | --- | --- |
+| Personal access token | `{ applicationId, secret }` | Scripts and servers working with your own organization |
+| OAuth | `{ accessToken, refreshToken?, clientId?, clientSecret?, expiresAt?, onTokenRefresh? }` | Apps that other organizations connect to |
+| Token provider | `{ getAccessToken }` | You already store and refresh tokens elsewhere |
+
+See Planning Center's [authentication docs](https://developer.planning.center/docs/#/overview/authentication).
+
+## Personal access tokens
+
+Create one at [api.planningcenteronline.com/oauth/applications](https://api.planningcenteronline.com/oauth/applications).
+It acts as the person who created it, with their permissions, and is sent as HTTP Basic auth.
+
+```ts
+import { PlanningCenter } from '@mackenly/planningcenterkit';
+
+const pco = new PlanningCenter({
+    auth: { applicationId: process.env.PCO_APP_ID!, secret: process.env.PCO_SECRET! },
+});
+```
+
+:::caution
+Never ship a personal access token to a browser or mobile app. It carries the full permissions of the person who created it.
+:::
+
+## OAuth
+
+### Using tokens you already have
+
+```ts
+const pco = new PlanningCenter({
+    auth: {
+        accessToken: saved.accessToken,
+        refreshToken: saved.refreshToken,
+        expiresAt: saved.expiresAt, // milliseconds since the epoch, or a Date
+        clientId: process.env.PCO_CLIENT_ID!,
+        clientSecret: process.env.PCO_CLIENT_SECRET!,
+        onTokenRefresh: async (tokens) => {
+            await db.saveTokens(userId, tokens); // tokens.accessToken, tokens.refreshToken, tokens.expiresAt
+        },
+    },
+});
+```
+
+How refresh works:
+
+- Pass `refreshToken`, `clientId`, and `clientSecret` together to enable automatic refresh (all
+  three or none; anything else throws).
+- The client refreshes about a minute before `expiresAt`, and once after any `401` response,
+  then replays the request.
+- Concurrent requests share a single refresh.
+- **Refresh tokens rotate.** Every refresh returns a new refresh token and the old one stops
+  working. The client keeps the new tokens in memory, but you must persist them in
+  `onTokenRefresh`, or after a restart you'll be holding a dead refresh token and the user will
+  have to authorize again. If `onTokenRefresh` throws, the request that triggered the refresh
+  fails with that error (the new tokens are still used in memory).
+- Access tokens last 2 hours; refresh tokens are honored for up to 90 days.
+
+If you pass only `accessToken`, it's used as-is until it expires.
+
+When refresh fails (for example, the user revoked access), you get a `PcoOAuthError`:
+
+```ts
+import { PcoOAuthError } from '@mackenly/planningcenterkit';
+
+try {
+    await pco.people.people.list();
+} catch (err) {
+    if (err instanceof PcoOAuthError && err.error === 'invalid_grant') {
+        // The refresh token was already used or revoked: send the user through OAuth again.
+    }
+    throw err;
+}
+```
+
+### Running the authorization flow
+
+The helpers in `@mackenly/planningcenterkit/oauth` (also exported from the main entry) work on
+their own, so you can use them in route handlers without creating a client.
+
+```ts
+import {
+    createPkceChallenge,
+    exchangeCodeForToken,
+    getAuthorizationUrl,
+} from '@mackenly/planningcenterkit/oauth';
+
+const redirectUri = 'https://example.com/auth/complete';
+
+// GET /login
+export async function login(): Promise<Response> {
+    const { codeVerifier, codeChallenge } = await createPkceChallenge();
+    const state = crypto.randomUUID();
+    // Save state and codeVerifier in the user's session (an encrypted cookie, a KV entry, ...).
+    await db.saveSession({ state, codeVerifier });
+    const url = getAuthorizationUrl({
+        clientId: process.env.PCO_CLIENT_ID!,
+        redirectUri,
+        scopes: ['people', 'services'],
+        state,
+        codeChallenge,
+    });
+    return Response.redirect(url, 302);
+}
+
+// GET /auth/complete?code=...&state=...
+export async function complete(request: Request): Promise<Response> {
+    const url = new URL(request.url);
+    const session = await db.loadSession(url.searchParams.get('state'));
+    if (!session) return new Response('Unknown login attempt', { status: 400 });
+
+    const tokens = await exchangeCodeForToken({
+        clientId: process.env.PCO_CLIENT_ID!,
+        clientSecret: process.env.PCO_CLIENT_SECRET!,
+        code: url.searchParams.get('code')!,
+        redirectUri,
+        codeVerifier: session.codeVerifier,
+    });
+    await db.saveTokens(userId, tokens);
+    return Response.redirect('https://example.com/', 302);
+}
+```
+
+Notes:
+
+- `scopes` are product names: `api`, `calendar`, `check_ins`, `giving`, `groups`, `home`,
+  `people`, `publishing`, `registrations`, `resources`, `services`, plus `openid` for an OIDC
+  `id_token`. They're exported as `PCO_OAUTH_SCOPES`. The Webhooks API needs no scope.
+- PKCE is optional for confidential apps but recommended. Planning Center supports `S256` only.
+  Public apps (no client secret) must use PKCE and can omit `clientSecret` from the exchange.
+- `getAuthorizationUrl` also accepts `nonce` and `prompt` (`'login'` or `'select_account'`).
+- A complete runnable server is in [examples/oauth-flow.ts](https://github.com/mackenly/planningcenterkit/blob/main/examples/oauth-flow.ts).
+
+### Other OAuth helpers
+
+```ts
+import { introspectToken, normalizeTokens, refreshAccessToken, revokeToken } from '@mackenly/planningcenterkit/oauth';
+
+const clientId = process.env.PCO_CLIENT_ID!;
+const clientSecret = process.env.PCO_CLIENT_SECRET!;
+
+// Refresh manually (when you don't use automatic refresh). Persist the result: the old refresh token is now dead.
+const fresh = await refreshAccessToken({ clientId, clientSecret, refreshToken: saved.refreshToken });
+
+// Disconnect: revoking the refresh token also revokes its access tokens.
+await revokeToken({ clientId, clientSecret, token: fresh.refreshToken!, tokenTypeHint: 'refresh_token' });
+
+// Check a token.
+const { active, scope } = await introspectToken({ clientId, clientSecret, token: fresh.accessToken });
+
+// Convert a raw stored token response ({ access_token, expires_in, created_at, ... }).
+const tokens = normalizeTokens({ access_token: 'abc', refresh_token: 'def', expires_in: 7200, created_at: 1767225600 });
+```
+
+Every OAuth helper accepts `fetch`, `baseUrl`, and `signal` options.
+
+## Token provider
+
+If tokens live in another system that refreshes them, give the client a function. It's called
+before every request attempt and must return the current access token:
+
+```ts
+const pco = new PlanningCenter({
+    auth: { getAccessToken: () => tokenStore.getFreshToken(userId) },
+});
+```
+
+The client doesn't refresh provider tokens itself, so a `401` is returned to you as a
+`PcoAuthenticationError`.
+
+## One client per user
+
+A `PlanningCenter` instance holds one set of credentials. In a multi-tenant app, create a client
+per organization or user (they're cheap: product clients are created lazily on first use) and
+cache it for as long as the tokens are valid:
+
+```ts
+import { PlanningCenter } from '@mackenly/planningcenterkit';
+
+const clients = new Map<string, PlanningCenter>();
+
+async function clientFor(userId: string): Promise<PlanningCenter> {
+    let client = clients.get(userId);
+    if (!client) {
+        const tokens = await db.loadTokens(userId);
+        client = new PlanningCenter({
+            auth: {
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken,
+                expiresAt: tokens.expiresAt,
+                clientId: process.env.PCO_CLIENT_ID!,
+                clientSecret: process.env.PCO_CLIENT_SECRET!,
+                onTokenRefresh: (fresh) => db.saveTokens(userId, fresh),
+            },
+        });
+        clients.set(userId, client);
+    }
+    return client;
+}
+```
+
+## Custom hosts
+
+`baseUrl` changes the API origin (and the OAuth endpoints used for refresh), and `uploadUrl` the
+file upload endpoint. The client refuses to send credentials to any other origin, even when a
+response's pagination links point there.

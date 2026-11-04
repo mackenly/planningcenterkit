@@ -1,0 +1,281 @@
+---
+title: "Querying"
+description: "Filter with where and filter, side-load with include, sort, paginate, and follow nested resources."
+sidebar:
+  order: 3
+---
+
+Every collection in every product is a query builder. This guide covers filtering, side-loading,
+sorting, pagination, and navigating between resources.
+
+Builders are **immutable**: every method returns a new builder and leaves the original unchanged,
+so you can define a base query once and branch from it safely.
+
+```ts
+const active = pco.people.people.where('status', 'active');
+const adults = active.where('child', false);       // `active` is unchanged
+const newest = active.order('-created_at').first();
+```
+
+Names are `snake_case` exactly as in [Planning Center's API reference](https://developer.planning.center/docs/),
+and every name (where fields, includes, order fields, filters, edges) is checked against the docs
+for that resource. Pressing `.` or `'` in your editor shows what's available.
+
+## `where`: filter by attribute
+
+```ts
+// Equality: where[status]=active
+pco.people.people.where('status', 'active');
+
+// Comparison: where[created_at][gte]=2026-01-01
+pco.people.people.where('created_at', 'gte', '2026-01-01');
+
+// Ranges: call it twice
+pco.people.people.where('birthdate', 'gte', '1990-01-01').where('birthdate', 'lt', '2000-01-01');
+
+// Dates are sent as ISO 8601
+pco.people.people.where('updated_at', 'gt', new Date(Date.now() - 24 * 60 * 60 * 1000));
+
+// Search fields Planning Center documents as query parameters
+pco.people.people.where('search_name_or_email', 'ada@example.com');
+```
+
+- Operators are `gt`, `gte`, `lt`, and `lte`. They're only accepted on fields Planning Center
+  lets you compare (usually dates, times, and some numbers). A field without operators is
+  equality only, and passing an operator is a type error.
+- Value types come from the docs: booleans for boolean fields, numbers for numeric fields,
+  `string | Date` for dates.
+- Calling `where` again with the same field (and operator) replaces the earlier value.
+- Passing `undefined` or `null` as the value throws a `PcoError` instead of silently dropping the
+  condition, so a missing variable can't turn a filtered query into "everything".
+
+### Partial matches with `%`
+
+Use `%` as a wildcard in a text `where` value for a partial match. Write it as-is: the library
+percent-encodes every value for the URL (`Tim%` is sent as `Tim%25`), so Planning Center receives
+exactly the `%` you wrote, and you never need to encode values yourself:
+
+```ts
+pco.people.people.where('first_name', 'Tim%');  // starts with "Tim": Tim, Timothy, ...
+```
+
+Which fields honor wildcards is up to Planning Center, so test against your data. For searching
+people, the documented `search_name`, `search_name_or_email`, and
+`search_name_or_email_or_phone_number` fields are usually the better tool.
+
+## `filter`: named filters
+
+Some endpoints accept named filters (`?filter=future`). The accepted names depend on the edge,
+and they're typed per edge:
+
+```ts
+pco.services.service_types.id('1').plans.filter('future');
+pco.people.people.filter('admins');
+pco.people.people.id('1').background_checks.filter('current', 'not_expired'); // filter=current,not_expired
+```
+
+Repeated calls add to the list. Some filters take an extra parameter (for example the People
+`created_since` filter or the Services `after` and `before` plan filters). Pass it with
+`param()`; check Planning Center's docs for each filter's parameter name:
+
+```ts
+pco.services.service_types.id('1').plans.filter('after').param('after', '2026-12-01');
+```
+
+## `include`: side-load related resources
+
+`include()` asks Planning Center to embed related resources in the response's `included` array,
+saving a request per resource. Read them with `related(resource, name)`, which returns an array
+typed by the relationship:
+
+```ts
+const { data, related } = await pco.people.people
+    .include('emails', 'phone_numbers', 'primary_campus')
+    .list();
+
+for (const person of data) {
+    const emails = related(person, 'emails');               // People.Email[]
+    const phones = related(person, 'phone_numbers');        // People.PhoneNumber[]
+    const [campus] = related(person, 'primary_campus');     // People.Campus | undefined
+    console.log(person.attributes.name, emails[0]?.attributes.address, campus?.attributes.name);
+}
+```
+
+`related()` always returns an array: empty when the relationship is missing or wasn't included, one
+element for a to-one relationship. The raw `included` array is on the result too.
+
+For a single resource, pass `include` as an option:
+
+```ts
+const { data: plan, related } = await pco.services.service_types.id('1').plans.id('2').get({ include: ['plan_times'] });
+const times = related(plan, 'plan_times'); // Services.PlanTime[]
+```
+
+## `order`: sort
+
+```ts
+pco.people.people.order('last_name');                 // ascending
+pco.people.people.order('-created_at');               // descending
+pco.people.people.order('last_name', 'first_name');   // order=last_name,first_name
+```
+
+Each call replaces the previous order. Only fields the docs list as orderable are accepted.
+
+## Pagination
+
+Planning Center pages results with `per_page` (1 to 100, default 25) and `offset`.
+
+```ts
+const page = await pco.people.people.perPage(50).offset(100).list();
+
+page.data;        // this page's resources
+page.totalCount;  // meta.total_count: matches across all pages
+page.nextOffset;  // offset of the next page, or undefined on the last page
+page.meta;        // the raw meta (can_include, can_order_by, ...)
+page.links;       // the raw links (self, next, ...)
+```
+
+Usually you don't page by hand. Pick the method that fits:
+
+| Method | What it does |
+| --- | --- |
+| `list(options?)` | Fetches one page |
+| `all(options?)` | Async-iterates every matching resource, following pagination |
+| `pages(options?)` | Async-iterates page by page (each with its own `included` and `related()`) |
+| `toArray(options?)` | Collects every matching resource into an array |
+| `first(options?)` | Fetches the first match (`per_page=1`), or `undefined` |
+| `count(options?)` | Returns the total number of matches (`per_page=1`) |
+| `get(id, options?)` | Fetches one resource by id from this collection |
+
+```ts
+// Stream everything, 100 per request.
+for await (const person of pco.people.people.where('status', 'active').all()) {
+    console.log(person.attributes.name);
+}
+
+// Need `included`? Iterate pages instead.
+for await (const page of pco.people.people.include('emails').pages()) {
+    for (const person of page.data) console.log(page.related(person, 'emails').length);
+}
+
+// Limits
+const firstThousand = await pco.people.people.toArray({ max: 1000 });
+for await (const page of pco.people.people.pages({ maxPages: 3 })) console.log(page.data.length);
+
+// Shortcuts
+const newest = await pco.people.people.order('-created_at').first();
+const total = await pco.people.people.where('child', true).count();
+```
+
+`all()`, `pages()`, and `toArray()` request 100 per page unless you set `perPage()`. Breaking out
+of a `for await` loop stops fetching.
+
+## Navigating nested resources
+
+`id(id)` returns a reference to one resource. It has `get()`, `update()` and `delete()` (when the
+resource supports them), `action()`, and one property per edge Planning Center documents for that
+resource. Edges can be chained as deep as the URLs go:
+
+```ts
+// GET /people/v2/people/1/emails
+await pco.people.people.id('1').emails.list();
+
+// GET /people/v2/people/1/workflow_cards?filter=assigned
+await pco.people.people.id('1').workflow_cards.filter('assigned').list();
+
+// GET /services/v2/service_types/1/plans/2/team_members?filter=confirmed
+await pco.services.service_types.id('1').plans.id('2').team_members.filter('confirmed').list();
+
+// GET /groups/v2/groups/5/memberships?include=person
+await pco.groups.groups.id('5').memberships.include('person').list();
+```
+
+Edges that return a collection are full query builders (`where`, `include`, `all()`, ...). The few
+edges that return exactly one resource have `get()`, plus `create()` when Planning Center accepts
+a `POST` there (for example starring a People list with `pco.people.lists.id('1').star`):
+
+```ts
+const { data: enrollment } = await pco.groups.groups.id('5').enrollment.get(); // data may be null
+```
+
+### To-one relationships documented as collections
+
+Planning Center's API documentation describes many to-one links as collections, for example a
+person's `primary_campus` or a Services item's `song` and `arrangement`. They're typed and
+accessed as collections, so use `list()` (or `first()`) rather than `get()`:
+
+```ts
+const [campus] = (await pco.people.people.id('1').primary_campus.list()).data;
+const song = await pco.services.service_types.id('1').plans.id('2').items.id('3').song.first();
+```
+
+The runtime accepts either response shape (a single resource or an array) for these edges, so
+this keeps working whichever one Planning Center returns.
+
+### Canonical URLs
+
+When a resource type has its own top-level URL (People lists live at `/people/v2/lists/{id}`, for
+example), `.id()` addresses it by that canonical URL even when you reached it through a nested
+chain. Deep chains therefore only ever request URLs Planning Center documents, and `.path` on the
+reference shows the URL that will be used.
+
+Ids can be strings or numbers. Building a reference doesn't send a request; only `get()`,
+`list()`, and the other terminal methods do.
+
+### Edges that collide with method names
+
+If an edge is named like a builder method (`get`, `update`, `delete`, `action`, `edge`, `path`, or
+`then`), reach it with `edge()`. `edge()` works for any edge:
+
+```ts
+pco.people.people.id('1').edge('emails').list();
+```
+
+The product root has the same escape hatch for root collections, and `get()` fetches the root
+resource itself (usually the organization):
+
+```ts
+const { data: org } = await pco.services.get();
+await pco.services.edge('service_types').list();
+```
+
+## Cancelling
+
+Every terminal method accepts an `AbortSignal`:
+
+```ts
+const controller = new AbortController();
+setTimeout(() => controller.abort(), 5_000);
+await pco.people.people.list({ signal: controller.signal });
+await pco.people.people.id('1').get({ signal: controller.signal, include: ['emails'] });
+for await (const person of pco.people.people.all({ signal: controller.signal })) console.log(person.id);
+```
+
+An aborted request rejects with the signal's reason (an `AbortError` `DOMException` by default).
+
+## Anything else
+
+`param(key, value)` sets any raw query parameter, for parameters the typed methods don't cover:
+
+```ts
+pco.people.people.param('where[search_name_or_email_or_phone_number]', '555');
+```
+
+The `path` property on any builder shows the URL path it targets, which helps when debugging.
+
+## Raw requests
+
+For endpoints that aren't in the docs at all, `pco.request()` is still authenticated, rate
+limited, and retried:
+
+```ts
+import type { JsonApiDocument } from '@mackenly/planningcenterkit';
+
+const me = await pco.request<JsonApiDocument>({ method: 'GET', path: '/people/v2/me' });
+const page = await pco.request<JsonApiDocument>({
+    method: 'GET',
+    path: '/people/v2/people',
+    query: { 'where[search_name_or_email]': 'ada', per_page: 10 },
+    version: '2026-10-05', // raw requests send no X-PCO-API-Version unless you set one
+});
+```

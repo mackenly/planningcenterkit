@@ -1,0 +1,148 @@
+---
+title: "Writing data"
+description: "Create, update, and delete resources, run actions, and upload files, all typed against what Planning Center accepts."
+sidebar:
+  order: 4
+---
+
+Creating, updating, and deleting resources, and running actions. Every write is typed against what
+Planning Center's docs say the endpoint accepts, and methods only exist where the API supports them:
+
+- `create()` exists on collections you can `POST` to (`pco.people.people`, `...id('1').emails`),
+  not on read-only ones (`pco.people.emails` at the root).
+- `update()` exists on references to resources that accept `PATCH`.
+- `delete()` exists on references to resources that accept `DELETE`.
+- `action(name)` accepts only the actions documented for that resource.
+
+Writes go to the same product client and API version as reads, so the response is typed too.
+
+## Create
+
+```ts
+const { data: person } = await pco.people.people.create({
+    first_name: 'Ada',
+    last_name: 'Lovelace',
+    birthdate: '1815-12-10',
+    child: false,
+});
+console.log(person.id, person.attributes.name);
+
+// Nested collections create resources that belong to the parent.
+await pco.people.people.id(person.id).emails.create({ address: 'ada@example.com', location: 'Home', primary: true });
+await pco.people.people.id(person.id).phone_numbers.create({ number: '+15555550100', location: 'Mobile' });
+```
+
+The first argument holds the attributes; the library wraps them in the JSON:API envelope
+(`{ data: { type: 'Person', attributes: {...} } }`) for you. Only attributes the docs list as
+assignable on create are accepted, so read-only fields like `created_at` are type errors.
+
+### Linking to other resources
+
+Most Planning Center endpoints take related ids as `*_id` attributes:
+
+```ts
+// POST /groups/v2/groups/5/memberships
+await pco.groups.groups.id('5').memberships.create({ person_id: '123', role: 'member' });
+
+// POST /services/v2/service_types/1/plans/2/team_members
+await pco.services.service_types.id('1').plans.id('2').team_members.create({
+    person_id: '123',
+    team_id: '45',
+    team_position_name: 'Vocals',
+});
+```
+
+For endpoints that expect JSON:API relationships instead, pass `relationships`:
+
+```ts
+await pco.people.people.id('123').emails.create(
+    { address: 'ada@example.com', location: 'Work' },
+    { relationships: { person: { data: { type: 'Person', id: '123' } } } },
+);
+```
+
+### Getting related resources back
+
+`create()` and `update()` accept `include`, and the result has `related()` just like reads:
+
+```ts
+const { data: membership, related } = await pco.groups.groups
+    .id('5')
+    .memberships.create({ person_id: '123', role: 'leader' }, { include: ['person'] });
+const [member] = related(membership, 'person');
+```
+
+## Update
+
+```ts
+const { data } = await pco.people.people.id('123').update({ nickname: 'Ada', status: 'active' });
+
+// Clear a value with null
+await pco.people.people.id('123').update({ middle_name: null });
+
+await pco.people.people.id('123').emails.id('456').update({ primary: true });
+```
+
+Only the attributes you pass are changed.
+
+## Delete
+
+```ts
+await pco.people.people.id('123').emails.id('456').delete();
+await pco.services.service_types.id('1').plans.id('2').delete();
+```
+
+`delete()` resolves to `undefined` on success and throws `PcoNotFoundError` if the resource is
+already gone.
+
+## Actions
+
+Some resources have actions: endpoints you `POST` to on a resource, like running a list or
+reordering a plan's items. `action(name, body?)` sends `body` exactly as given and resolves with the
+parsed response (or `undefined` for an empty `204`).
+
+```ts
+import type { JsonApiDocument } from '@mackenly/planningcenterkit';
+
+// POST /people/v2/lists/1/run
+await pco.people.lists.id('1').action('run');
+
+// POST /people/v2/people/123/workflow_cards/9/promote
+await pco.people.people.id('123').workflow_cards.id('9').action('promote');
+
+// POST /services/v2/service_types/1/plans/2/item_reorder
+await pco.services.service_types.id('1').plans.id('2').action('item_reorder', {
+    data: { attributes: { sequence: ['5', '3', '4'] } },
+});
+
+// POST /groups/v2/groups/5/duplicate, typing the response yourself
+const copy = await pco.groups.groups.id('5').action<JsonApiDocument>('duplicate');
+```
+
+Action bodies aren't typed, because Planning Center documents them as prose. Check the action's
+page in [Planning Center's API documentation](https://developer.planning.center/docs/) for its body (each resource's [reference page](/reference/) lists its actions and links there). Calling an
+action the docs don't list rejects with a `PcoError` before anything is sent; use
+[`pco.request()`](/guides/querying/#raw-requests) for undocumented endpoints.
+
+## Files
+
+Attributes that take a file (avatars, attachments, form uploads) take the id of a file uploaded to
+Planning Center's upload service:
+
+```ts
+import { readFile } from 'node:fs/promises';
+
+const file = await pco.uploadFile(await readFile('portrait.jpg'), { filename: 'portrait.jpg', contentType: 'image/jpeg' });
+await pco.people.people.id('123').update({ avatar: file.id });
+```
+
+`uploadFile()` accepts a `Blob` or `File` (e.g. from a `FormData` request), an `ArrayBuffer`, or a
+`Uint8Array` (a Node `Buffer` is one). It resolves with `{ id, name, content_type, file_size, md5,
+expires_at }`; the upload expires if you don't attach it to something.
+
+## Retries and writes
+
+`POST` and `PATCH` requests are not retried on server errors, network errors, or timeouts, because
+Planning Center may already have applied them. They are retried on `429` (rate limited), since a
+rate-limited request was never processed. If a create times out, check whether it happened before
+trying again. See [Errors and retries](/guides/errors-and-retries/).
