@@ -12,7 +12,7 @@ const nimbusConfig = defineNimbusConfig({
   // versions, llms.txt and the search index are still prepared at build.
   rendering: { default: "request" },
   site: "https://planningcenterkit.mackenly.com",
-  title: "Planning Center Kit",
+  title: "Unofficial Planning Center Kit",
   description:
     "Documentation for @mackenly/planningcenterkit, an unofficial, fully typed, zero-dependency TypeScript client for every Planning Center API.",
   locale: "en",
@@ -20,7 +20,7 @@ const nimbusConfig = defineNimbusConfig({
   // `{path}` is the page's file relative to site/. Generated reference pages
   // have no source file to edit; the docs route leaves their edit link out.
   editPattern: "https://github.com/mackenly/planningcenterkit/edit/main/site/{path}",
-  socialImageAlt: "Planning Center Kit documentation",
+  socialImageAlt: "Unofficial Planning Center Kit documentation",
   agents: { mcp: true },
   sidebar: {
     items: [

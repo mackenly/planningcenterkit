@@ -54,6 +54,14 @@ jobs:
             # released, and the failed run is the signal to look at the new spec by hand.
             - run: npm run check
 
+            # Check the regenerated client against a real organization before anything is
+            # released. Skips itself (passes) when the secrets aren't set.
+            - name: Live tests
+              run: npm run test:live
+              env:
+                  PCO_TEST_CLIENT_ID: ${{ secrets.PCO_TEST_CLIENT_ID }}
+                  PCO_TEST_SECRET: ${{ secrets.PCO_TEST_SECRET }}
+
             - name: Make sure only spec/ and src/generated/ changed
               run: |
                   unexpected="$(git status --porcelain --untracked-files=all | grep -vE '^.. (spec/|src/generated/)' || true)"

@@ -59,7 +59,8 @@
     "spec:diff": "node scripts/spec-diff.ts",
     "docs:reference": "node scripts/generate-reference.ts",
     "docs:dev": "npm run docs:reference && npm --prefix site run dev",
-    "docs:build": "npm run docs:reference && npm --prefix site run build"
+    "docs:build": "npm run docs:reference && npm --prefix site run build",
+    "test:live": "vitest run --config vitest.live.config.ts"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-# Planning Center Kit (@mackenly/planningcenterkit)
+# Unofficial Planning Center Kit (@mackenly/planningcenterkit)
 
 > Fully typed, zero-dependency TypeScript/JavaScript client for every Planning Center API (People, Services, Check-Ins, Groups, Giving, Calendar, Registrations, Publishing, Webhooks, Current, API). Generated from Planning Center's own API documentation. Runs on Node 22+, Bun, Deno, Cloudflare Workers, and browsers (OAuth/token auth only in browsers). Unofficial; not affiliated with Planning Center.
 

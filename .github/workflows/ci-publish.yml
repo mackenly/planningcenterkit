@@ -46,8 +46,39 @@ jobs:
             - run: npm test
             - run: npm run build
 
-    publish:
+    # Read-only tests against a real Planning Center organization. They run only when the
+    # PCO_TEST_CLIENT_ID and PCO_TEST_SECRET repository secrets exist (a personal access token's
+    # application ID and secret). Secrets aren't available to pull requests from forks or
+    # Dependabot, so the job passes without running there. The job itself always runs (its steps
+    # are skipped instead) so `publish`, which needs it, isn't skipped along with it.
+    live:
         needs: build-and-test
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        # Shares the organization's rate limit with the spec refresh's live run.
+        concurrency:
+            group: pco-live
+            cancel-in-progress: false
+        env:
+            PCO_TEST_CLIENT_ID: ${{ secrets.PCO_TEST_CLIENT_ID }}
+            PCO_TEST_SECRET: ${{ secrets.PCO_TEST_SECRET }}
+        steps:
+            - name: Skip without credentials
+              if: env.PCO_TEST_CLIENT_ID == '' || env.PCO_TEST_SECRET == ''
+              run: echo "PCO_TEST_CLIENT_ID / PCO_TEST_SECRET not available; skipping live tests."
+            - uses: actions/checkout@v4
+              if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
+            - uses: actions/setup-node@v4
+              if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
+              with:
+                  node-version: '24.x'
+            - run: npm ci
+              if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
+            - run: npm run test:live
+              if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
+
+    publish:
+        needs: [build-and-test, live]
         runs-on: ubuntu-latest
         if: github.repository_owner == 'mackenly' && github.ref == 'refs/heads/main'
         timeout-minutes: 15

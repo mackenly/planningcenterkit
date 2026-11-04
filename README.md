@@ -1,6 +1,9 @@
-# Planning Center Kit
+# Unofficial Planning Center Kit
 
 A fully typed, zero-dependency TypeScript client for every Planning Center API.
+
+> [!IMPORTANT]
+> **Unofficial.** This is an independent, community-maintained project. It is not supported by, endorsed by, or affiliated with Planning Center.
 
 [![npm version](https://img.shields.io/npm/v/@mackenly/planningcenterkit?logo=npm)](https://www.npmjs.com/package/@mackenly/planningcenterkit)
 [![CI](https://github.com/mackenly/planningcenterkit/actions/workflows/ci-publish.yml/badge.svg?branch=main)](https://github.com/mackenly/planningcenterkit/actions/workflows/ci-publish.yml)
@@ -465,6 +468,7 @@ so fixes to resource types usually belong in `scripts/` rather than `src/generat
 | `npm run spec:fetch` | Downloads Planning Center's API documentation into `spec/` |
 | `npm run generate` | Regenerates `src/generated/` from `spec/` |
 | `npm test` | Unit and type tests (Vitest) |
+| `npm run test:live` | Read-only tests against a real organization; needs `PCO_TEST_CLIENT_ID` and `PCO_TEST_SECRET` (a personal access token), skipped otherwise |
 | `npm run typecheck` | `tsc` over sources, tests, scripts, and examples |
 | `npm run build` | Builds ESM and CommonJS output into `dist/` |
 | `npm run check` | Typecheck, test, and build |

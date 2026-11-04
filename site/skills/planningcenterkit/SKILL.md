@@ -3,7 +3,7 @@ name: planningcenterkit
 description: Use @mackenly/planningcenterkit, the typed TypeScript client for every Planning Center (PCO) API. Covers creating a client, authentication, querying with where/filter/include/order, pagination, nested resources, creates/updates/deletes/actions, errors, retries and rate limits, and finding exact resource and field names in the reference.
 ---
 
-# Planning Center Kit
+# Unofficial Planning Center Kit
 
 `@mackenly/planningcenterkit` is an unofficial, zero-dependency client for every Planning Center API (People, Services, Check-Ins, Groups, Giving, Calendar, Registrations, Publishing, Current, Webhooks, API). The typed clients are generated from Planning Center's API documentation, so every name is `snake_case` exactly as in Planning Center's docs. Node 22+, Bun, Deno, Cloudflare Workers, Vercel.
 

@@ -18,5 +18,5 @@
     "rewriteRelativeImportExtensions": false,
     "types": ["node"]
   },
-  "include": ["src", "test", "scripts", "examples", "vitest.config.ts"]
+  "include": ["src", "test", "scripts", "examples", "vitest.config.ts", "vitest.live.config.ts"]
 }

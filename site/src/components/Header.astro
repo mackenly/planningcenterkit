@@ -75,7 +75,14 @@ const resolveSectionHref = (href: string): string =>
         {/* The mark alone; the site title stays as the link's accessible name. */}
         <a href={homeHref} class="flex shrink-0 items-center text-foreground transition-opacity hover:opacity-70">
           <Logo class="h-5 w-5 shrink-0" />
-          <span class="ms-2 text-sm font-semibold whitespace-nowrap">{config.title}</span>
+          {config.title.startsWith("Unofficial ") ? (
+            <span class="ms-2 flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold">
+              <span class="rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-px text-[11px] font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-300">Unofficial</span>
+              <span>{config.title.slice("Unofficial ".length)}</span>
+            </span>
+          ) : (
+            <span class="ms-2 text-sm font-semibold whitespace-nowrap">{config.title}</span>
+          )}
         </a>
       </slot>
 

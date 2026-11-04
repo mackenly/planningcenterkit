@@ -19,6 +19,7 @@ npm run check          # typecheck + tests + build; run before finishing any cha
 npm run spec:fetch     # re-download Planning Center's docs into spec/
 npm run generate       # spec/ -> src/generated/ (deterministic)
 npm run spec:diff      # semver impact of spec/ changes vs HEAD
+npm run test:live      # read-only live tests; needs PCO_TEST_CLIENT_ID and PCO_TEST_SECRET, never log them
 npm run docs:dev       # docs site locally
 ```
 
@@ -29,5 +30,6 @@ npm run docs:dev       # docs site locally
 - Change generated output by changing `scripts/generate.ts` (or the contracts in `src/core/graph.ts`), then run `npm run generate`. Never edit `src/generated/` directly.
 - API names stay snake_case exactly as in Planning Center's docs; only product properties are camelCase.
 - Every public export gets TSDoc with an example that compiles against the real generated names.
+- Live tests (`test/live/`) must stay read-only: they run against a real organization in CI.
 - Add tests for behavior changes; risky logic (retries, auth refresh, URL building, webhook verification) needs regression tests that fail without the fix.
 - Releases are automatic; see [RELEASING.md](RELEASING.md). Use `feat:` (or `feat(scope):`) for minor and `BREAKING CHANGE` or `bump-major` for major bumps in commit messages.
