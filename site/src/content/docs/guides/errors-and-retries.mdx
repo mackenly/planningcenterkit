@@ -1,0 +1,216 @@
+---
+title: "Errors and retries"
+description: "Error classes, Planning Center error hints, retries, rate limiting, timeouts, cancellation, and logging hooks."
+sidebar:
+  order: 5
+---
+
+## Error classes
+
+Everything the library throws extends `PcoError`, so `err instanceof PcoError` catches all of it.
+A non-2xx response becomes a `PcoApiError` subclass chosen by status code, thrown after any retries.
+
+```text
+PcoError
+├── PcoApiError                  any non-2xx response
+│   ├── PcoBadRequestError       400
+│   ├── PcoAuthenticationError   401
+│   ├── PcoForbiddenError        403
+│   ├── PcoNotFoundError         404
+│   ├── PcoConflictError         409
+│   ├── PcoValidationError       422
+│   ├── PcoRateLimitError        429
+│   └── PcoServerError           5xx
+├── PcoNetworkError              no response (DNS failure, connection reset, ...)
+├── PcoTimeoutError              an attempt exceeded timeoutMs
+├── PcoOAuthError                code exchange, refresh, revoke, or introspect failed
+└── PcoWebhookError              webhook body already read
+    ├── PcoWebhookVerificationError   bad or missing signature (status 401)
+    └── PcoWebhookParseError          malformed delivery (status 400)
+```
+
+A plain `PcoError` is also thrown for invalid input before any request is sent: a missing or mixed
+`auth`, an empty id, `perPage(500)`, or an action the docs don't list.
+
+Every `PcoApiError` has:
+
+| Property | Description |
+| --- | --- |
+| `status` | HTTP status code |
+| `method`, `url` | The request that failed (the URL never contains credentials) |
+| `errors` | The JSON:API `errors` array from the response |
+| `hint` | Planning Center's error hint, if the response had one (see below) |
+| `headers` | Response headers |
+| `body` | Parsed response body (or the raw text if it wasn't JSON) |
+| `message` | `GET https://... failed with 404: Not Found` plus details and hint |
+
+```ts
+import { PcoApiError, PcoNotFoundError } from '@mackenly/planningcenterkit';
+
+try {
+    await pco.people.people.id('123').update({ nickname: 'Ada' });
+} catch (err) {
+    if (err instanceof PcoNotFoundError) {
+        // the person was deleted
+    } else if (err instanceof PcoApiError) {
+        console.error(err.status, err.errors.map((e) => e.detail));
+    } else {
+        throw err;
+    }
+}
+```
+
+### Validation errors
+
+`PcoValidationError.fieldErrors` groups the messages by attribute (taken from each error's
+`source.pointer`; errors without a pointer are under `base`):
+
+```ts
+import { PcoValidationError } from '@mackenly/planningcenterkit';
+
+try {
+    await pco.people.people.id('123').emails.create({ address: 'not an email' });
+} catch (err) {
+    if (err instanceof PcoValidationError) {
+        console.log(err.fieldErrors); // { address: ['is invalid'] }
+    }
+}
+```
+
+### Error hints
+
+Planning Center tags some errors with an animal codename. The library finds it and sets `hint`,
+and adds its meaning to the message. The full list is exported as `PCO_ERROR_HINTS`.
+
+| Hint | Meaning |
+| --- | --- |
+| `BABOON` | The OAuth access token is expired |
+| `CAPUCHIN` | The OAuth access token has been revoked |
+| `PELICAN` | The OAuth token is missing a required scope |
+| `CHINCHILLA` | The client application was not found or is invalid |
+| `FLAMINGO` | The authenticated user does not exist |
+| `LEMMING` | The authenticated organization does not exist |
+| `TRASH_PANDA` | The person doesn't have access to the requested product |
+| `BLACKBIRD` | The request includes an unsupported `kind` parameter |
+| `WEASEL`, `ANTEATER`, `BLUE_JAY`, `MOCKINGBIRD` | Signature authentication failures |
+
+```ts
+import { PcoAuthenticationError, PcoForbiddenError } from '@mackenly/planningcenterkit';
+
+try {
+    await pco.services.service_types.list();
+} catch (err) {
+    if (err instanceof PcoForbiddenError && err.hint === 'PELICAN') {
+        // ask the user to re-authorize with the `services` scope
+    } else if (err instanceof PcoAuthenticationError && err.hint === 'CAPUCHIN') {
+        // the user disconnected your app
+    }
+}
+```
+
+With OAuth auto-refresh configured, an expired token (`BABOON`) is refreshed and the request
+replayed before you ever see the error.
+
+## Retries
+
+| Situation | Retried? | Wait |
+| --- | --- | --- |
+| `429 Too Many Requests` | Yes, any method (the request wasn't processed) | `Retry-After`, or backoff if absent |
+| `5xx` | `GET` and `DELETE` only | Backoff (at least `Retry-After` if sent) |
+| Network error or timeout | `GET` and `DELETE` only | Backoff |
+| `401` with OAuth refresh configured | Once, after refreshing the token | None |
+| Any other `4xx` | No | |
+
+`POST` and `PATCH` aren't retried on server or network errors because Planning Center may already
+have applied them. Backoff is exponential with full jitter, starting at 500 ms and capped at 10 s.
+
+```ts
+const pco = new PlanningCenter({
+    auth,
+    retry: {
+        maxRetries: 3,            // retries after the first attempt; 0 disables retrying
+        retryServerErrors: true,  // retry 5xx/network/timeouts for GET and DELETE
+        maxRetryAfterSeconds: 60, // a 429 asking for longer throws PcoRateLimitError right away
+    },
+});
+```
+
+When retries run out, the last error is thrown (`PcoRateLimitError`, `PcoServerError`,
+`PcoNetworkError`, or `PcoTimeoutError`). `PcoRateLimitError.retryAfter` has the seconds the API
+asked for.
+
+## Rate limiting
+
+Planning Center allows a fixed number of requests per window (by default 100 requests per 20
+seconds per user) and reports the current window in `X-PCO-API-Request-Rate-Limit`,
+`-Count`, and `-Period` headers. The client:
+
+- **Paces itself** from those headers: once the window is used up, new requests wait for it to
+  reset instead of getting a `429`. Turn it off with `rateLimit: { throttle: false }`.
+- **Pauses everything** after a `429`, for the `Retry-After` it was given, so concurrent requests
+  don't pile on.
+- **Limits concurrency** to `maxConcurrency` requests in flight (default `10`); the rest queue.
+
+All products on one `PlanningCenter` share one transport, so these limits are coordinated across
+`pco.people`, `pco.services`, and the rest. If you create several clients for the same
+credentials, share a transport between them:
+
+```ts
+import { createTransport, PlanningCenter } from '@mackenly/planningcenterkit';
+import { createGivingClient } from '@mackenly/planningcenterkit/giving';
+
+const transport = createTransport({ auth: { applicationId: '...', secret: '...' } });
+const pco = new PlanningCenter({ transport });
+const giving = createGivingClient({ transport });
+```
+
+## Timeouts and cancellation
+
+`timeoutMs` (default `30000`) limits each attempt. A timed-out `GET` or `DELETE` is retried; when
+retries run out, you get a `PcoTimeoutError`.
+
+Pass an `AbortSignal` to cancel a request, including any retry or rate-limit wait:
+
+```ts
+const controller = new AbortController();
+const pending = pco.people.people.toArray({ signal: controller.signal });
+controller.abort();
+await pending.catch((err) => console.log(err.name)); // 'AbortError'
+```
+
+An abort rejects with the signal's reason as-is (not wrapped in a `PcoError`), so
+`AbortSignal.timeout(5000)` rejects with a `TimeoutError` `DOMException`.
+
+## Logging and telemetry
+
+Hooks observe every attempt without changing it. They never receive credentials, and errors they
+throw are ignored.
+
+```ts
+const pco = new PlanningCenter({
+    auth,
+    hooks: {
+        onRequest: ({ method, url, attempt }) => console.debug(`-> ${method} ${url}${attempt ? ` (retry ${attempt})` : ''}`),
+        onResponse: ({ method, url, status, durationMs }) => console.debug(`<- ${status} ${method} ${url} ${durationMs}ms`),
+        onRetry: ({ reason, status, delayMs }) => console.warn(`retrying after ${reason} ${status ?? ''} in ${delayMs}ms`),
+        onThrottle: ({ delayMs }) => console.warn(`rate limit window full, waiting ${delayMs}ms`),
+    },
+});
+```
+
+| Hook | Called | Info |
+| --- | --- | --- |
+| `onRequest` | Before each attempt | `method`, `url`, `attempt` (0 for the first) |
+| `onResponse` | After each attempt that got a response | adds `status`, `durationMs` |
+| `onRetry` | Before waiting to retry | adds `delayMs`, `reason` (`rate_limit`, `server_error`, `network_error`, `timeout`), `status?`, `error?` |
+| `onThrottle` | When a request waits for the rate limit window | `method`, `url`, `delayMs` |
+
+## Other transport options
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `userAgent` | | Appended to the `planningcenterkit` User-Agent, e.g. `my-app/1.0` |
+| `headers` | | Extra headers on every request |
+| `fetch` | global `fetch` | Custom `fetch` (proxies, tests, instrumentation) |
+| `baseUrl` | `https://api.planningcenteronline.com` | API origin |
+| `uploadUrl` | `https://upload.planningcenteronline.com/v2/files` | File upload endpoint |

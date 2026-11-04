@@ -13,11 +13,24 @@ on:
             - main
         paths-ignore:
             - '**/*.md'
+    # Manual releases, and the automatic spec refresh (.github/workflows/refresh-spec.yml), which
+    # dispatches this workflow with the semver level spec-diff computed. See RELEASING.md.
     workflow_dispatch:
+        inputs:
+            version_type:
+                description: 'Version bump: auto reads commit message keywords (see RELEASING.md)'
+                type: choice
+                options:
+                    - auto
+                    - patch
+                    - minor
+                    - major
+                default: auto
 
 jobs:
     build-and-test:
         runs-on: ubuntu-latest
+        timeout-minutes: 15
         strategy:
             matrix:
                 node-version: [22.x, 24.x, 26.x]
@@ -28,14 +41,22 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix.node-version }}
-            - run: npm install
-            - run: npm run build
+            - run: npm ci
+            - run: npm run typecheck
             - run: npm test
+            - run: npm run build
 
     publish:
         needs: build-and-test
         runs-on: ubuntu-latest
         if: github.repository_owner == 'mackenly' && github.ref == 'refs/heads/main'
+        timeout-minutes: 15
+        # One release at a time, repo-wide: the spec refresh job shares this group, so a refresh
+        # never pushes to main while a release is bumping the version (and vice versa). Queued
+        # runs wait instead of being cancelled mid-publish.
+        concurrency:
+            group: release-main
+            cancel-in-progress: false
         permissions:
             contents: write
             packages: write
@@ -55,9 +76,14 @@ jobs:
               uses: phips28/gh-action-bump-version@master
               with:
                   tag-prefix: 'v'
-                  patch-wording: 'bump-patch,fixes,Fixes,bugfix,Bugfix,patch,hotfix,Hotfix'
-                  minor-wording: 'bump-minor,adds,Adds,new'
-                  major-wording: 'bump-major,MAJOR,removes,Removes,delete,Delete'
+                  # Manual dispatch with an explicit level overrides keywords; '' means auto.
+                  version-type: ${{ inputs.version_type != 'auto' && inputs.version_type || '' }}
+                  # Keywords are matched as substrings of the pushed commit messages (major wins,
+                  # then minor; a conventional `type!:` subject is also major). Anything else is
+                  # a patch.
+                  minor-wording: 'feat:,feat(,bump-minor'
+                  major-wording: 'BREAKING CHANGE,bump-major'
+                  default: patch
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - name: Publish to GitHub Packages

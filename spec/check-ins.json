@@ -1,0 +1,3765 @@
+{
+  "basePath": "/check-ins/v2",
+  "entry": "organization",
+  "openApi": true,
+  "product": "checkIns",
+  "slug": "check-ins",
+  "title": "Planning Center Check-Ins",
+  "version": "2025-05-28",
+  "vertices": {
+    "attendance_type": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "color",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "limit",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A kind of attendee which is tracked by _headcount_, not by check-in.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-attendancetype-event",
+          "name": "event",
+          "path": "/check-ins/v2/events/{event_id}/attendance_types/{attendance_type_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "headcount",
+          "id": "headcount-attendancetype-headcounts",
+          "name": "headcounts",
+          "path": "/check-ins/v2/events/{event_id}/attendance_types/{attendance_type_id}/headcounts",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event"
+      ],
+      "name": "AttendanceType",
+      "orders": [],
+      "path": "/check-ins/v2/events/{event_id}/attendance_types",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "check_in": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "checked_out_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "confirmed_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "emergency_contact_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "emergency_contact_phone_number",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "medical_notes",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "number",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "one_time_guest",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "security_code",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An attendance record for an event.\n\nIf someone was checked out, `checked_out_at` will be present.\n\nYou can scope check-ins in a few ways:\n\n- `regular`s, `guest`s, and `volunteer`s correspond to the option selected when checking in.\n- `attendee`s are `regular`s and `guest`s together.\n- `one_time_guest`s are check-ins which were created without a corresponding person record.\n- `not_one_time_guest`s are check-ins which had a corresponding person record when they were created.\n- `checked_out` are check-ins where `checked_out_at` is present (meaning they were checked out from a station).\n- `first_time`s are check-ins which are the person's first for a given event. (Label-only visitors are not included here.)",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "check_in_group",
+          "id": "checkingroup-checkin-check_in_group",
+          "name": "check_in_group",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/check_in_group",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "check_in_time",
+          "id": "checkintime-checkin-check_in_times",
+          "name": "check_in_times",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/check_in_times",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "station",
+          "id": "station-checkin-checked_in_at",
+          "name": "checked_in_at",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/checked_in_at",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-checkin-checked_in_by",
+          "name": "checked_in_by",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/checked_in_by",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-checkin-checked_out_by",
+          "name": "checked_out_by",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/checked_out_by",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-checkin-event",
+          "name": "event",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_period",
+          "id": "eventperiod-checkin-event_period",
+          "name": "event_period",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_period",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_time",
+          "id": "eventtime-checkin-event_times",
+          "name": "event_times",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_times",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location",
+          "id": "location-checkin-locations",
+          "name": "locations",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "option",
+          "id": "option-checkin-options",
+          "name": "options",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/options",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-checkin-person",
+          "name": "person",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/person",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "check_in_times",
+        "checked_in_at",
+        "checked_in_by",
+        "checked_out_by",
+        "event",
+        "event_period",
+        "event_times",
+        "locations",
+        "options",
+        "person"
+      ],
+      "name": "CheckIn",
+      "orders": [
+        "checked_out_at",
+        "created_at",
+        "first_name",
+        "last_name",
+        "number",
+        "updated_at"
+      ],
+      "path": "/check-ins/v2/check_ins",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "account_center_person_id",
+          "ops": [],
+          "type": "integer"
+        },
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "security_code",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "EventPeriod",
+          "name": "event_period",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "check_in_group": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": 1,
+          "name": "check_ins_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "name_labels_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Possible values:\n  - `ready`: This group isn't printed or canceled yet\n  - `printed`: This group was successfully printed at a station\n  - `canceled`: This group was canceled at a station\n  - `skipped`: This group had no labels to print, so it was never printed.",
+          "example": "string",
+          "name": "print_status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "security_labels_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "When one or more people check in, they're grouped in a `CheckInGroup`.\nThese check-ins all have the same \"checked-in by\" person.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "check_in",
+          "id": "checkin-checkingroup-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/stations/{station_id}/check_in_groups/{check_in_group_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_period",
+          "id": "eventperiod-checkingroup-event_period",
+          "name": "event_period",
+          "path": "/check-ins/v2/stations/{station_id}/check_in_groups/{check_in_group_id}/event_period",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "station",
+          "id": "station-checkingroup-print_station",
+          "name": "print_station",
+          "path": "/check-ins/v2/stations/{station_id}/check_in_groups/{check_in_group_id}/print_station",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "check_ins",
+        "event_period",
+        "print_station"
+      ],
+      "name": "CheckInGroup",
+      "orders": [],
+      "path": "/check-ins/v2/stations/{station_id}/check_in_groups",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "check_in_time": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": [],
+          "name": "alerts",
+          "note": null,
+          "permissionLevel": "station",
+          "type": "array"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "has_validated",
+          "note": null,
+          "permissionLevel": "station",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "services_integrated",
+          "note": null,
+          "permissionLevel": "station",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A CheckInTime combines an EventTime and a Location, and associates it with\nthe parent CheckIn.",
+      "edges": [],
+      "includes": [],
+      "name": "CheckInTime",
+      "orders": [],
+      "path": "/check-ins/v2/check_ins/{check_in_id}/check_in_times",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "CheckIn",
+          "name": "check_in",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "EventTime",
+          "name": "event_time",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Location",
+          "name": "location",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "PreCheck",
+          "name": "pre_check",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": "string",
+          "name": "app_source",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "archived_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "enable_services_integration",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "frequency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "integration_key",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "location_times_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "pre_select_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A recurring event which people may attend.\n\nEach recurrence is an _event period_ (which often corresponds to a week).\n\nEvent periods have _event times_ where people may actually check in.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "attendance_type",
+          "id": "attendancetype-event-attendance_types",
+          "name": "attendance_types",
+          "path": "/check-ins/v2/events/{event_id}/attendance_types",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-event-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/events/{event_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_time",
+          "id": "eventtime-event-current_event_times",
+          "name": "current_event_times",
+          "path": "/check-ins/v2/events/{event_id}/current_event_times",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_label",
+          "id": "eventlabel-event-event_labels",
+          "name": "event_labels",
+          "path": "/check-ins/v2/events/{event_id}/event_labels",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_period",
+          "id": "eventperiod-event-event_periods",
+          "name": "event_periods",
+          "path": "/check-ins/v2/events/{event_id}/event_periods",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "integration_link",
+          "id": "integrationlink-event-integration_links",
+          "name": "integration_links",
+          "path": "/check-ins/v2/events/{event_id}/integration_links",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "locations",
+            "root"
+          ],
+          "head": "location",
+          "id": "location-event-locations",
+          "name": "locations",
+          "path": "/check-ins/v2/events/{event_id}/locations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person_event",
+          "id": "personevent-event-person_events",
+          "name": "person_events",
+          "path": "/check-ins/v2/events/{event_id}/person_events",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "attendance_types"
+      ],
+      "name": "Event",
+      "orders": [
+        "created_at",
+        "name"
+      ],
+      "path": "/check-ins/v2/events",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_many",
+          "graphType": "Campus",
+          "name": "campuses",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event_label": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "for_guest",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "for_regular",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "for_volunteer",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "quantity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Says how many of a given label to print for this event and\nwhether to print it for regulars, guests, and/or volunteers.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-eventlabel-event",
+          "name": "event",
+          "path": "/check-ins/v2/events/{event_id}/event_labels/{event_label_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "label",
+          "id": "label-eventlabel-label",
+          "name": "label",
+          "path": "/check-ins/v2/events/{event_id}/event_labels/{event_label_id}/label",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event",
+        "label"
+      ],
+      "name": "EventLabel",
+      "orders": [],
+      "path": "/check-ins/v2/events/{event_id}/event_labels",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "event_period": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "guest_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "note",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "regular_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Deduplicated people with a Guest check-in.\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "unique_guest_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Deduplicated people with a Regular check-in.\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "unique_regular_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Deduplicated people with any check-in.\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "unique_total_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Deduplicated people with a Volunteer check-in.\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "unique_volunteer_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "volunteer_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A recurrence of an event, sometimes called a \"session\".\nFor weekly events, an event period is a week. For daily events, an event period is a day.\nAn event period has event times, which is what people select\nwhen they actually check in. When new sessions are created, times\nare copied from one session to the next.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-eventperiod-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_period/{event_period_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-eventperiod-event",
+          "name": "event",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_period/{event_period_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "available"
+          ],
+          "head": "event_time",
+          "id": "eventtime-eventperiod-event_times",
+          "name": "event_times",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_period/{event_period_id}/event_times",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location_event_period",
+          "id": "locationeventperiod-eventperiod-location_event_periods",
+          "name": "location_event_periods",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_period/{event_period_id}/location_event_periods",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event",
+        "event_times"
+      ],
+      "name": "EventPeriod",
+      "orders": [
+        "starts_at"
+      ],
+      "path": "/check-ins/v2/check_ins/{check_in_id}/event_period",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "ends_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "starts_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event_time": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "day_of_week",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "guest_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "hides_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "hour",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "minute",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "regular_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "shows_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "total_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "volunteer_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A time that someone may check in. Times are copied from session to session.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location",
+          "id": "location-eventtime-available_locations",
+          "name": "available_locations",
+          "path": "/check-ins/v2/event_times/{event_time_id}/available_locations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-eventtime-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/event_times/{event_time_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-eventtime-event",
+          "name": "event",
+          "path": "/check-ins/v2/event_times/{event_time_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_period",
+          "id": "eventperiod-eventtime-event_period",
+          "name": "event_period",
+          "path": "/check-ins/v2/event_times/{event_time_id}/event_period",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "headcount",
+          "id": "headcount-eventtime-headcounts",
+          "name": "headcounts",
+          "path": "/check-ins/v2/event_times/{event_time_id}/headcounts",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location_event_time",
+          "id": "locationeventtime-eventtime-location_event_times",
+          "name": "location_event_times",
+          "path": "/check-ins/v2/event_times/{event_time_id}/location_event_times",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event",
+        "event_period",
+        "headcounts"
+      ],
+      "name": "EventTime",
+      "orders": [
+        "shows_at",
+        "starts_at"
+      ],
+      "path": "/check-ins/v2/event_times",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "EventPeriod",
+          "name": "event_period",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "headcount": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "total",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A tally of attendees for a given event time and attendance type.\nIf one does not exist, the count may have been zero.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "attendance_type",
+          "id": "attendancetype-headcount-attendance_type",
+          "name": "attendance_type",
+          "path": "/check-ins/v2/headcounts/{headcount_id}/attendance_type",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_time",
+          "id": "eventtime-headcount-event_time",
+          "name": "event_time",
+          "path": "/check-ins/v2/headcounts/{headcount_id}/event_time",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "attendance_type",
+        "event_time"
+      ],
+      "name": "Headcount",
+      "orders": [
+        "created_at",
+        "total",
+        "updated_at"
+      ],
+      "path": "/check-ins/v2/headcounts",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "AttendanceType",
+          "name": "attendance_type",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "EventTime",
+          "name": "event_time",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "integration_link": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "remote_app",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The Global ID for the external resource. Formatted as `gid://<app>/<type>/<id>`.",
+          "example": "string",
+          "name": "remote_gid",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "remote_id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "remote_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "sync_future_assignment_types",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A record linking another product's resource to a Check-Ins resource.",
+      "edges": [],
+      "includes": [],
+      "name": "IntegrationLink",
+      "orders": [],
+      "path": "/check-ins/v2/integration_links",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "remote_gid",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "local",
+          "note": "Type will be the type of Check-Ins resource it is linked to.",
+          "polymorphic": true
+        }
+      ],
+      "resourceOnly": false
+    },
+    "label": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "prints_for",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "roll",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "xml",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Labels can be set to print for events (through `EventLabel`s),\nlocations (through `LocationLabel`s) or options.\nLabel type (security label / name label) is expressed with the\n`prints_for` attribute. `prints_for=\"Person\"` is a name label,\n`prints_for=\"Group\"` is a security label.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_label",
+          "id": "eventlabel-label-event_labels",
+          "name": "event_labels",
+          "path": "/check-ins/v2/labels/{label_id}/event_labels",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location_label",
+          "id": "locationlabel-label-location_labels",
+          "name": "location_labels",
+          "path": "/check-ins/v2/labels/{label_id}/location_labels",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Label",
+      "orders": [],
+      "path": "/check-ins/v2/labels",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "location": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": 1,
+          "name": "age_max_in_months",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "age_min_in_months",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01",
+          "name": "age_on",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "age_range_by",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "attendees_per_volunteer",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "child_or_adult",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01",
+          "name": "effective_date",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "gender",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "grade_max",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "grade_min",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "max_occupancy",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "milestone",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "min_volunteers",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "opened",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "questions",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A place where people may check in to for a given event.\nSome locations have `kind=\"Folder\"`, which means that people\ncan't check-in here, but this location contains other locations.\nYou can get its contents from the `locations` attribute.\nYou can get a location's parent folder from the `parent` attribute.\n(If it's not in a folder, `parent` will be empty.)",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-location-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-location-event",
+          "name": "event",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "integration_link",
+          "id": "integrationlink-location-integration_links",
+          "name": "integration_links",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/integration_links",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location_event_period",
+          "id": "locationeventperiod-location-location_event_periods",
+          "name": "location_event_periods",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/location_event_periods",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location_event_time",
+          "id": "locationeventtime-location-location_event_times",
+          "name": "location_event_times",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/location_event_times",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location_label",
+          "id": "locationlabel-location-location_labels",
+          "name": "location_labels",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/location_labels",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location",
+          "id": "location-location-locations",
+          "name": "locations",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/locations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "option",
+          "id": "option-location-options",
+          "name": "options",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/options",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location",
+          "id": "location-location-parent",
+          "name": "parent",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/locations/{location_id}/parent",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event",
+        "locations",
+        "options",
+        "parent"
+      ],
+      "name": "Location",
+      "orders": [
+        "kind",
+        "name",
+        "position"
+      ],
+      "path": "/check-ins/v2/check_ins/{check_in_id}/locations",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Parent",
+          "name": "parent",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "location_event_period": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "guest_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "regular_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "volunteer_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Counts check-ins for a location during a certain event period.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-locationeventperiod-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_period/{event_period_id}/location_event_periods/{location_event_period_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_period",
+          "id": "eventperiod-locationeventperiod-event_period",
+          "name": "event_period",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_period/{event_period_id}/location_event_periods/{location_event_period_id}/event_period",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location",
+          "id": "location-locationeventperiod-location",
+          "name": "location",
+          "path": "/check-ins/v2/check_ins/{check_in_id}/event_period/{event_period_id}/location_event_periods/{location_event_period_id}/location",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event_period",
+        "location"
+      ],
+      "name": "LocationEventPeriod",
+      "orders": [],
+      "path": "/check-ins/v2/check_ins/{check_in_id}/event_period/{event_period_id}/location_event_periods",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "location_event_time": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "guest_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "regular_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "volunteer_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Counts check-ins for a location for a given event time.\nThis is useful for checking occupancy.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-locationeventtime-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/event_times/{event_time_id}/location_event_times/{location_event_time_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_time",
+          "id": "eventtime-locationeventtime-event_time",
+          "name": "event_time",
+          "path": "/check-ins/v2/event_times/{event_time_id}/location_event_times/{location_event_time_id}/event_time",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location",
+          "id": "location-locationeventtime-location",
+          "name": "location",
+          "path": "/check-ins/v2/event_times/{event_time_id}/location_event_times/{location_event_time_id}/location",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event_time",
+        "location"
+      ],
+      "name": "LocationEventTime",
+      "orders": [],
+      "path": "/check-ins/v2/event_times/{event_time_id}/location_event_times",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "location_label": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "for_guest",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "for_regular",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "for_volunteer",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "quantity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Says how many of a given label to print for this location and\nwhether to print it for regulars, guests, and/or volunteers.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "label",
+          "id": "label-locationlabel-label",
+          "name": "label",
+          "path": "/check-ins/v2/labels/{label_id}/location_labels/{location_label_id}/label",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location",
+          "id": "location-locationlabel-location",
+          "name": "location",
+          "path": "/check-ins/v2/labels/{label_id}/location_labels/{location_label_id}/location",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "label",
+        "location"
+      ],
+      "name": "LocationLabel",
+      "orders": [],
+      "path": "/check-ins/v2/labels/{label_id}/location_labels",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "option": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "body",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "quantity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An option which an attendee may select when checking in.\n\nOptions may have extra labels associated with them, denoted by `label` and `quantity`.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "check_in",
+          "id": "checkin-option-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/options/{option_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "label",
+          "id": "label-option-label",
+          "name": "label",
+          "path": "/check-ins/v2/options/{option_id}/label",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "label"
+      ],
+      "name": "Option",
+      "orders": [],
+      "path": "/check-ins/v2/options",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "organization": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "daily_check_ins",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "date_format_pattern",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "time_zone",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An organization which has people and events.\nThis contains its date format & time zone preferences.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-organization-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_time",
+          "id": "eventtime-organization-event_times",
+          "name": "event_times",
+          "path": "/check-ins/v2/event_times",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "archived",
+            "for_campus",
+            "for_headcounts",
+            "for_registrations",
+            "not_archived"
+          ],
+          "head": "event",
+          "id": "event-organization-events",
+          "name": "events",
+          "path": "/check-ins/v2/events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "headcount",
+          "id": "headcount-organization-headcounts",
+          "name": "headcounts",
+          "path": "/check-ins/v2/headcounts",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "integration_link",
+          "id": "integrationlink-organization-integration_links",
+          "name": "integration_links",
+          "path": "/check-ins/v2/integration_links",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "label",
+          "id": "label-organization-labels",
+          "name": "labels",
+          "path": "/check-ins/v2/labels",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "option",
+          "id": "option-organization-options",
+          "name": "options",
+          "path": "/check-ins/v2/options",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "pass",
+          "id": "pass-organization-passes",
+          "name": "passes",
+          "path": "/check-ins/v2/passes",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-organization-people",
+          "name": "people",
+          "path": "/check-ins/v2/people",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "station",
+          "id": "station-organization-stations",
+          "name": "stations",
+          "path": "/check-ins/v2/stations",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "theme",
+          "id": "theme-organization-themes",
+          "name": "themes",
+          "path": "/check-ins/v2/themes",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Organization",
+      "orders": [],
+      "path": "/check-ins/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "pass": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "code",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Possible values: `barcode` or `pkpass`.\n\nUsing the `pkpass` value creates a mobile pass and sends an email to the associated person.",
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Enables quick lookup of a person via barcode reader.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-pass-person",
+          "name": "person",
+          "path": "/check-ins/v2/passes/{pass_id}/person",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "person"
+      ],
+      "name": "Pass",
+      "orders": [],
+      "path": "/check-ins/v2/passes",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "code",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "person": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": [],
+          "name": "addresses",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01",
+          "name": "birthdate",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "check_in_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "child",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "demographic_avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": [],
+          "name": "email_addresses",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "gender",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "grade",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "headcounter",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "ignore_filters",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "last_checked_in_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "medical_notes",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "middle_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name_prefix",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name_suffix",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "passed_background_check",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "permission",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": [],
+          "name": "phone_numbers",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "top_permission",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An attendee, volunteer or administrator.\n\n_Usually_, a person who checked in will be present as a `Person`. In some cases, they may not be present:\n- The person was manually deleted from the admin interface\n- The check-in was created as a \"Visitor - Label Only\" (which doesn't create a corresponding person record)",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-person-check_ins",
+          "name": "check_ins",
+          "path": "/check-ins/v2/people/{person_id}/check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "organization",
+          "id": "organization-person-organization",
+          "name": "organization",
+          "path": "/check-ins/v2/people/{person_id}/organization",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "pass",
+          "id": "pass-person-passes",
+          "name": "passes",
+          "path": "/check-ins/v2/people/{person_id}/passes",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person_event",
+          "id": "personevent-person-person_events",
+          "name": "person_events",
+          "path": "/check-ins/v2/people/{person_id}/person_events",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "organization"
+      ],
+      "name": "Person",
+      "orders": [
+        "check_in_count",
+        "first_name",
+        "last_checked_in_at",
+        "last_name"
+      ],
+      "path": "/check-ins/v2/people",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "headcounter",
+          "ops": [],
+          "type": "boolean"
+        },
+        {
+          "name": "ignore_filters",
+          "ops": [],
+          "type": "boolean"
+        },
+        {
+          "name": "permission",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "search_name",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "person_event": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": 1,
+          "name": "check_in_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Counts a person's attendence for a given event.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-personevent-event",
+          "name": "event",
+          "path": "/check-ins/v2/events/{event_id}/person_events/{person_event_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "check_in",
+          "id": "checkin-personevent-first_check_in",
+          "name": "first_check_in",
+          "path": "/check-ins/v2/events/{event_id}/person_events/{person_event_id}/first_check_in",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "check_in",
+          "id": "checkin-personevent-last_check_in",
+          "name": "last_check_in",
+          "path": "/check-ins/v2/events/{event_id}/person_events/{person_event_id}/last_check_in",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-personevent-person",
+          "name": "person",
+          "path": "/check-ins/v2/events/{event_id}/person_events/{person_event_id}/person",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event",
+        "first_check_in",
+        "last_check_in",
+        "person"
+      ],
+      "name": "PersonEvent",
+      "orders": [],
+      "path": "/check-ins/v2/events/{event_id}/person_events",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "pre_check": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "PreCheck",
+      "orders": [],
+      "path": "/check-ins/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "roster_list_person": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "birthdate",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "demographic_avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "gender",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "grade",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "ignore_filters",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "medical_notes",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "RosterListPerson",
+      "orders": [],
+      "path": "/check-ins/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "station": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": 1,
+          "name": "check_in_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "closes_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Possible values: `scanner` or `keypad`",
+          "example": "value",
+          "name": "input_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values: `all_input_types`, `only_keypad`, or `only_scanner`",
+          "example": "value",
+          "name": "input_type_options",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "mode",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "next_shows_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": true,
+          "name": "online",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": true,
+          "name": "open_for_check_in",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": 1,
+          "name": "seconds_until_closes_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": 1,
+          "name": "seconds_until_next_shows_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "timeout_seconds",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A device where people can be checked in.\nA device may also be connected to a printer\nand print labels for itself or other stations.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "canceled",
+            "printed",
+            "ready",
+            "skipped"
+          ],
+          "head": "check_in_group",
+          "id": "checkingroup-station-check_in_groups",
+          "name": "check_in_groups",
+          "path": "/check-ins/v2/stations/{station_id}/check_in_groups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "attendee",
+            "checked_out",
+            "first_time",
+            "guest",
+            "not_checked_out",
+            "not_one_time_guest",
+            "one_time_guest",
+            "regular",
+            "volunteer"
+          ],
+          "head": "check_in",
+          "id": "checkin-station-checked_in_at_check_ins",
+          "name": "checked_in_at_check_ins",
+          "path": "/check-ins/v2/stations/{station_id}/checked_in_at_check_ins",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-station-event",
+          "name": "event",
+          "path": "/check-ins/v2/stations/{station_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "location",
+          "id": "location-station-location",
+          "name": "location",
+          "path": "/check-ins/v2/stations/{station_id}/location",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "station",
+          "id": "station-station-print_station",
+          "name": "print_station",
+          "path": "/check-ins/v2/stations/{station_id}/print_station",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "theme",
+          "id": "theme-station-theme",
+          "name": "theme",
+          "path": "/check-ins/v2/stations/{station_id}/theme",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event",
+        "location",
+        "print_station",
+        "theme"
+      ],
+      "name": "Station",
+      "orders": [],
+      "path": "/check-ins/v2/stations",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "theme": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "background_color",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "color",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "image",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "image_thumbnail",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "mode",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "text_color",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A custom style which may be applied to stations.",
+      "edges": [],
+      "includes": [],
+      "name": "Theme",
+      "orders": [],
+      "path": "/check-ins/v2/themes",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    }
+  }
+}

@@ -1,0 +1,137 @@
+name: Refresh Planning Center spec
+
+# Re-downloads Planning Center's API documentation, regenerates src/generated/, runs the full
+# check, and classifies the change with scripts/spec-diff.ts (see RELEASING.md):
+#
+# - none:          nothing to do.
+# - patch / minor: commit spec/ and src/generated/ straight to main and release that level.
+# - major:         push chore/refresh-pco-spec and open (or update) a pull request. Breaking
+#                  changes are never released automatically; merging the PR releases a major.
+#
+# Opening the pull request needs the repository setting "Allow GitHub Actions to create and
+# approve pull requests" (Settings > Actions > General > Workflow permissions).
+
+on:
+    schedule:
+        - cron: '17 9 * * 1' # Mondays 09:17 UTC
+    workflow_dispatch:
+
+permissions:
+    contents: write # push spec commits to main / the refresh branch
+    pull-requests: write # open or update the breaking-change pull request
+    actions: write # dispatch ci-publish.yml and docs.yml
+
+concurrency:
+    group: refresh-spec
+    cancel-in-progress: false
+
+env:
+    BRANCH: chore/refresh-pco-spec
+
+jobs:
+    refresh:
+        # Only on the canonical repo, and only from main: the patch/minor path pushes to main.
+        if: github.repository_owner == 'mackenly' && github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        # Shares the release group with ci-publish.yml's publish job, so a refresh never pushes to
+        # main while a release is bumping the version, and the release it dispatches waits until
+        # this job is done.
+        concurrency:
+            group: release-main
+            cancel-in-progress: false
+        steps:
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: '24.x'
+                  cache: npm
+            - run: npm ci
+            - run: npm run spec:fetch
+              timeout-minutes: 10
+            - run: npm run generate
+            # Typecheck, tests, build. If this fails the job stops here: nothing is committed or
+            # released, and the failed run is the signal to look at the new spec by hand.
+            - run: npm run check
+
+            - name: Make sure only spec/ and src/generated/ changed
+              run: |
+                  unexpected="$(git status --porcelain --untracked-files=all | grep -vE '^.. (spec/|src/generated/)' || true)"
+                  if [ -n "$unexpected" ]; then
+                      echo "::error::The refresh changed files outside spec/ and src/generated/:"
+                      echo "$unexpected"
+                      exit 1
+                  fi
+
+            - name: Classify the change
+              id: diff
+              # Compares HEAD:spec/ (what's on main) with the freshly fetched spec/.
+              run: node scripts/spec-diff.ts --markdown --github-output > "$RUNNER_TEMP/spec-diff.md"
+
+            - name: Nothing changed
+              if: steps.diff.outputs.level == 'none'
+              run: echo "Planning Center's documentation hasn't changed."
+
+            - name: Configure git
+              if: steps.diff.outputs.level != 'none'
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+            # Pushes made with GITHUB_TOKEN don't trigger `push` workflows (GitHub's guard against
+            # recursive runs), so committing to main alone would release nothing and leave the docs
+            # stale. `workflow_dispatch` is the documented exception, so trigger the release and the
+            # docs deploy explicitly. The commit message deliberately avoids release keywords; the
+            # level comes from version_type.
+            - name: Commit to main and release (${{ steps.diff.outputs.level }})
+              if: steps.diff.outputs.level == 'patch' || steps.diff.outputs.level == 'minor'
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  LEVEL: ${{ steps.diff.outputs.level }}
+              run: |
+                  git add -- spec src/generated
+                  git commit -m "chore(spec): refresh Planning Center API spec ($LEVEL)" -m "$(cat "$RUNNER_TEMP/spec-diff.md")"
+                  # Fails (and releases nothing) if main moved during this run; the next run retries.
+                  git push origin HEAD:main
+                  gh workflow run ci-publish.yml --ref main -f version_type="$LEVEL"
+                  # The release is what matters; a docs dispatch failure only warns.
+                  gh workflow run docs.yml --ref main || echo "::warning::Could not dispatch docs.yml; deploy the docs manually."
+                  {
+                      echo "Committed to main and dispatched a **$LEVEL** release and a docs deploy."
+                      echo
+                      cat "$RUNNER_TEMP/spec-diff.md"
+                  } >> "$GITHUB_STEP_SUMMARY"
+
+            - name: Open or update the breaking-change pull request
+              if: steps.diff.outputs.level == 'major'
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TITLE: 'chore(spec)!: refresh Planning Center API spec (BREAKING CHANGE)'
+              run: |
+                  git switch -C "$BRANCH"
+                  git add -- spec src/generated
+                  git commit -m "$TITLE"
+                  git push --force origin "$BRANCH"
+
+                  body="$RUNNER_TEMP/pr-body.md"
+                  {
+                      echo 'Automated refresh of the Planning Center API documentation snapshot (`spec/`) and the generated clients (`src/generated/`). `npm run check` (typecheck, tests, build) passed.'
+                      echo
+                      echo '> [!IMPORTANT]'
+                      echo '> `scripts/spec-diff.ts` classified this as a **breaking change**, so it was not released automatically.'
+                      echo '> **Merging this PR publishes a new major version.** Squash-merge and keep the `BREAKING CHANGE` title: the release workflow reads it to bump the major version.'
+                      echo '> If the merge commit message loses that keyword, run the "Node.js CI/CD" workflow manually on `main` with `version_type: major`.'
+                      echo '> Add a CHANGELOG.md entry describing the breaking changes before merging.'
+                      echo
+                      echo 'CI does not run automatically on pull requests opened by GITHUB_TOKEN; close and reopen this PR to trigger it.'
+                      echo
+                      cat "$RUNNER_TEMP/spec-diff.md"
+                  } > "$body"
+
+                  if gh pr view "$BRANCH" --json state --jq .state 2>/dev/null | grep -q OPEN; then
+                      gh pr edit "$BRANCH" --title "$TITLE" --body-file "$body"
+                      echo "Updated the existing pull request."
+                  else
+                      gh pr create --base main --head "$BRANCH" --title "$TITLE" --body-file "$body"
+                  fi
+                  cat "$RUNNER_TEMP/spec-diff.md" >> "$GITHUB_STEP_SUMMARY"

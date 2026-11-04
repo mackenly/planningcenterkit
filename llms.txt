@@ -1,0 +1,119 @@
+# Planning Center Kit (@mackenly/planningcenterkit)
+
+> Fully typed, zero-dependency TypeScript/JavaScript client for every Planning Center API (People, Services, Check-Ins, Groups, Giving, Calendar, Registrations, Publishing, Webhooks, Current, API). Generated from Planning Center's own API documentation. Runs on Node 22+, Bun, Deno, Cloudflare Workers, and browsers (OAuth/token auth only in browsers). Unofficial; not affiliated with Planning Center.
+
+This file ships inside the npm package so agents can use the library without network access.
+Full docs: https://planningcenterkit.mackenly.com (also /llms.txt there, Markdown at every page URL, and Agent Skills).
+Types: `node_modules/@mackenly/planningcenterkit/dist/esm/generated/<product>.d.ts` lists every resource, attribute, include, where field, order field, filter, edge, and action.
+
+## Essentials
+
+- Names from the API stay snake_case exactly as in Planning Center's docs (`phone_numbers`, `first_name`, `service_types`). Only product properties are camelCase (`pco.checkIns`).
+- URL path segments map 1:1 to the client: `/services/v2/service_types/1/plans` is `pco.services.service_types.id('1').plans`.
+- Responses are JSON:API: `{ data, included, meta, links }`; attributes live under `resource.attributes`.
+- Each product is pinned to the API version its types were generated from (`X-PCO-API-Version`).
+- Rate limits (429 + Retry-After), retries (GET/DELETE on 5xx/network), timeouts, and OAuth refresh are automatic.
+
+## Setup
+
+```ts
+import { PlanningCenter } from '@mackenly/planningcenterkit';
+
+// Personal access token (server-side only)
+const pco = new PlanningCenter({ auth: { applicationId: process.env.PCO_APP_ID!, secret: process.env.PCO_SECRET! } });
+
+// OAuth: refresh tokens rotate, so persist the new ones in onTokenRefresh
+const oauth = new PlanningCenter({
+    auth: { accessToken, refreshToken, clientId, clientSecret, expiresAt, onTokenRefresh: (tokens) => saveTokens(tokens) },
+});
+
+// Or supply tokens yourself
+const custom = new PlanningCenter({ auth: { getAccessToken: () => tokenStore.get() } });
+```
+
+## Reading
+
+```ts
+const { data: me } = await pco.people.me.get();                       // the authenticated person
+
+const page = await pco.people.people
+    .where('first_name', 'Ada')                // equality; append % for prefix match: 'Ad%'
+    .where('created_at', 'gte', '2026-01-01')  // gt | gte | lt | lte on dates (Date objects accepted)
+    .include('emails', 'phone_numbers')        // side-load related resources
+    .order('-created_at')                      // '-' prefix = descending
+    .perPage(100)                              // 1..100
+    .list();                                   // one page: { data, included, meta, links, totalCount, nextOffset, related }
+const emails = page.related(page.data[0]!, 'emails'); // typed resources from `included`, always an array
+
+for await (const person of pco.people.people.all()) { /* every page, automatically */ }
+const all = await pco.people.people.toArray({ max: 500 });
+const first = await pco.people.people.first();
+const total = await pco.people.people.count();
+
+const plan = await pco.services.service_types.id('1').plans.id('2').get({ include: ['plan_times'] });
+const future = await pco.services.service_types.id('1').plans.filter('future').list(); // filters come from the edge
+```
+
+Some to-one links are documented by Planning Center as collections; use `.list()` / `.first()` on them.
+Single-resource edges (e.g. `pco.groups.groups.id('5').enrollment`) have `.get()`, plus `.create()` when creatable.
+
+## Writing
+
+```ts
+const { data: person } = await pco.people.people.create({ first_name: 'Ada', last_name: 'Lovelace' });
+await pco.people.people.id(person.id).update({ nickname: 'Ada' });
+await pco.people.people.id(person.id).emails.create({ address: 'ada@example.com', location: 'Home' });
+await pco.people.people.id(person.id).delete();
+await pco.people.people.id('1').workflow_cards.id('2').action('promote'); // POST .../promote
+```
+
+`create`, `update`, and `delete` only exist (in types and at runtime) where Planning Center supports them; attribute types come from the docs.
+
+## Anything else
+
+```ts
+const doc = await pco.request({ method: 'GET', path: '/people/v2/people', query: { 'where[remote_id]': 42 }, version: '2026-10-05' });
+const file = await pco.uploadFile(bytes, { filename: 'avatar.png' }); // then pass file.id to a file attribute
+```
+
+## Errors
+
+All errors extend `PcoError`. API failures are `PcoApiError` subclasses with `status`, `errors`, `hint`, `url`:
+`PcoBadRequestError` 400, `PcoAuthenticationError` 401 (hint `BABOON` = expired token), `PcoForbiddenError` 403,
+`PcoNotFoundError` 404, `PcoConflictError` 409, `PcoValidationError` 422 (`fieldErrors` by attribute),
+`PcoRateLimitError` 429 after retries (`retryAfter`), `PcoServerError` 5xx. Also `PcoNetworkError`, `PcoTimeoutError`,
+`PcoOAuthError` (`error`, e.g. `invalid_grant`), `PcoWebhookError`.
+The client refuses unsupported operations before sending (unknown action, create on a non-creatable edge, ids `.`/`..`, `where(field, undefined)`).
+
+## Options
+
+`new PlanningCenter({ auth, timeoutMs: 30000, retry: { maxRetries: 3, retryServerErrors: true, maxRetryAfterSeconds: 60 }, rateLimit: { throttle: true }, maxConcurrency: 10, hooks: { onRequest, onResponse, onRetry, onThrottle }, fetch, baseUrl, userAgent, versions: { people: '2026-10-05' } })`.
+Every request method accepts `{ signal }` for cancellation.
+
+## Webhooks (receiving)
+
+`@mackenly/planningcenterkit/webhooks` verifies and parses deliveries. (`pco.webhooks` / `@mackenly/planningcenterkit/webhooks-api` is the Webhooks *product* API for managing subscriptions.)
+
+```ts
+import { handleWebhook } from '@mackenly/planningcenterkit/webhooks';
+
+export default {
+    async fetch(request: Request): Promise<Response> {
+        const events = await handleWebhook(request, { secret: env.PCO_WEBHOOK_SECRET }); // throws 401/400 errors with `.status`
+        for (const event of events) console.log(event.name, event.action, event.payload.data.id);
+        return new Response('ok');
+    },
+};
+```
+
+Node/Express: verify the raw body with `verifyWebhookSignature({ body, signature, secret })`, then `parseWebhook(body)`.
+
+## OAuth helpers
+
+`@mackenly/planningcenterkit/oauth`: `getAuthorizationUrl`, `createPkceChallenge`, `exchangeCodeForToken`, `refreshAccessToken`, `revokeToken`, `introspectToken`, `PCO_OAUTH_SCOPES`.
+
+## Imports
+
+- `@mackenly/planningcenterkit`: everything (`PlanningCenter`, errors, types, `People.Person`, `Services.Plan`, ...)
+- `@mackenly/planningcenterkit/<product>`: one product only (`createPeopleClient`, ...): api, calendar, check-ins, current, giving, groups, people, publishing, registrations, services, webhooks-api
+- `@mackenly/planningcenterkit/webhooks`, `@mackenly/planningcenterkit/oauth`

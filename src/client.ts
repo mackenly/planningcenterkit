@@ -1,349 +1,236 @@
+import type { ProductName } from './core/graph.js';
+import { createTransport, type TransportOptions } from './core/http.js';
+import { createProductClient, type ProductClient } from './core/product.js';
+import type { PcoRequest, PcoTransport, UploadedFile, UploadOptions } from './core/transport.js';
+import { apiGraph, type ApiRoot, type ApiSchema } from './generated/api.js';
+import { calendarGraph, type CalendarRoot, type CalendarSchema } from './generated/calendar.js';
+import { checkInsGraph, type CheckInsRoot, type CheckInsSchema } from './generated/check-ins.js';
+import { currentGraph, type CurrentRoot, type CurrentSchema } from './generated/current.js';
+import { givingGraph, type GivingRoot, type GivingSchema } from './generated/giving.js';
+import { groupsGraph, type GroupsRoot, type GroupsSchema } from './generated/groups.js';
+import { peopleGraph, type PeopleRoot, type PeopleSchema } from './generated/people.js';
+import { publishingGraph, type PublishingRoot, type PublishingSchema } from './generated/publishing.js';
+import { registrationsGraph, type RegistrationsRoot, type RegistrationsSchema } from './generated/registrations.js';
+import { servicesGraph, type ServicesRoot, type ServicesSchema } from './generated/services.js';
+import { webhooksGraph, type WebhooksRoot, type WebhooksSchema } from './generated/webhooks.js';
+
 /**
- * Configuration for the Planning Center API client with OAuth
+ * API versions to send per product, as `YYYY-MM-DD` (or `'LATEST'`).
+ *
+ * By default each product is pinned to the version this package's types were generated from,
+ * so responses always match the types. Override only if you need a different version, and note
+ * the types won't follow.
+ *
+ * @see https://api.planningcenteronline.com/docs/overview/versioning
  */
-export interface PcoClientConfigOAuth {
-    token: string;
-    clientId: string;
-    clientSecret: string;
-    refreshToken: string;
-    expiresAt: number;
-    customApiBaseUrl?: string;
-    version?: string;
+export type ApiVersions = Partial<Record<ProductName, string>>;
+
+/** Options for {@link PlanningCenter}: transport options plus per-product API versions. */
+export interface PlanningCenterOptions extends TransportOptions {
+    /** Per-product API version overrides. */
+    versions?: ApiVersions;
+}
+
+/** Use an existing transport (e.g. a shared one, or a mock in tests) instead of creating one. */
+export interface PlanningCenterTransportOptions {
+    transport: PcoTransport;
+    versions?: ApiVersions;
 }
 
 /**
- * Configuration for the Planning Center API client with a personal access token
+ * The Planning Center API client. One property per product, each generated from Planning
+ * Center's API documentation, plus raw `request()` and `uploadFile()`.
+ *
+ * Product clients are created on first use, and all share one transport, so authentication,
+ * rate limiting, and retries are coordinated across products.
+ *
+ * @example
+ * ```ts
+ * import { PlanningCenter } from '@mackenly/planningcenterkit';
+ *
+ * const pco = new PlanningCenter({
+ *     auth: { applicationId: process.env.PCO_APP_ID!, secret: process.env.PCO_SECRET! },
+ * });
+ *
+ * const { data } = await pco.people.people
+ *     .where('created_at', 'gte', '2026-01-01')
+ *     .include('emails')
+ *     .order('-created_at')
+ *     .list();
+ *
+ * for await (const plan of pco.services.service_types.id('1').plans.filter('future').all()) {
+ *     console.log(plan.attributes.title);
+ * }
+ * ```
  */
-export interface PcoClientConfigPersonalAccessToken {
-    personalAccessToken: string;
-    appId: string;
-    customApiBaseUrl?: string;
-    version?: string;
-}
+export class PlanningCenter {
+    /** The underlying transport. Use it to share auth/rate limiting with your own code. */
+    readonly transport: PcoTransport;
+    readonly #versions: ApiVersions;
+    readonly #clients = new Map<ProductName, unknown>();
 
-export abstract class PcoClient {
-    private customApiBaseUrl: string | boolean;
-    private version: string | undefined;
-    private authentication: string;
-
-    private includes: string[] = [];
-    private filters: { [key: string]: any } = {};
-    private order: { field: string, symbol: string } = { field: 'created_at', symbol: '' };
-    private pagination: { limit: number, offset: number } = { limit: 10, offset: 0 };
-
-    //
-    // Constructors
-    //
-
-    /**
-     * Create an instance of the Planning Center API client with a personal access token
-     * @param personalAccessToken Personal access token - see {@link https://developer.planning.center/docs/#/overview/authentication}
-     * @param appId Application ID - see {@link https://developer.planning.center/docs/#/overview/authentication}
-     * @param customApiBaseUrl Custom API base URL (optional)
-     * @param version API version (default: 2024-06-09) (optional) {@link https://developer.planning.center/docs/#/overview/versioning}
-     * @example
-     * ```typescript
-     * const client = new ApiClient({
-     *  personalAccessToken,
-     *  appId
-     * } as PcoClientConfigPersonalAccessToken);
-     * ```
-     * @link https://developer.planning.center/docs/#/overview/authentication
-     */
-    constructor({ personalAccessToken, appId, customApiBaseUrl, version }: PcoClientConfigPersonalAccessToken)
-
-    /**
-     * Create an instance of the Planning Center API client with OAuth
-     * @param token Access token - see {@link https://developer.planning.center/docs/#/overview/authentication}
-     * @param clientId Client ID - see {@link https://developer.planning.center/docs/#/overview/authentication}
-     * @param clientSecret Client secret - see {@link https://developer.planning.center/docs/#/overview/authentication}
-     * @param refreshToken Refresh token - see {@link https://developer.planning.center/docs/#/overview/authentication}
-     * @param expiresAt Expiration time of the token - Use {@link PcoClient.getExpiration} to calculate
-     * @param customApiBaseUrl Custom API base URL (optional)
-     * @param version API version (default: 2024-06-09) (optional) {@link https://developer.planning.center/docs/#/overview/versioning}
-     * @example
-     * ```typescript
-     * const client = new ApiClient({
-     *  token,
-     *  clientId,
-     *  clientSecret,
-     *  refreshToken,
-     *  expiresAt
-     * } as PcoClientConfigOAuth);
-     * ```
-     * @link https://developer.planning.center/docs/#/overview/authentication
-     */
-    constructor({ token, clientId, clientSecret, refreshToken, expiresAt, customApiBaseUrl, version }: PcoClientConfigOAuth)
-
-    /**
-     * Implements the overloads for the constructor
-     */
-    constructor(config: PcoClientConfigPersonalAccessToken | PcoClientConfigOAuth) {
-        if ('version' in config && config.version) {
-            if (!config.version.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                throw new Error('Invalid version format');
-            }
-            this.version = config.version;
-        }
-        if ('personalAccessToken' in config) {
-            this.authentication = `Basic ${btoa(config.appId + ':' + config.personalAccessToken)}`;
-            this.customApiBaseUrl = config.customApiBaseUrl ?? false;
-        } else if ('token' in config) {
-            if (!PcoClient.validateToken(config.token)) {
-                throw new Error('Invalid token format');
-            }
-            this.authentication = `Bearer ${config.token}`;
-            this.customApiBaseUrl = config.customApiBaseUrl ?? false;
+    constructor(options: PlanningCenterOptions | PlanningCenterTransportOptions) {
+        if ('transport' in options) {
+            this.transport = options.transport;
+            this.#versions = { ...options.versions };
         } else {
-            throw new Error('Invalid configuration');
+            const { versions, ...transportOptions } = options;
+            this.transport = createTransport(transportOptions);
+            this.#versions = { ...versions };
         }
     }
 
-    //
-    // Static and internal methods
-    //
+    /**
+     * Planning Center API: OAuth applications, personal access tokens, connected applications.
+     * @see https://api.planningcenteronline.com/docs/apps/api
+     */
+    get api(): ProductClient<ApiSchema, ApiRoot> {
+        return this.#product('api', () => createProductClient<ApiSchema, ApiRoot>(apiGraph, this.transport, this.#options('api')));
+    }
 
     /**
-     * Get the expiration time for a token when given a lifespan
-     * @param expiresIn Time in seconds until the token expires
-     * @returns The expiration time in milliseconds
+     * Calendar: events, resources, rooms, approvals.
+     * @see https://api.planningcenteronline.com/docs/apps/calendar
+     */
+    get calendar(): ProductClient<CalendarSchema, CalendarRoot> {
+        return this.#product('calendar', () =>
+            createProductClient<CalendarSchema, CalendarRoot>(calendarGraph, this.transport, this.#options('calendar')),
+        );
+    }
+
+    /**
+     * Check-Ins: events, check-ins, locations, stations, labels.
+     * @see https://api.planningcenteronline.com/docs/apps/check-ins
+     */
+    get checkIns(): ProductClient<CheckInsSchema, CheckInsRoot> {
+        return this.#product('checkIns', () =>
+            createProductClient<CheckInsSchema, CheckInsRoot>(checkInsGraph, this.transport, this.#options('checkIns')),
+        );
+    }
+
+    /**
+     * Current (legacy donations product).
+     * @see https://api.planningcenteronline.com/docs/apps/current
+     */
+    get current(): ProductClient<CurrentSchema, CurrentRoot> {
+        return this.#product('current', () =>
+            createProductClient<CurrentSchema, CurrentRoot>(currentGraph, this.transport, this.#options('current')),
+        );
+    }
+
+    /**
+     * Giving: donations, funds, batches, pledges, recurring donations.
+     * @see https://api.planningcenteronline.com/docs/apps/giving
+     */
+    get giving(): ProductClient<GivingSchema, GivingRoot> {
+        return this.#product('giving', () =>
+            createProductClient<GivingSchema, GivingRoot>(givingGraph, this.transport, this.#options('giving')),
+        );
+    }
+
+    /**
+     * Groups: groups, memberships, events, attendance, tags.
+     * @see https://api.planningcenteronline.com/docs/apps/groups
+     */
+    get groups(): ProductClient<GroupsSchema, GroupsRoot> {
+        return this.#product('groups', () =>
+            createProductClient<GroupsSchema, GroupsRoot>(groupsGraph, this.transport, this.#options('groups')),
+        );
+    }
+
+    /**
+     * People: people, households, lists, forms, workflows, notes, field data.
+     * @see https://api.planningcenteronline.com/docs/apps/people
+     */
+    get people(): ProductClient<PeopleSchema, PeopleRoot> {
+        return this.#product('people', () =>
+            createProductClient<PeopleSchema, PeopleRoot>(peopleGraph, this.transport, this.#options('people')),
+        );
+    }
+
+    /**
+     * Publishing: channels, episodes, series, speakers.
+     * @see https://api.planningcenteronline.com/docs/apps/publishing
+     */
+    get publishing(): ProductClient<PublishingSchema, PublishingRoot> {
+        return this.#product('publishing', () =>
+            createProductClient<PublishingSchema, PublishingRoot>(publishingGraph, this.transport, this.#options('publishing')),
+        );
+    }
+
+    /**
+     * Registrations: signups, attendees, registrations, selection types.
+     * @see https://api.planningcenteronline.com/docs/apps/registrations
+     */
+    get registrations(): ProductClient<RegistrationsSchema, RegistrationsRoot> {
+        return this.#product('registrations', () =>
+            createProductClient<RegistrationsSchema, RegistrationsRoot>(
+                registrationsGraph,
+                this.transport,
+                this.#options('registrations'),
+            ),
+        );
+    }
+
+    /**
+     * Services: service types, plans, items, songs, arrangements, teams, schedules.
+     * @see https://api.planningcenteronline.com/docs/apps/services
+     */
+    get services(): ProductClient<ServicesSchema, ServicesRoot> {
+        return this.#product('services', () =>
+            createProductClient<ServicesSchema, ServicesRoot>(servicesGraph, this.transport, this.#options('services')),
+        );
+    }
+
+    /**
+     * Webhooks: subscriptions, available events, deliveries. To receive webhooks, see
+     * `@mackenly/planningcenterkit/webhooks`.
+     * @see https://api.planningcenteronline.com/docs/apps/webhooks
+     */
+    get webhooks(): ProductClient<WebhooksSchema, WebhooksRoot> {
+        return this.#product('webhooks', () =>
+            createProductClient<WebhooksSchema, WebhooksRoot>(webhooksGraph, this.transport, this.#options('webhooks')),
+        );
+    }
+
+    /**
+     * Sends any request, authenticated, rate limited, and retried like every other call. Use it
+     * for endpoints or parameters the typed clients don't cover.
+     *
      * @example
-     * ```typescript
-     * const expiration = ApiClient.getExpiration(7200);
-     * const client = new ApiClient({
-     *  ... 
-     *  expiresAt: expiration
-     * } as PcoClientConfigOAuth);
+     * ```ts
+     * const me = await pco.request<JsonApiDocument>({ method: 'GET', path: '/people/v2/me' });
      * ```
      */
-    public static getExpiration(expiresIn: number): number {
-        return Date.now() + expiresIn * 1000;
+    request<T = unknown>(request: PcoRequest): Promise<T> {
+        return this.transport.request<T>(request);
     }
 
     /**
-     * Format a date to be used in a request
-     * @param date Date to format
-     * @returns Formatted date string
+     * Uploads a file and returns its UUID, which you then pass to an attribute that accepts files.
+     *
      * @example
-     * ```typescript
-     * const date = new Date();
-     * const formattedDate: string = ApiClient.formatDate(date);
+     * ```ts
+     * const file = await pco.uploadFile(await fs.readFile('avatar.png'), { filename: 'avatar.png' });
+     * await pco.people.people.id('123').update({ avatar: file.id });
      * ```
+     * @see https://api.planningcenteronline.com/docs/overview/file-uploads
      */
-    protected static formatDate(date: Date): string {
-        // Nothing much going on here, but may be useful in the future
-        return date.toISOString();
+    uploadFile(file: Blob | ArrayBuffer | Uint8Array, options?: UploadOptions): Promise<UploadedFile> {
+        return this.transport.upload(file, options);
     }
 
-    /**
-     * Validate a token to ensure it is in the correct format
-     * There's two formats for tokens:
-     * Legacy: 64 hexadecimal digits, 0-9 and a-f
-     * Current: prefix like pco_tok_, followed by 72 hexadecimal digits; 80 characters total
-     * TODO: Remove support for legacy tokens by 2025. It should end September 23, 2024
-     * @param token Token to validate
-     * @returns Whether the token is valid
-     */
-    protected static validateToken(token: string): boolean {
-        return token.match(/^[0-9a-f]{64}$|^pco_tok_[0-9a-f]{72}$/) !== null;
+    #options(product: ProductName): { version?: string } {
+        const version = this.#versions[product];
+        return version ? { version } : {};
     }
 
-    /**
-     * Make a request to the Planning Center API
-     * @param endpoint The endpoint to request
-     * @param method The HTTP method to use (default: GET)
-     * @param body The body of the request (optional)
-     * @param options Request options (optional)
-     * @returns The response from the API
-     * @throws Error if the request fails
-     */
-    protected async request(endpoint: string, options: RequestInit = {}): Promise<any> {
-        if (this.version) {
-            options.headers = {
-                ...options.headers,
-                'X-PCO-API-Version': this.version
-            };
+    #product<T>(name: ProductName, create: () => T): T {
+        let client = this.#clients.get(name) as T | undefined;
+        if (!client) {
+            client = create();
+            this.#clients.set(name, client);
         }
-        const apiBaseUrl = this.customApiBaseUrl ? this.customApiBaseUrl : 'https://api.planningcenteronline.com';
-        const response = await fetch(`${apiBaseUrl}${endpoint}`, {
-            ...options,
-            headers: {
-                ...options.headers,
-                'Content-Type': 'application/json',
-                Authorization: this.authentication
-            },
-
-        });
-
-        if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}\n${response.statusText}\nMore details: https://developer.planning.center/docs/#/overview/errors`);
-        }
-
-        return await response.json();
-    }
-
-    //
-    // Client methods for manual requests
-    //
-
-    /**
-     * Get a custom endpoint from the API. This is useful for endpoints that are not covered by the client methods
-     * @param endpoint The endpoint to request with the base slash
-     * @returns The response from the API
-     * @example
-     * ```typescript
-     * const data = await client.get('/people/v2');
-     * ```
-     * @link https://developer.planning.center/docs/#/overview/authentication
-     * @link https://developer.planning.center/docs/#/overview/errors
-     * @link https://developer.planning.center/docs/#/overview/versioning
-     */
-    public get(endpoint: string) {
-        return this.request(`${endpoint}${this.buildQuery()}`);
-    }
-
-    /**
-     * Create a new record in the API at the given endpoint. This is useful for POST requests not covered by the client methods
-     * @param endpoint The endpoint to request with the base slash
-     * @param body The body of the request
-     * @returns The response from the API
-     * @example
-     * ```typescript
-     * const data = await client.post('/people/v2', { name: 'John Doe' });
-     * ```
-     * @link https://developer.planning.center/docs/#/overview/authentication
-     * @link https://developer.planning.center/docs/#/overview/errors
-     * @link https://developer.planning.center/docs/#/overview/versioning
-     */
-    public post(endpoint: string, body: any) {
-        return this.request(`${endpoint}${this.buildQuery()}`, { method: 'POST', body: JSON.stringify(body) });
-    }
-
-    /**
-     * Update a record in the API at the given endpoint. This is useful for PATCH requests not covered by the client methods
-     * @param endpoint The endpoint to request with the base slash
-     * @param body The body of the request
-     * @returns The response from the API
-     * @example
-     * ```typescript
-     * const data = await client.patch('/people/v2/1', { name: 'Jane Doe' });
-     * ```
-     * @link https://developer.planning.center/docs/#/overview/authentication
-     * @link https://developer.planning.center/docs/#/overview/errors
-     * @link https://developer.planning.center/docs/#/overview/versioning
-     */
-    public patch(endpoint: string, body: any) {
-        return this.request(`${endpoint}${this.buildQuery()}`, { method: 'PATCH', body: JSON.stringify(body) });
-    }
-
-    /**
-     * Delete a record in the API at the given endpoint. This is useful for DELETE requests not covered by the client methods
-     * @param endpoint The endpoint to request with the base slash
-     * @returns The response from the API
-     * @example
-     * ```typescript
-     * const data = await client.delete('/people/v2/1');
-     * ```
-     * @link https://developer.planning.center/docs/#/overview/authentication
-     * @link https://developer.planning.center/docs/#/overview/errors
-     * @link https://developer.planning.center/docs/#/overview/versioning
-     */
-    public delete(endpoint: string) {
-        return this.request(`${endpoint}${this.buildQuery()}`, { method: 'DELETE' });
-    }
-
-    //
-    // Query builder methods
-    //
-
-    /**
-     * Include related records in the response
-     * @param relations The relations to include
-     * @returns The client instance
-     * @example
-     * ```typescript
-     * const data = await client.include(['emails']).getPerson();
-     * ```
-     */
-    public include(relations: string[]) {
-        this.includes = relations;
-        return this;
-    }
-
-    /**
-     * Filter the response by a field
-     * @param field The field to filter by
-     * @param operator The operator to use in the filter
-     * @param value The value to filter by
-     * @returns The client instance
-     * @example
-     * ```typescript
-     * const data = await client.where('search_name_or_email', '=', 'hello@example.com').getPerson();
-     * ```
-     */
-    public where(field: string, operator: string, value: any) {
-        this.filters[field] = { operator, value };
-        return this;
-    }
-
-    /**
-     * Order the response by a field
-     * @param field The field to order by
-     * @param direction The direction to order in (default: desc)
-     * @returns The client instance
-     * @example
-     * ```typescript
-     * const data = await client.orderBy('created_at', 'asc').getPerson();
-     * ```
-     */
-    public orderBy(field: string, direction: 'asc' | 'desc' = 'desc') {
-        let symbol = '';
-        switch (direction) {
-            case 'asc':
-                symbol = '-';
-                break;
-            case 'desc':
-                symbol = '';
-                break;
-        }
-        this.order = { field, symbol };
-        return this;
-    }
-
-    /**
-     * Paginate the response
-     * @param limit The number of records to return
-     * @param offset The number of records to skip
-     * @returns The client instance
-     * @example
-     * ```typescript
-     * const data = await client.paginate(10, 0).getPerson();
-     * ```
-     */
-    public paginate(limit: number, offset: number) {
-        this.pagination = { limit, offset };
-        return this;
-    }
-
-    /**
-     * Build the query string from the includes, filters, order, and pagination
-     * @returns The query string
-     */
-    protected buildQuery() {
-        let query = `?include=${this.includes.join(',')}`;
-        for (let field in this.filters) {
-            const filter = this.filters[field];
-            query += `&where[${field}]${filter.operator}${filter.value}`;
-        }
-        query += `&order=${this.order.symbol}${this.order.field}`;
-        query += `&limit=${this.pagination.limit}&offset=${this.pagination.offset}`;
-
-        // clean up the attributes
-        this.includes = [];
-        this.filters = {};
-        this.order = { field: 'created_at', symbol: '' };
-        this.pagination = { limit: 10, offset: 0 };
-
-        return query;
+        return client;
     }
 }

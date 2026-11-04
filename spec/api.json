@@ -1,0 +1,520 @@
+{
+  "basePath": "/api/v2",
+  "entry": "organization",
+  "openApi": true,
+  "product": "api",
+  "slug": "api",
+  "title": "Planning Center API",
+  "version": "2026-09-24",
+  "vertices": {
+    "connected_application": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "connected_application_person",
+          "id": "connectedapplicationperson-connectedapplication-people",
+          "name": "people",
+          "path": "/api/v2/connected_applications/{connected_application_id}/people",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "ConnectedApplication",
+      "orders": [],
+      "path": "/api/v2/connected_applications",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "connected_application_person": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "connected_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": [],
+          "name": "scopes",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "site_administrator",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "ConnectedApplicationPerson",
+      "orders": [],
+      "path": "/api/v2/connected_applications/{connected_application_id}/people",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "site_administrator",
+          "ops": [],
+          "type": "boolean"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "oauth_application": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "oauth_application_mau",
+          "id": "oauthapplicationmau-oauthapplication-mau",
+          "name": "mau",
+          "path": "/api/v2/oauth_applications/{oauth_application_id}/mau",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "OauthApplication",
+      "orders": [],
+      "path": "/api/v2/oauth_applications",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "oauth_application_mau": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The total number of unique active users for the application.",
+          "example": 1,
+          "name": "count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The month the stat was recorded for.",
+          "example": 1,
+          "name": "month",
+          "note": "Starting at 1 for January.",
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The year the stat was recorded for.",
+          "example": 1,
+          "name": "year",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Monthly Active Users for an Oauth Application.\n\nA \"Monthly Active User\" is any person who has been issued an Oauth token during that month.\n\nHistorical data will be kept for 24 months.\n\n_Note:_ There is no historical data before mid-February 2019.",
+      "edges": [],
+      "includes": [],
+      "name": "OauthApplicationMau",
+      "orders": [],
+      "path": "/api/v2/oauth_applications/{oauth_application_id}/mau",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "OauthApplication",
+          "name": "oauth_application",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "organization": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "connected_application",
+          "id": "connectedapplication-organization-connected_applications",
+          "name": "connected_applications",
+          "path": "/api/v2/connected_applications",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "oauth_application",
+          "id": "oauthapplication-organization-oauth_applications",
+          "name": "oauth_applications",
+          "path": "/api/v2/oauth_applications",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "accessible"
+          ],
+          "head": "personal_access_token",
+          "id": "personalaccesstoken-organization-personal_access_tokens",
+          "name": "personal_access_tokens",
+          "path": "/api/v2/personal_access_tokens",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Organization",
+      "orders": [],
+      "path": "/api/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "person": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "Person",
+      "orders": [],
+      "path": "/api/v2/personal_access_tokens/{personal_access_token_id}/person",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "personal_access_token": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": "Revokes a personal access token",
+          "name": "revoke",
+          "path": "/api/v2/personal_access_tokens/{personal_access_token_id}/revoke"
+        }
+      ],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The day this token was last used to make an api request, or `null` if it never has.",
+          "example": "2000-01-01",
+          "name": "last_used_on",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "When the token was revoked, or `null` while it is still usable.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "revoked_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-personalaccesstoken-person",
+          "name": "person",
+          "path": "/api/v2/personal_access_tokens/{personal_access_token_id}/person",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "person"
+      ],
+      "name": "PersonalAccessToken",
+      "orders": [
+        "created_at",
+        "last_used_on",
+        "name",
+        "person",
+        "revoked_at"
+      ],
+      "path": "/api/v2/personal_access_tokens",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    }
+  }
+}

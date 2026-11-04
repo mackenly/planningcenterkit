@@ -1,0 +1,234 @@
+---
+title: "Products"
+description: "Every Planning Center product: client property, subpath import, pinned API version, and root collections."
+sidebar:
+  order: 8
+---
+
+Planning Center Kit covers all 11 Planning Center products. Each one is a property on
+`PlanningCenter`, a standalone client from its own subpath import, and a namespace of types.
+
+```ts
+import { PlanningCenter } from '@mackenly/planningcenterkit';
+
+const pco = new PlanningCenter({ auth: { applicationId: '...', secret: '...' } });
+await pco.checkIns.check_ins.order('-created_at').first();
+```
+
+```ts
+import { createCheckInsClient } from '@mackenly/planningcenterkit/check-ins';
+
+const checkIns = createCheckInsClient({ auth: { applicationId: '...', secret: '...' } });
+await checkIns.check_ins.order('-created_at').first();
+```
+
+Standalone clients take the same options as `PlanningCenter` plus `version`, or an existing
+`transport` to share rate limiting and credentials (see
+[Errors and retries](/guides/errors-and-retries/#rate-limiting)).
+
+**Webhooks naming:** `pco.webhooks` and `@mackenly/planningcenterkit/webhooks-api` are the
+*Webhooks product API* (subscriptions, available events, deliveries).
+`@mackenly/planningcenterkit/webhooks` is for *receiving* webhooks (signature verification and
+parsing); see [Webhooks](/guides/webhooks/).
+
+**API versions:** each product is pinned to the version of Planning Center's documentation its
+types were generated from, sent as `X-PCO-API-Version`. Override with
+`new PlanningCenter({ auth, versions: { checkIns: '2025-01-01' } })` or
+`createCheckInsClient({ auth, version: '2025-01-01' })`; the types won't follow an override.
+
+The [reference](/reference/) has a page per product and per resource with every client path,
+attribute, and query option.
+
+**Root collections** are the properties on each product client, named after their URL
+(`pco.people.people` is `/people/v2/people`). "(create)" marks the ones you can `create()` on.
+Every client also has `get()` for the product root (usually the organization) and `edge(name)`.
+
+## API
+
+OAuth applications, personal access tokens, and connected applications.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.api` |
+| Subpath import | `import { createApiClient } from '@mackenly/planningcenterkit/api'` |
+| Types namespace | `Api` |
+| Base path | `/api/v2` |
+| Pinned API version | `2026-09-24` |
+| Resource types | 7 |
+| Reference | [API reference](/reference/api/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/api](https://developer.planning.center/docs/#/apps/api) |
+
+**Root collections:** `connected_applications`, `oauth_applications`, `personal_access_tokens`.
+
+## Calendar
+
+Events, event instances, resources and rooms, resource bookings, and approvals.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.calendar` |
+| Subpath import | `import { createCalendarClient } from '@mackenly/planningcenterkit/calendar'` |
+| Types namespace | `Calendar` |
+| Base path | `/calendar/v2` |
+| Pinned API version | `2026-06-22` |
+| Resource types | 25 |
+| Reference | [Calendar reference](/reference/calendar/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/calendar](https://developer.planning.center/docs/#/apps/calendar) |
+
+**Root collections:** `attachments`, `calendars`, `conflicts`, `event_instances`, `event_resource_requests`, `events`, `feeds`, `job_statuses`, `people`, `report_templates` (create), `resource_approval_groups`, `resource_bookings`, `resource_folders` (create), `resource_questions`, `resources` (create), `room_setups`, `tag_groups` (create), `tags` (create).
+
+## Check-Ins
+
+Events, check-ins, locations, stations, labels, passes, and headcounts.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.checkIns` |
+| Subpath import | `import { createCheckInsClient } from '@mackenly/planningcenterkit/check-ins'` |
+| Types namespace | `CheckIns` |
+| Base path | `/check-ins/v2` |
+| Pinned API version | `2025-05-28` |
+| Resource types | 24 |
+| Reference | [Check-Ins reference](/reference/check-ins/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/check-ins](https://developer.planning.center/docs/#/apps/check-ins) |
+
+**Root collections:** `check_ins`, `event_times`, `events`, `headcounts`, `integration_links`, `labels`, `options`, `passes`, `people`, `stations`, `themes`.
+
+## Current
+
+The legacy Current donations product.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.current` |
+| Subpath import | `import { createCurrentClient } from '@mackenly/planningcenterkit/current'` |
+| Types namespace | `Current` |
+| Base path | `/current/v2` |
+| Pinned API version | `2018-08-01` |
+| Resource types | 2 |
+| Reference | [Current reference](/reference/current/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/current](https://developer.planning.center/docs/#/apps/current) |
+
+**Root collections:** `people`.
+
+## Giving
+
+Donations, funds, batches, pledges, payment sources, and recurring donations.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.giving` |
+| Subpath import | `import { createGivingClient } from '@mackenly/planningcenterkit/giving'` |
+| Types namespace | `Giving` |
+| Base path | `/giving/v2` |
+| Pinned API version | `2019-10-18` |
+| Resource types | 20 |
+| Reference | [Giving reference](/reference/giving/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/giving](https://developer.planning.center/docs/#/apps/giving) |
+
+**Root collections:** `batch_groups` (create), `batches` (create), `campuses`, `donations`, `donor_summaries`, `funds` (create), `in_kind_donations` (create), `labels` (create), `payment_sources` (create), `people`, `pledge_campaigns` (create), `recurring_donations`.
+
+## Groups
+
+Groups, group types, memberships, events, attendance, and tags.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.groups` |
+| Subpath import | `import { createGroupsClient } from '@mackenly/planningcenterkit/groups'` |
+| Types namespace | `Groups` |
+| Base path | `/groups/v2` |
+| Pinned API version | `2023-07-10` |
+| Resource types | 17 |
+| Reference | [Groups reference](/reference/groups/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/groups](https://developer.planning.center/docs/#/apps/groups) |
+
+**Root collections:** `campuses`, `event_notes`, `events`, `group_applications`, `group_types`, `groups`, `memberships`, `people`, `tag_groups`.
+
+## People
+
+People, households, lists, forms, workflows, notes, and custom fields.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.people` |
+| Subpath import | `import { createPeopleClient } from '@mackenly/planningcenterkit/people'` |
+| Types namespace | `People` |
+| Base path | `/people/v2` |
+| Pinned API version | `2026-10-05` |
+| Resource types | 67 |
+| Reference | [People reference](/reference/people/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/people](https://developer.planning.center/docs/#/apps/people) |
+
+`pco.people.me` is the person the credentials belong to (`GET /people/v2/me`): `await pco.people.me.get()`.
+
+**Root collections:** `addresses`, `apps`, `background_checks`, `birthday_people`, `campuses` (create), `carriers`, `emails`, `field_data`, `field_definitions`, `form_categories` (create), `forms`, `households` (create), `inactive_reasons` (create), `list_categories` (create), `lists`, `marital_statuses` (create), `membership_types` (create), `message_groups`, `messages`, `name_prefixes` (create), `name_suffixes` (create), `note_categories` (create), `note_category_subscriptions`, `notes`, `people` (create), `people_imports`, `person_mergers`, `phone_numbers`, `reports` (create), `school_options` (create), `social_profiles`, `spam_email_addresses`, `stats`, `tabs` (create), `workflow_assignee_summaries`, `workflows` (create).
+
+## Publishing
+
+Channels, episodes, series, speakers, and announcements.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.publishing` |
+| Subpath import | `import { createPublishingClient } from '@mackenly/planningcenterkit/publishing'` |
+| Types namespace | `Publishing` |
+| Base path | `/publishing/v2` |
+| Pinned API version | `2024-03-25` |
+| Resource types | 17 |
+| Reference | [Publishing reference](/reference/publishing/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/publishing](https://developer.planning.center/docs/#/apps/publishing) |
+
+**Root collections:** `announcement_categories`, `announcements`, `channels` (create), `episodes` (create), `series` (create), `speakers`.
+
+## Registrations
+
+Signups, registrations, attendees, and categories.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.registrations` |
+| Subpath import | `import { createRegistrationsClient } from '@mackenly/planningcenterkit/registrations'` |
+| Types namespace | `Registrations` |
+| Base path | `/registrations/v2` |
+| Pinned API version | `2025-05-01` |
+| Resource types | 11 |
+| Reference | [Registrations reference](/reference/registrations/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/registrations](https://developer.planning.center/docs/#/apps/registrations) |
+
+**Root collections:** `attendees`, `campuses`, `categories`, `people`, `registrations`, `signups`.
+
+## Services
+
+Service types, plans, items, songs and arrangements, teams, and schedules.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.services` |
+| Subpath import | `import { createServicesClient } from '@mackenly/planningcenterkit/services'` |
+| Types namespace | `Services` |
+| Base path | `/services/v2` |
+| Pinned API version | `2018-11-01` |
+| Resource types | 65 |
+| Reference | [Services reference](/reference/services/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/services](https://developer.planning.center/docs/#/apps/services) |
+
+**Root collections:** `attachment_types`, `chat`, `email_templates` (create), `folders` (create), `media` (create), `people`, `plans`, `report_templates`, `series`, `service_types` (create), `songs` (create), `tag_groups`, `teams` (create).
+
+## Webhooks
+
+Webhook subscriptions, available events, and deliveries.
+
+| Property | Value |
+| --- | --- |
+| Client property | `pco.webhooks` |
+| Subpath import | `import { createWebhooksClient } from '@mackenly/planningcenterkit/webhooks-api'` |
+| Types namespace | `Webhooks` |
+| Base path | `/webhooks/v2` |
+| Pinned API version | `2022-10-20` |
+| Resource types | 5 |
+| Reference | [Webhooks reference](/reference/webhooks/) |
+| Planning Center docs | [developer.planning.center/docs/#/apps/webhooks](https://developer.planning.center/docs/#/apps/webhooks) |
+
+**Root collections:** `available_events`, `webhook_subscriptions` (create).
+

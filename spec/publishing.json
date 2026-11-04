@@ -1,0 +1,2079 @@
+{
+  "basePath": "/publishing/v2",
+  "entry": "organization",
+  "openApi": true,
+  "product": "publishing",
+  "slug": "publishing",
+  "title": "Planning Center Publishing",
+  "version": "2024-03-25",
+  "vertices": {
+    "announcement": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": true,
+          "name": "archived",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "attach_linked_resource_image_job_id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "church_center_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "featured",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "hide_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": {},
+          "name": "image",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "link",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "link_resource_id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "link_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "show_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "summary",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "title",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "announcements_announcement_category",
+          "id": "announcementsannouncementcategory-announcement-announcements_announcement_categories",
+          "name": "announcements_announcement_categories",
+          "path": "/publishing/v2/announcements/{announcement_id}/announcements_announcement_categories",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "announcements_campus",
+          "id": "announcementscampus-announcement-announcements_campuses",
+          "name": "announcements_campuses",
+          "path": "/publishing/v2/announcements/{announcement_id}/announcements_campuses",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "announcements_announcement_categories",
+        "announcements_campuses"
+      ],
+      "name": "Announcement",
+      "orders": [
+        "featured",
+        "position",
+        "show_at",
+        "status",
+        "title"
+      ],
+      "path": "/publishing/v2/announcements",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "title",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "announcement_category": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "AnnouncementCategory",
+      "orders": [
+        "name"
+      ],
+      "path": "/publishing/v2/announcement_categories",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "announcements_announcement_category": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "announcement_category",
+          "id": "announcementcategory-announcementsannouncementcategory-announcement_category",
+          "name": "announcement_category",
+          "path": "/publishing/v2/announcements/{announcement_id}/announcements_announcement_categories/{announcements_announcement_category_id}/announcement_category",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "announcement_category"
+      ],
+      "name": "AnnouncementsAnnouncementCategory",
+      "orders": [],
+      "path": "/publishing/v2/announcements/{announcement_id}/announcements_announcement_categories",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "AnnouncementCategory",
+          "name": "announcement_category",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "announcements_campus": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "AnnouncementsCampus",
+      "orders": [],
+      "path": "/publishing/v2/announcements/{announcement_id}/announcements_campuses",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Campus",
+          "name": "campus",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "channel": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The activation time for an episode, expressed in minutes before its start",
+          "example": 1,
+          "name": "activate_episode_minutes_before",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "archived",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "An image file object. When setting, pass an upload UUID from the Uploads API\n(https://api.planningcenteronline.com/docs/overview/file-uploads)\nor a signed_identifier from an existing File.",
+          "example": {},
+          "name": "art",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "can_enable_chat",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "church_center_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "default_video_duration",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "default_video_embed_code",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "default_video_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "enable_audio",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "enable_on_demand_video",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "enable_watch_live",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "general_chat_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "group_chat_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "An image file object. When setting, pass an upload UUID from the Uploads API\n(https://api.planningcenteronline.com/docs/overview/file-uploads)\nor a signed_identifier from an existing File.",
+          "example": {},
+          "name": "podcast_art",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "podcast_feed_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": {},
+          "name": "podcast_settings",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "published",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "sermon_notes_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The id for the associated Services Service Type (https://developer.planning.center/docs/#/apps/services/2018-08-01/vertices/service_type)",
+          "example": "string",
+          "name": "services_service_type_remote_identifier",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A collection of sermons",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "channel_default_episode_resource",
+          "id": "channeldefaultepisoderesource-channel-channel_default_episode_resources",
+          "name": "channel_default_episode_resources",
+          "path": "/publishing/v2/channels/{channel_id}/channel_default_episode_resources",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "channel_default_time",
+          "id": "channeldefaulttime-channel-channel_default_times",
+          "name": "channel_default_times",
+          "path": "/publishing/v2/channels/{channel_id}/channel_default_times",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "episode",
+          "id": "episode-channel-current_episode",
+          "name": "current_episode",
+          "path": "/publishing/v2/channels/{channel_id}/current_episode",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "connected_to_services",
+            "not_connected_to_services",
+            "not_published",
+            "published",
+            "published_to_library"
+          ],
+          "head": "episode",
+          "id": "episode-channel-episodes",
+          "name": "episodes",
+          "path": "/publishing/v2/channels/{channel_id}/episodes",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "channel_next_time",
+          "id": "channelnexttime-channel-next_times",
+          "name": "next_times",
+          "path": "/publishing/v2/channels/{channel_id}/next_times",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "series",
+          "id": "series-channel-series",
+          "name": "series",
+          "path": "/publishing/v2/channels/{channel_id}/series",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "episode_statistics",
+          "id": "episodestatistics-channel-statistics",
+          "name": "statistics",
+          "path": "/publishing/v2/channels/{channel_id}/statistics",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "channel_default_episode_resources",
+        "channel_default_times",
+        "current_episode"
+      ],
+      "name": "Channel",
+      "orders": [
+        "name",
+        "position"
+      ],
+      "path": "/publishing/v2/channels",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "activate_episode_minutes_before",
+          "archived",
+          "art",
+          "default_video_duration",
+          "default_video_embed_code",
+          "default_video_url",
+          "description",
+          "enable_audio",
+          "enable_on_demand_video",
+          "enable_watch_live",
+          "general_chat_enabled",
+          "group_chat_enabled",
+          "name",
+          "podcast_art",
+          "podcast_settings",
+          "position",
+          "published",
+          "sermon_notes_enabled",
+          "url"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "activate_episode_minutes_before",
+          "archived",
+          "art",
+          "default_video_duration",
+          "default_video_embed_code",
+          "default_video_url",
+          "description",
+          "enable_audio",
+          "enable_on_demand_video",
+          "enable_watch_live",
+          "general_chat_enabled",
+          "group_chat_enabled",
+          "name",
+          "podcast_art",
+          "podcast_settings",
+          "position",
+          "published",
+          "sermon_notes_enabled",
+          "url"
+        ]
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "channel_default_episode_resource": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": true,
+          "name": "featured",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "icon",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Possible values: `giving_fund`, `people_form`, `generic_url`, `services_public_page`",
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "title",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The default EpisodeResources for a Channel",
+      "edges": [],
+      "includes": [],
+      "name": "ChannelDefaultEpisodeResource",
+      "orders": [],
+      "path": "/publishing/v2/channels/{channel_id}/channel_default_episode_resources",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "channel_default_time": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The day of the week. 0 is Sunday, 1 is Monday, etc.",
+          "example": 1,
+          "name": "day_of_week",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Possible values: `weekly`",
+          "example": "string",
+          "name": "frequency",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "hour",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "minute",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The default times for a channel",
+      "edges": [],
+      "includes": [],
+      "name": "ChannelDefaultTime",
+      "orders": [
+        "position"
+      ],
+      "path": "/publishing/v2/channels/{channel_id}/channel_default_times",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "day_of_week",
+          "frequency",
+          "hour",
+          "minute",
+          "position"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "day_of_week",
+          "frequency",
+          "hour",
+          "minute",
+          "position"
+        ]
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "channel_next_time": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The next default time for a channel",
+      "edges": [],
+      "includes": [],
+      "name": "ChannelNextTime",
+      "orders": [],
+      "path": "/publishing/v2/channels/{channel_id}/next_times",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "episode": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": "Generate a signed download URL for an episode's sermon audio file.\n\nIt expects an empty `POST` body.",
+          "name": "generate_download_url",
+          "path": "/publishing/v2/episodes/{episode_id}/generate_download_url"
+        }
+      ],
+      "attributes": [
+        {
+          "description": "An image file object. When setting, pass an upload UUID from the Uploads API\n(https://api.planningcenteronline.com/docs/overview/file-uploads)\nor a signed_identifier from an existing File.",
+          "example": {},
+          "name": "art",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "church_center_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "library_audio_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values: `vimeo`, `youtube`, `livestream_com`, `resi`, `facebook`, or `boxcast`",
+          "example": "value",
+          "name": "library_streaming_service",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "library_video_embed_code",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "library_video_thumbnail_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "library_video_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "needs_library_audio_or_video_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "needs_notes_template",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "needs_video_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": [],
+          "name": "page_actions",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "published_live_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "published_to_library_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "An audio file object. When setting, pass an upload UUID from the Uploads API\n(https://api.planningcenteronline.com/docs/overview/file-uploads)\nor a signed_identifier from an existing File.",
+          "example": {},
+          "name": "sermon_audio",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": "The id for the associated Services Plan\n(https://developer.planning.center/docs/#/apps/services/2018-08-01/vertices/plan)",
+          "example": "string",
+          "name": "services_plan_remote_identifier",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The id for the associated Services Service Type\n(https://developer.planning.center/docs/#/apps/services/2018-08-01/vertices/service_type)",
+          "example": "string",
+          "name": "services_service_type_remote_identifier",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values: `channel_default_livestream`, `livestream`, or `prerecorded`",
+          "example": "value",
+          "name": "stream_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values: `vimeo`, `youtube`, `livestream_com`, `resi`, `facebook`, or `boxcast`",
+          "example": "value",
+          "name": "streaming_service",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The description as HTML, limited to paragraphs, line breaks, bold, and italics.\nSetting it also replaces description with its plain text.",
+          "example": "string",
+          "name": "summary",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "title",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "video_embed_code",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "video_thumbnail_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "video_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "channel",
+          "id": "channel-episode-channel",
+          "name": "channel",
+          "path": "/publishing/v2/episodes/{episode_id}/channel",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "episode_resource",
+          "id": "episoderesource-episode-episode_resources",
+          "name": "episode_resources",
+          "path": "/publishing/v2/episodes/{episode_id}/episode_resources",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "episode_time",
+          "id": "episodetime-episode-episode_times",
+          "name": "episode_times",
+          "path": "/publishing/v2/episodes/{episode_id}/episode_times",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "note_template",
+          "id": "notetemplate-episode-note_template",
+          "name": "note_template",
+          "path": "/publishing/v2/episodes/{episode_id}/note_template",
+          "post": false,
+          "response": "resource"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "series",
+          "id": "series-episode-series",
+          "name": "series",
+          "path": "/publishing/v2/episodes/{episode_id}/series",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "speakership",
+          "id": "speakership-episode-speakerships",
+          "name": "speakerships",
+          "path": "/publishing/v2/episodes/{episode_id}/speakerships",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "channel",
+        "episode_resources",
+        "episode_times",
+        "series",
+        "speakerships"
+      ],
+      "name": "Episode",
+      "orders": [
+        "published_live_at",
+        "published_to_library_at",
+        "stream_type",
+        "title"
+      ],
+      "path": "/publishing/v2/episodes",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "art",
+          "description",
+          "library_audio_url",
+          "library_video_url",
+          "published_to_library_at",
+          "series_id",
+          "sermon_audio",
+          "stream_type",
+          "summary",
+          "title",
+          "video_url"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "art",
+          "description",
+          "library_audio_url",
+          "library_video_url",
+          "published_to_library_at",
+          "series_id",
+          "sermon_audio",
+          "stream_type",
+          "summary",
+          "title",
+          "video_url"
+        ]
+      },
+      "queries": [
+        {
+          "name": "series_id",
+          "ops": [],
+          "type": "integer"
+        },
+        {
+          "name": "services_plan_remote_identifier",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "services_service_type_remote_identifier",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Series",
+          "name": "series",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "episode_resource": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": true,
+          "name": "featured",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "icon",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Possible values: `giving_fund`, `people_form`, `generic_url`, `services_public_page`",
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "title",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "EpisodeResource",
+      "orders": [
+        "position"
+      ],
+      "path": "/publishing/v2/episodes/{episode_id}/episode_resources",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "featured",
+          "icon",
+          "position",
+          "title",
+          "type",
+          "url"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "featured",
+          "icon",
+          "position",
+          "title",
+          "type",
+          "url"
+        ]
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "episode_statistics": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "library_watch_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "live_watch_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "published_live_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "published_to_library_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "`watch_count` per EpisodeTime",
+          "example": [],
+          "name": "times",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "title",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Viewership statistics for an episode",
+      "edges": [],
+      "includes": [],
+      "name": "EpisodeStatistics",
+      "orders": [],
+      "path": "/publishing/v2/channels/{channel_id}/statistics",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "episode_time": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": [],
+          "name": "caveats",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "array"
+        },
+        {
+          "description": "Possible values: `upcoming`, `active`, `over`",
+          "example": "string",
+          "name": "current_state",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1.42,
+          "name": "current_timestamp",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "float"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Possible values: `vimeo`, `youtube`, `livestream_com`, `resi`, `facebook`, `boxcast`",
+          "example": "string",
+          "name": "streaming_service",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "video_embed_code",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "video_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Live schedule times for an Episode",
+      "edges": [],
+      "includes": [],
+      "name": "EpisodeTime",
+      "orders": [
+        "starts_at"
+      ],
+      "path": "/publishing/v2/episodes/{episode_id}/episode_times",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "starts_at",
+          "video_embed_code",
+          "video_url"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "starts_at",
+          "video_embed_code",
+          "video_url"
+        ]
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "note_template": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": true,
+          "name": "auto_create_free_form_notes",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "published_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "template",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "NoteTemplate",
+      "orders": [],
+      "path": "/publishing/v2/episodes/{episode_id}/note_template",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": true,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": [
+          "auto_create_free_form_notes",
+          "enabled",
+          "template"
+        ]
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "organization": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": 1,
+          "name": "downloads_used",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "subdomain",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "announcement_category",
+          "id": "announcementcategory-organization-announcement_categories",
+          "name": "announcement_categories",
+          "path": "/publishing/v2/announcement_categories",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "active",
+            "active_and_scheduled",
+            "archived",
+            "inactive"
+          ],
+          "head": "announcement",
+          "id": "announcement-organization-announcements",
+          "name": "announcements",
+          "path": "/publishing/v2/announcements",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "archived",
+            "not_archived",
+            "podcast_enabled",
+            "published"
+          ],
+          "head": "channel",
+          "id": "channel-organization-channels",
+          "name": "channels",
+          "path": "/publishing/v2/channels",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "connected_to_services",
+            "not_connected_to_services",
+            "not_published_live",
+            "published_live",
+            "published_on_church_center"
+          ],
+          "head": "episode",
+          "id": "episode-organization-episodes",
+          "name": "episodes",
+          "path": "/publishing/v2/episodes",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "not_published",
+            "published",
+            "published_on_church_center"
+          ],
+          "head": "series",
+          "id": "series-organization-series",
+          "name": "series",
+          "path": "/publishing/v2/series",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "speaker",
+          "id": "speaker-organization-speakers",
+          "name": "speakers",
+          "path": "/publishing/v2/speakers",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Organization",
+      "orders": [],
+      "path": "/publishing/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "series": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "An image file object. When setting, pass an upload UUID from the Uploads API\n(https://api.planningcenteronline.com/docs/overview/file-uploads)\nor a signed_identifier from an existing File.",
+          "example": {},
+          "name": "art",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "hash"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "church_center_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ended_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "episodes_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "published",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "started_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "title",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "channel",
+          "id": "channel-series-channel",
+          "name": "channel",
+          "path": "/publishing/v2/series/{series_id}/channel",
+          "post": true,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "channel"
+      ],
+      "name": "Series",
+      "orders": [
+        "ended_at",
+        "episodes_count",
+        "started_at",
+        "title"
+      ],
+      "path": "/publishing/v2/series",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "art",
+          "description",
+          "published",
+          "title"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "art",
+          "description",
+          "published",
+          "title"
+        ]
+      },
+      "queries": [
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "speaker": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "episodes_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "formatted_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name_prefix",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name_suffix",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "speaker_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "Speaker",
+      "orders": [
+        "first_name"
+      ],
+      "path": "/publishing/v2/speakers",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "speakership": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "speaker",
+          "id": "speaker-speakership-speaker",
+          "name": "speaker",
+          "path": "/publishing/v2/episodes/{episode_id}/speakerships/{speakership_id}/speaker",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "speaker"
+      ],
+      "name": "Speakership",
+      "orders": [],
+      "path": "/publishing/v2/episodes/{episode_id}/speakerships",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Speaker",
+          "name": "speaker",
+          "note": "Assign via relationship data; speaker_id cannot be set as a direct attribute",
+          "polymorphic": true
+        }
+      ],
+      "resourceOnly": false
+    }
+  }
+}

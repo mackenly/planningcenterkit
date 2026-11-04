@@ -1,0 +1,156 @@
+---
+title: "TypeScript"
+description: "Name resource, schema, and result types, and see what the compiler catches."
+sidebar:
+  order: 7
+---
+
+Every type in this library comes from Planning Center's API documentation, so the compiler knows
+what each resource looks like, which names a query accepts, and what each write takes. This guide
+shows how to name those types in your own code.
+
+## Resource types
+
+Each product is exported as a namespace from the main entry (`People`, `Services`, `CheckIns`,
+`Groups`, `Giving`, `Calendar`, `Registrations`, `Publishing`, `Webhooks`, `Api`, `Current`).
+Every resource has two types in it: the resource and its attributes.
+
+```ts
+import type { CheckIns, People, Services } from '@mackenly/planningcenterkit';
+
+function displayName(person: People.Person): string {
+    const { nickname, first_name, last_name } = person.attributes;
+    return [nickname ?? first_name, last_name].filter(Boolean).join(' ');
+}
+
+type PlanFields = Services.PlanAttributes; // { title: string | null; sort_date: string | null; ... }
+type CheckIn = CheckIns.CheckIn;
+```
+
+A resource is a `PcoResource<...>`: `{ type, id, attributes, relationships?, links?, meta? }`, with
+`type` as a literal (`'Person'`) and `relationships` keyed by the documented relationship names.
+Attributes the API may omit or null are `T | null`.
+
+The per-product entry points export the same types without the namespace:
+
+```ts
+import type { Person, PersonAttributes } from '@mackenly/planningcenterkit/people';
+```
+
+## Schemas
+
+Under the hood each product has a schema type, `People.PeopleSchema`, mapping each resource's id
+(`person`, `email`, ...) to everything known about it. Index into it for the less common types:
+
+```ts
+import type { People } from '@mackenly/planningcenterkit';
+
+type PersonSchema = People.PeopleSchema['person'];
+type NewPerson = PersonSchema['create'];             // attributes accepted by create()
+type PersonUpdate = PersonSchema['update'];          // attributes accepted by update()
+type PersonInclude = PersonSchema['includes'];       // 'addresses' | 'emails' | ...
+type PersonOrder = PersonSchema['order'];            // 'birthdate' | 'created_at' | ...
+type PersonWhere = PersonSchema['where'];            // { status: string; created_at: string | Date; ... }
+type PersonEdges = keyof PersonSchema['edges'];      // 'addresses' | 'emails' | 'households' | ...
+
+function toPayload(row: { first: string; last: string }): NewPerson {
+    return { first_name: row.first, last_name: row.last };
+}
+```
+
+`People.PeopleRoot` is the map of root collections (`people`, `households`, `lists`, ...).
+
+## Result types
+
+| Type | What it is |
+| --- | --- |
+| `ListResult<Schema, 'vertex'>` | A page from `list()` or `pages()`: `data`, `included`, `meta`, `links`, `totalCount`, `nextOffset`, `related()` |
+| `ItemResult<Schema, 'vertex'>` | A single resource from `get()`, `create()`, `update()` |
+| `PcoResource<Schema['vertex']>` | One resource (same as `People.Person`) |
+| `AnyResource` | An untyped resource, e.g. raw entries in `included` |
+| `JsonApiDocument` | A raw JSON:API document, for `pco.request()` |
+
+```ts
+import type { ItemResult, ListResult, People } from '@mackenly/planningcenterkit';
+
+type PeoplePage = ListResult<People.PeopleSchema, 'person'>;
+type OnePerson = ItemResult<People.PeopleSchema, 'person'>;
+
+async function loadPage(offset: number): Promise<PeoplePage> {
+    return pco.people.people.perPage(100).offset(offset).list();
+}
+```
+
+People has a resource that is itself named `ListResult` (a row of a People list). It lives in the
+namespace, as `People.ListResult`, so it doesn't clash with the result type above.
+
+When the exact type is hard to name, let TypeScript infer it:
+
+```ts
+type Plans = Awaited<ReturnType<typeof pco.services.service_types.list>>;
+```
+
+## Passing builders and clients around
+
+Builders have types too, if you want helpers that take a query:
+
+```ts
+import type { CreatableCollection, People, PlanningCenter, ProductClient } from '@mackenly/planningcenterkit';
+
+type PeopleClient = ProductClient<People.PeopleSchema, People.PeopleRoot>; // same as PlanningCenter['people']
+type PeopleCollection = CreatableCollection<People.PeopleSchema, 'person', 'admins' | 'created_since' | 'organization_admins'>;
+
+async function activeCount(people: PlanningCenter['people']): Promise<number> {
+    return people.people.where('status', 'active').count();
+}
+
+// Or derive it from an expression:
+type PeopleQuery = typeof pco.people.people;
+function onlyActive(query: PeopleQuery): PeopleQuery {
+    return query.where('status', 'active');
+}
+```
+
+## What the types catch
+
+```ts
+pco.people.people.where('status', 'active');          // ok
+// @ts-expect-error: unknown where field
+pco.people.people.where('favorite_color', 'blue');
+// @ts-expect-error: first_name only supports equality
+pco.people.people.where('first_name', 'gte', 'A');
+// @ts-expect-error: wrong value type (child is a boolean)
+pco.people.people.where('child', 'yes');
+// @ts-expect-error: not an include for Person
+pco.people.people.include('plans');
+// @ts-expect-error: not an orderable field
+pco.people.people.order('-avatar');
+// @ts-expect-error: emails at the root are read-only (no create)
+pco.people.emails.create({ address: 'a@example.com' });
+// @ts-expect-error: created_at isn't assignable
+pco.people.people.create({ created_at: '2026-01-01' });
+```
+
+Resources pulled out of `included` with `related(resource, name)` are typed from the relationship
+name: `related(person, 'emails')` is `People.Email[]`.
+
+## Webhook payloads
+
+Webhook events are typed by name (`isEvent` narrows `product`, `resource`, and `action`), but the
+payload is a generic resource, since one URL can receive any event. Cast it to what you subscribed to:
+
+```ts
+import type { People } from '@mackenly/planningcenterkit';
+import { isEvent, type WebhookEvent } from '@mackenly/planningcenterkit/webhooks';
+
+function personFrom(event: WebhookEvent): People.Person | undefined {
+    if (!isEvent(event, ['people.v2.events.person.created', 'people.v2.events.person.updated'])) return undefined;
+    return event.payload.data as unknown as People.Person;
+}
+```
+
+## Compiler settings
+
+The package ships its own `.d.ts` files for both ESM and CommonJS. It's tested with `strict` and
+`noUncheckedIndexedAccess`. Any `moduleResolution` that understands package `exports`
+(`nodenext`, `node16`, or `bundler`) resolves the subpath imports.

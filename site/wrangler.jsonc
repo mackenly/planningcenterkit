@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "planningcenterkit-docs",
+  "compatibility_date": "2026-11-03",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "not_found_handling": "none"
+  },
+  // Serves the site at its own hostname. The mackenly.com zone must be on the
+  // same Cloudflare account; wrangler creates the DNS record and certificate.
+  "routes": [
+    { "pattern": "planningcenterkit.mackenly.com", "custom_domain": true }
+  ],
+  // One public hostname only: no *.workers.dev copy of the site.
+  "workers_dev": false,
+  "observability": {
+    "enabled": true
+  }
+}

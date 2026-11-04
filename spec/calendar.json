@@ -1,0 +1,4233 @@
+{
+  "basePath": "/calendar/v2",
+  "entry": "organization",
+  "openApi": true,
+  "product": "calendar",
+  "slug": "calendar",
+  "title": "Planning Center Calendar",
+  "version": "2026-06-22",
+  "vertices": {
+    "attachment": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "MIME type of the attachment. Null for external links.",
+          "example": "string",
+          "name": "content_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the attachment was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Description of the attachment",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "File size in bytes. Null for external links.",
+          "example": 1,
+          "name": "file_size",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Unique identifier for the attachment",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Possible values: file_upload, external_link\n\nPossible values: `file_upload` or `external_link`",
+          "example": "value",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Set to the file name if not provided",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the attachment was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Path to where the attachment is stored, or the external link URL for external_link attachments",
+          "example": "string",
+          "name": "url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A file or external link attached to an event.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-attachment-event",
+          "name": "event",
+          "path": "/calendar/v2/attachments/{attachment_id}/event",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event"
+      ],
+      "name": "Attachment",
+      "orders": [
+        "content_type",
+        "created_at",
+        "description",
+        "file_size",
+        "kind",
+        "name",
+        "updated_at"
+      ],
+      "path": "/calendar/v2/attachments",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "content_type",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "description",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "file_size",
+          "ops": [],
+          "type": "integer"
+        },
+        {
+          "name": "kind",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "calendar": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "access",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "access_restricted",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Possible values: `blue`, `aqua`, `teal`, `green`, `yellow`, `orange`, `pink`, `purple`, `magenta`, `indigo`, `aqua_bold`, `teal_bold`, `orange_bold`, `magenta_bold`, `blue_bold`, `green_bold`, `yellow_bold`, `pink_bold`, `purple_bold`, or `indigo_bold`",
+          "example": "value",
+          "name": "color",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The number of pending events that would confirm if the calendar stopped requiring approval\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "confirmable_event_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "default",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "requires_approval",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Calendars associated with an Organization.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource_approval_group",
+          "id": "resourceapprovalgroup-calendar-approval_groups",
+          "name": "approval_groups",
+          "path": "/calendar/v2/calendars/{calendar_id}/approval_groups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-calendar-events",
+          "name": "events",
+          "path": "/calendar/v2/calendars/{calendar_id}/events",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "approval_groups"
+      ],
+      "name": "Calendar",
+      "orders": [
+        "name"
+      ],
+      "path": "/calendar/v2/calendars",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "conflict": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "UTC time at which the conflict was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the conflict",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Additional information about the conflict or resolution",
+          "example": "string",
+          "name": "note",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the conflict was resolved",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "resolved_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "UTC time at which the conflict was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A conflict between two events caused by overlapping event resource\nrequests.\n\nIf the conflict has been resolved, `resolved_at` will be present.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-conflict-resolved_by",
+          "name": "resolved_by",
+          "path": "/calendar/v2/conflicts/{conflict_id}/resolved_by",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource",
+          "id": "resource-conflict-resource",
+          "name": "resource",
+          "path": "/calendar/v2/conflicts/{conflict_id}/resource",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-conflict-winner",
+          "name": "winner",
+          "path": "/calendar/v2/conflicts/{conflict_id}/winner",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "resolved_by",
+        "resource",
+        "winner"
+      ],
+      "name": "Conflict",
+      "orders": [
+        "resolved_at"
+      ],
+      "path": "/calendar/v2/conflicts",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "resolved_by",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Resource",
+          "name": "resource",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "winner",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "containing_resource": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The containing record for a RoomSetup. Can be a Resource or\nan Organization",
+      "edges": [],
+      "includes": [],
+      "name": "ContainingResource",
+      "orders": [],
+      "path": "/calendar/v2/room_setups/{room_setup_id}/containing_resource",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "event": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Possible values:\n- `A`: approved.\n- `P`: pending.\n- `R`: rejected.",
+          "example": "string",
+          "name": "approval_status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the event was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A rich text public-facing summary of the event",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "- `true` indicates the event is featured on Church Center\n- `false` indicates the event is not featured on Church Center",
+          "example": true,
+          "name": "featured",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Unique identifier for the event",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Path to where the event image is stored",
+          "example": "string",
+          "name": "image_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "- `true` indicates the event is published to Church Center through the link only\n- `false` indicates the event is published to Church Center normally",
+          "example": true,
+          "name": "link_only",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The name of the event",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Calculated by taking the sum of the `percent_approved` for all\nfuture `ReservationBlocks` and dividing that by the `count` of all future\n`ReservationBlocks`.\n\nIf there are no future `ReservationBlocks`, returns `100`",
+          "example": 1,
+          "name": "percent_approved",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Calculated by taking the sum of the `percent_rejected` for all\nfuture `ReservationBlocks` and dividing that by the `count` of all future\n`ReservationBlocks`.\n\nIf there are no future `ReservationBlocks`, returns `0`",
+          "example": 1,
+          "name": "percent_rejected",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The registration URL for the event",
+          "example": "string",
+          "name": "registration_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A plain text public-facing summary of the event",
+          "example": "string",
+          "name": "summary",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the event was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "- `true` indicates the event Church Center visibility is set to 'Published'\n- `false` indicates the event Church Center visibility is set to 'Hidden'",
+          "example": true,
+          "name": "visible_in_church_center",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An event.\n\nMay contain information such as who owns\nthe event, visibility on Church Center and a public-facing summary.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "attachment",
+          "id": "attachment-event-attachments",
+          "name": "attachments",
+          "path": "/calendar/v2/events/{event_id}/attachments",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "calendar",
+          "id": "calendar-event-calendar",
+          "name": "calendar",
+          "path": "/calendar/v2/events/{event_id}/calendar",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "conflict",
+          "id": "conflict-event-conflicts",
+          "name": "conflicts",
+          "path": "/calendar/v2/events/{event_id}/conflicts",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_connection",
+          "id": "eventconnection-event-event_connections",
+          "name": "event_connections",
+          "path": "/calendar/v2/events/{event_id}/event_connections",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "future"
+          ],
+          "head": "event_instance",
+          "id": "eventinstance-event-event_instances",
+          "name": "event_instances",
+          "path": "/calendar/v2/events/{event_id}/event_instances",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_resource_request",
+          "id": "eventresourcerequest-event-event_resource_requests",
+          "name": "event_resource_requests",
+          "path": "/calendar/v2/events/{event_id}/event_resource_requests",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "feed",
+          "id": "feed-event-feed",
+          "name": "feed",
+          "path": "/calendar/v2/events/{event_id}/feed",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-event-owner",
+          "name": "owner",
+          "path": "/calendar/v2/events/{event_id}/owner",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "future"
+          ],
+          "head": "resource_booking",
+          "id": "resourcebooking-event-resource_bookings",
+          "name": "resource_bookings",
+          "path": "/calendar/v2/events/{event_id}/resource_bookings",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "tag",
+          "id": "tag-event-tags",
+          "name": "tags",
+          "path": "/calendar/v2/events/{event_id}/tags",
+          "post": true,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "attachments",
+        "calendar",
+        "feed",
+        "owner",
+        "tags"
+      ],
+      "name": "Event",
+      "orders": [],
+      "path": "/calendar/v2/events",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "approval_status",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "featured",
+          "ops": [],
+          "type": "boolean"
+        },
+        {
+          "name": "link_only",
+          "ops": [],
+          "type": "boolean"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "percent_approved",
+          "ops": [],
+          "type": "integer"
+        },
+        {
+          "name": "percent_rejected",
+          "ops": [],
+          "type": "integer"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "visible_in_church_center",
+          "ops": [],
+          "type": "boolean"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Calendar",
+          "name": "calendar",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "owner",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event_connection": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Unique identifier for the connected record",
+          "example": "primary_key",
+          "name": "connected_to_id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Name of the record that the event is connected to",
+          "example": "string",
+          "name": "connected_to_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Currently we support `signup`, `group`, `event`, and `service_type`",
+          "example": "string",
+          "name": "connected_to_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A link to the connected record",
+          "example": "string",
+          "name": "connected_to_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Currently we support `registrations`, `groups`, `check-ins`, and `services`",
+          "example": "string",
+          "name": "product_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Whether this connection is promoted for display (only applies to Groups connections)\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "promoted",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A connection between a Calendar event and a record in another product",
+      "edges": [],
+      "includes": [],
+      "name": "EventConnection",
+      "orders": [],
+      "path": "/calendar/v2/events/{event_id}/event_connections",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "connected_to_id",
+          "connected_to_name",
+          "connected_to_type",
+          "product_name",
+          "promoted"
+        ],
+        "edges": [
+          "eventconnection-event-event_connections"
+        ],
+        "updateAssignable": [
+          "connected_to_id",
+          "connected_to_name",
+          "connected_to_type",
+          "product_name",
+          "promoted"
+        ]
+      },
+      "queries": [
+        {
+          "name": "connected_to_id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "product_name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "promoted",
+          "ops": [],
+          "type": "boolean"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event_instance": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Indicates whether event instance lasts all day",
+          "example": true,
+          "name": "all_day_event",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The URL for the event on Church Center",
+          "example": "string",
+          "name": "church_center_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Compact representation of event instance's recurrence pattern",
+          "example": "string",
+          "name": "compact_recurrence_description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the event instance was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A rich text public-facing summary of the event\n\nOnly available when requested with the `?fields` param",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the event instance ends",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the event instance",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Path to where the event image is stored\n\nOnly available when requested with the `?fields` param",
+          "example": "string",
+          "name": "image_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The type of event: `standard` or `blockout`\n\nOnly available when requested with the `?fields` param",
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Representation of where the event instance takes place",
+          "example": "string",
+          "name": "location",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Name of event. Can be overridden for specific instances",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Publicly visible end time",
+          "example": "string",
+          "name": "published_ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Publicly visible start time",
+          "example": "string",
+          "name": "published_starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "For a recurring event instance, the interval of how often the event instance occurs",
+          "example": "string",
+          "name": "recurrence",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Longer description of the event instance's recurrence pattern",
+          "example": "string",
+          "name": "recurrence_description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the event instance starts",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "UTC time at which the event instance was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A specific occurrence of an event.\n\nIf the event is recurring, `recurrence` will be set and\n`recurrence_description` will provide an overview of the recurrence pattern.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-eventinstance-event",
+          "name": "event",
+          "path": "/calendar/v2/event_instances/{event_instance_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_time",
+          "id": "eventtime-eventinstance-event_times",
+          "name": "event_times",
+          "path": "/calendar/v2/event_instances/{event_instance_id}/event_times",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "future",
+            "resources",
+            "rooms"
+          ],
+          "head": "resource_booking",
+          "id": "resourcebooking-eventinstance-resource_bookings",
+          "name": "resource_bookings",
+          "path": "/calendar/v2/event_instances/{event_instance_id}/resource_bookings",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "tag",
+          "id": "tag-eventinstance-tags",
+          "name": "tags",
+          "path": "/calendar/v2/event_instances/{event_instance_id}/tags",
+          "post": true,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event",
+        "event_times",
+        "resource_bookings",
+        "tags"
+      ],
+      "name": "EventInstance",
+      "orders": [
+        "created_at",
+        "ends_at",
+        "starts_at",
+        "updated_at"
+      ],
+      "path": "/calendar/v2/event_instances",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "ends_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "kind",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "starts_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event_resource_answer": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The answer formatted for display",
+          "example": {},
+          "name": "answer",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "json"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": "string",
+          "name": "db_answer",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Question details as of when it was answered",
+          "example": {},
+          "name": "question",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "json"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An answer to a question in a room or resource request.",
+      "edges": [],
+      "includes": [],
+      "name": "EventResourceAnswer",
+      "orders": [],
+      "path": "/calendar/v2/event_resource_requests/{event_resource_request_id}/answers",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "created_by",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "EventResourceRequest",
+          "name": "event_resource_request",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "ResourceQuestion",
+          "name": "resource_question",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "updated_by",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event_resource_request": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Whether or not an email has been sent to request approval",
+          "example": true,
+          "name": "approval_sent",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Possible values:\n- `A`: approved\n- `P`: pending\n- `R`: rejected",
+          "example": "string",
+          "name": "approval_status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which request was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the request",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Additional information about the room or resource request",
+          "example": "string",
+          "name": "notes",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "How many of the rooms or resources are being requested",
+          "example": 1,
+          "name": "quantity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "UTC time at which request was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Whether this resource request is visible on kiosks",
+          "example": true,
+          "name": "visible_on_kiosks",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A room or resource request for a specific event.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_resource_answer",
+          "id": "eventresourceanswer-eventresourcerequest-answers",
+          "name": "answers",
+          "path": "/calendar/v2/event_resource_requests/{event_resource_request_id}/answers",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-eventresourcerequest-created_by",
+          "name": "created_by",
+          "path": "/calendar/v2/event_resource_requests/{event_resource_request_id}/created_by",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-eventresourcerequest-event",
+          "name": "event",
+          "path": "/calendar/v2/event_resource_requests/{event_resource_request_id}/event",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource",
+          "id": "resource-eventresourcerequest-resource",
+          "name": "resource",
+          "path": "/calendar/v2/event_resource_requests/{event_resource_request_id}/resource",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "approved",
+            "approved_conflict",
+            "approved_pending",
+            "approved_pending_conflict",
+            "approved_pending_rejected",
+            "approved_pending_rejected_conflict",
+            "approved_rejected",
+            "approved_rejected_conflict",
+            "conflict",
+            "future",
+            "pending",
+            "pending_conflict",
+            "pending_rejected",
+            "pending_rejected_conflict",
+            "rejected",
+            "rejected_conflict"
+          ],
+          "head": "resource_booking",
+          "id": "resourcebooking-eventresourcerequest-resource_bookings",
+          "name": "resource_bookings",
+          "path": "/calendar/v2/event_resource_requests/{event_resource_request_id}/resource_bookings",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "room_setup",
+          "id": "roomsetup-eventresourcerequest-room_setup",
+          "name": "room_setup",
+          "path": "/calendar/v2/event_resource_requests/{event_resource_request_id}/room_setup",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-eventresourcerequest-updated_by",
+          "name": "updated_by",
+          "path": "/calendar/v2/event_resource_requests/{event_resource_request_id}/updated_by",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "created_by",
+        "event",
+        "resource",
+        "room_setup",
+        "updated_by"
+      ],
+      "name": "EventResourceRequest",
+      "orders": [],
+      "path": "/calendar/v2/event_resource_requests",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "approval_sent",
+          "ops": [],
+          "type": "boolean"
+        },
+        {
+          "name": "approval_status",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "created_by",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "EventResourceRequest",
+          "name": "event_resource_request",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Resource",
+          "name": "resource",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "RoomSetup",
+          "name": "room_setup",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "updated_by",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event_time": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "UTC time at which the event time ends",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the event time",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Name of the event time",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "event_visible",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the event time starts",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Set to `true` if the time is visible on kiosk",
+          "example": true,
+          "name": "visible_on_kiosks",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Set to `true` if the time is visible on widget or iCal",
+          "example": true,
+          "name": "visible_on_widget_and_ical",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": true,
+      "deprecated": false,
+      "description": "Start and end times for each event instance.\n\nIn the Calendar UI, these are represented under the \"Schedule\" section and\nmay include \"Setup\" and \"Teardown\" times for the instance.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-eventtime-event",
+          "name": "event",
+          "path": "/calendar/v2/event_instances/{event_instance_id}/event_times/{event_time_id}/event",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event"
+      ],
+      "name": "EventTime",
+      "orders": [
+        "ends_at",
+        "starts_at"
+      ],
+      "path": "/calendar/v2/event_instances/{event_instance_id}/event_times",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "ends_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "starts_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "visible_on_kiosks",
+          "ops": [],
+          "type": "boolean"
+        },
+        {
+          "name": "visible_on_widget_and_ical",
+          "ops": [],
+          "type": "boolean"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "feed": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": true,
+          "name": "can_delete",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Possible values: `hidden` or `published`",
+          "example": "value",
+          "name": "default_church_center_visibility",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": true,
+          "name": "deleting",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Possible values: `registrations`, `groups`, `ical`, or `form`",
+          "example": "value",
+          "name": "feed_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "imported_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": true,
+          "name": "prefix_event_names",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "source_id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": true,
+          "name": "sync_campus_tags",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A feed belonging to an organization.",
+      "edges": [],
+      "includes": [],
+      "name": "Feed",
+      "orders": [
+        "name"
+      ],
+      "path": "/calendar/v2/feeds",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "feed_type",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "source_id",
+          "ops": [],
+          "type": "primary_key"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Calendar",
+          "name": "default_calendar",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "event_owner",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "job_status": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": {},
+          "name": "errors",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "json"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "message",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "retries",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "started_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "JobStatus",
+      "orders": [],
+      "path": "/calendar/v2/job_statuses",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "organization": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The day of the week the calendar starts on",
+          "example": "string",
+          "name": "calendar_starts_on",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values:\n- `%d/%m/%Y`: indicates date/month/year formatting\n- `%m/%d/%Y`: indicates month/date/year formatting",
+          "example": "string",
+          "name": "date_format",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Unique identifier for the organization",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name of the organization",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": true,
+          "name": "onboarding",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The time zone of the organization",
+          "example": "string",
+          "name": "time_zone",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "- `true` indicates hours for times will use a 24-hour clock\n- `false` indicates hours for times will use a 12-hour clock",
+          "example": true,
+          "name": "twenty_four_hour_time",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An administrative structure, usually representing a single church.\nContains date/time formatting and time zone preferences.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "attachment",
+          "id": "attachment-organization-attachments",
+          "name": "attachments",
+          "path": "/calendar/v2/attachments",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "calendar",
+          "id": "calendar-organization-calendars",
+          "name": "calendars",
+          "path": "/calendar/v2/calendars",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "future",
+            "resolved",
+            "unresolved"
+          ],
+          "head": "conflict",
+          "id": "conflict-organization-conflicts",
+          "name": "conflicts",
+          "path": "/calendar/v2/conflicts",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "all",
+            "approved",
+            "approved_conflict",
+            "approved_pending",
+            "approved_pending_conflict",
+            "approved_pending_rejected",
+            "approved_pending_rejected_conflict",
+            "approved_rejected",
+            "approved_rejected_conflict",
+            "approver",
+            "approver_subscriber",
+            "conflict",
+            "event_request_approved",
+            "event_request_approved_pending",
+            "event_request_approved_pending_rejected",
+            "event_request_approved_rejected",
+            "event_request_pending",
+            "event_request_pending_rejected",
+            "event_request_rejected",
+            "future",
+            "lost",
+            "lost_due_to_blockout",
+            "manager",
+            "manager_approver",
+            "manager_approver_subscriber",
+            "manager_subscriber",
+            "not_pending_event_requests",
+            "owner",
+            "owner_approver",
+            "owner_approver_subscriber",
+            "owner_manager",
+            "owner_manager_approver",
+            "owner_manager_approver_subscriber",
+            "owner_manager_subscriber",
+            "owner_subscriber",
+            "pending",
+            "pending_conflict",
+            "pending_rejected",
+            "pending_rejected_conflict",
+            "rejected",
+            "rejected_conflict",
+            "shared",
+            "subscriber",
+            "unresolved"
+          ],
+          "head": "event_instance",
+          "id": "eventinstance-organization-event_instances",
+          "name": "event_instances",
+          "path": "/calendar/v2/event_instances",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_resource_request",
+          "id": "eventresourcerequest-organization-event_resource_requests",
+          "name": "event_resource_requests",
+          "path": "/calendar/v2/event_resource_requests",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "future"
+          ],
+          "head": "event",
+          "id": "event-organization-events",
+          "name": "events",
+          "path": "/calendar/v2/events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "feed",
+          "id": "feed-organization-feeds",
+          "name": "feeds",
+          "path": "/calendar/v2/feeds",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "job_status",
+          "id": "jobstatus-organization-job_statuses",
+          "name": "job_statuses",
+          "path": "/calendar/v2/job_statuses",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "active",
+            "event_owners"
+          ],
+          "head": "person",
+          "id": "person-organization-people",
+          "name": "people",
+          "path": "/calendar/v2/people",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "report_template",
+          "id": "reporttemplate-organization-report_templates",
+          "name": "report_templates",
+          "path": "/calendar/v2/report_templates",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource_approval_group",
+          "id": "resourceapprovalgroup-organization-resource_approval_groups",
+          "name": "resource_approval_groups",
+          "path": "/calendar/v2/resource_approval_groups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "approved",
+            "approved_conflict",
+            "approved_pending",
+            "approved_pending_conflict",
+            "approved_pending_rejected",
+            "approved_pending_rejected_conflict",
+            "approved_rejected",
+            "approved_rejected_conflict",
+            "conflict",
+            "future",
+            "pending",
+            "pending_conflict",
+            "pending_rejected",
+            "pending_rejected_conflict",
+            "rejected",
+            "rejected_conflict",
+            "resources",
+            "rooms"
+          ],
+          "head": "resource_booking",
+          "id": "resourcebooking-organization-resource_bookings",
+          "name": "resource_bookings",
+          "path": "/calendar/v2/resource_bookings",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "resources",
+            "rooms"
+          ],
+          "head": "resource_folder",
+          "id": "resourcefolder-organization-resource_folders",
+          "name": "resource_folders",
+          "path": "/calendar/v2/resource_folders",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource_question",
+          "id": "resourcequestion-organization-resource_questions",
+          "name": "resource_questions",
+          "path": "/calendar/v2/resource_questions",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "resources",
+            "rooms"
+          ],
+          "head": "resource",
+          "id": "resource-organization-resources",
+          "name": "resources",
+          "path": "/calendar/v2/resources",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "shared_room_setups"
+          ],
+          "head": "room_setup",
+          "id": "roomsetup-organization-room_setups",
+          "name": "room_setups",
+          "path": "/calendar/v2/room_setups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "required"
+          ],
+          "head": "tag_group",
+          "id": "taggroup-organization-tag_groups",
+          "name": "tag_groups",
+          "path": "/calendar/v2/tag_groups",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "individual"
+          ],
+          "head": "tag",
+          "id": "tag-organization-tags",
+          "name": "tags",
+          "path": "/calendar/v2/tags",
+          "post": true,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Organization",
+      "orders": [],
+      "path": "/calendar/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "person": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "Path to where the avatar image is stored",
+          "example": "string",
+          "name": "avatar_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Indicates whether the person can edit other people",
+          "example": true,
+          "name": "can_edit_people",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Indicates whether the person can edit resources",
+          "example": true,
+          "name": "can_edit_resources",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Indicates whether the person can edit rooms",
+          "example": true,
+          "name": "can_edit_rooms",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Indicates whether the person is a child",
+          "example": true,
+          "name": "child",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "An object containing the person's contact data.\n\nThis can include an array of `email_addresses`, `addresses` and `phone_numbers`",
+          "example": "string",
+          "name": "contact_data",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the person was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Indicates whether the person is an Event Administrator, and therefore has access to every calendar\n\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "event_administrator",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Event permissions for the person",
+          "example": "string",
+          "name": "event_permissions_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The person's first name",
+          "example": "string",
+          "name": "first_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "`M` indicates male, `F` indicates female",
+          "example": "string",
+          "name": "gender",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Indicates whether the person has access to Calendar",
+          "example": true,
+          "name": "has_access",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Indicates whether the person has full (not limited, event-level-only) access to at least one calendar\n\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "has_full_access_to_any_calendar",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Unique identifier for the person",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The person's last name",
+          "example": "string",
+          "name": "last_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Indicates whether the person is a member of at least one approval group\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "member_of_approval_groups",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "The person's middle name",
+          "example": "string",
+          "name": "middle_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The person's first name, last name, and name suffix",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values:\n- `Mr.`\n- `Mrs.`\n- `Ms.`\n- `Miss`\n- `Dr.`\n- `Rev.`",
+          "example": "string",
+          "name": "name_prefix",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values:\n- `Jr.`\n- `Sr.`\n- `Ph.D.`\n- `II`\n- `III`",
+          "example": "string",
+          "name": "name_suffix",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "If the person is a member of an approval group, the number of EventResourceRequests needing resolution.\n\nIf `resolves_conflicts` is `true`, the count will also include the number of Conflicts needing resolution.",
+          "example": 1,
+          "name": "pending_request_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "People permissions for the person",
+          "example": "string",
+          "name": "people_permissions_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Integer that corresponds to the person's permissions in Calendar",
+          "example": 1,
+          "name": "permissions",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Indicates whether the person is able to resolve Conflicts",
+          "example": true,
+          "name": "resolves_conflicts",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Resource permissions for the person",
+          "example": "string",
+          "name": "resources_permissions_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Room permissions for the person",
+          "example": "string",
+          "name": "room_permissions_type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Indicates whether the person is a Organization Administrator",
+          "example": true,
+          "name": "site_administrator",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Possible values:\n- `active`: The person is marked \"active\" in People\n- `inactive`: The person is marked \"inactive\" in People\n\n\nPossible values: `active`, `pending`, or `inactive`",
+          "example": "value",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the person was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "The people in your organization with access to Calendar.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "awaiting_response",
+            "future",
+            "not_in_conflict",
+            "not_overbooked",
+            "overbooked"
+          ],
+          "head": "event_resource_request",
+          "id": "eventresourcerequest-person-event_resource_requests",
+          "name": "event_resource_requests",
+          "path": "/calendar/v2/people/{person_id}/event_resource_requests",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "organization",
+          "id": "organization-person-organization",
+          "name": "organization",
+          "path": "/calendar/v2/people/{person_id}/organization",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "organization"
+      ],
+      "name": "Person",
+      "orders": [
+        "created_at",
+        "first_name",
+        "last_name",
+        "resolves_conflicts",
+        "updated_at"
+      ],
+      "path": "/calendar/v2/people",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "first_name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "middle_name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "report_template": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The contents of the report template",
+          "example": "string",
+          "name": "body",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the report was created",
+          "example": "string",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A summarization of the report",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Unique identifier for the report",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The title of the report",
+          "example": "string",
+          "name": "title",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the report was updated",
+          "example": "string",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A template for generating a report.",
+      "edges": [],
+      "includes": [],
+      "name": "ReportTemplate",
+      "orders": [],
+      "path": "/calendar/v2/report_templates",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "body",
+          "description",
+          "title"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "body",
+          "description",
+          "title"
+        ]
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "required_approval": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Represents the relationship between a Resource and a Resource Approval Group.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource",
+          "id": "resource-requiredapproval-resource",
+          "name": "resource",
+          "path": "/calendar/v2/resource_approval_groups/{resource_approval_group_id}/required_approvals/{required_approval_id}/resource",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "resource"
+      ],
+      "name": "RequiredApproval",
+      "orders": [],
+      "path": "/calendar/v2/resource_approval_groups/{resource_approval_group_id}/required_approvals",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "resource": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "UTC time at which the room or resource was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Description of the room or resource",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the resource expires",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "expires_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Where the resource is normally kept",
+          "example": "string",
+          "name": "home_location",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Unique identifier for the room or resource",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Path to where resource image is stored",
+          "example": "string",
+          "name": "image",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The type of resource, can either be `Room` or `Resource`",
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The name of the room or resource",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A string representing the location of the resource if it is nested within a folder.\n\nEach parent folder is separated by `/`",
+          "example": "string",
+          "name": "path_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The quantity of the resource",
+          "example": 1,
+          "name": "quantity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The serial number of the resource",
+          "example": "string",
+          "name": "serial_number",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the room or resource was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A room or resource that can be requested for use as part of\nan event.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "conflict",
+          "id": "conflict-resource-conflicts",
+          "name": "conflicts",
+          "path": "/calendar/v2/resources/{resource_id}/conflicts",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_resource_request",
+          "id": "eventresourcerequest-resource-event_resource_requests",
+          "name": "event_resource_requests",
+          "path": "/calendar/v2/resources/{resource_id}/event_resource_requests",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "required_approval",
+          "id": "requiredapproval-resource-required_approvals",
+          "name": "required_approvals",
+          "path": "/calendar/v2/resources/{resource_id}/required_approvals",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource_approval_group",
+          "id": "resourceapprovalgroup-resource-resource_approval_groups",
+          "name": "resource_approval_groups",
+          "path": "/calendar/v2/resources/{resource_id}/resource_approval_groups",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "approved",
+            "approved_conflict",
+            "approved_pending",
+            "approved_pending_conflict",
+            "approved_pending_rejected",
+            "approved_pending_rejected_conflict",
+            "approved_rejected",
+            "approved_rejected_conflict",
+            "conflict",
+            "future",
+            "pending",
+            "pending_conflict",
+            "pending_rejected",
+            "pending_rejected_conflict",
+            "rejected",
+            "rejected_conflict"
+          ],
+          "head": "resource_booking",
+          "id": "resourcebooking-resource-resource_bookings",
+          "name": "resource_bookings",
+          "path": "/calendar/v2/resources/{resource_id}/resource_bookings",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource_folder",
+          "id": "resourcefolder-resource-resource_folder",
+          "name": "resource_folder",
+          "path": "/calendar/v2/resources/{resource_id}/resource_folder",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource_question",
+          "id": "resourcequestion-resource-resource_questions",
+          "name": "resource_questions",
+          "path": "/calendar/v2/resources/{resource_id}/resource_questions",
+          "post": true,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "room_setup",
+          "id": "roomsetup-resource-room_setups",
+          "name": "room_setups",
+          "path": "/calendar/v2/resources/{resource_id}/room_setups",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "resource_approval_groups",
+        "resource_folder",
+        "resource_questions",
+        "room_setups"
+      ],
+      "name": "Resource",
+      "orders": [
+        "created_at",
+        "expires_at",
+        "name",
+        "updated_at"
+      ],
+      "path": "/calendar/v2/resources",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "description",
+          "expires_at",
+          "home_location",
+          "kind",
+          "name",
+          "quantity",
+          "serial_number"
+        ],
+        "edges": [
+          "resource-organization-resources"
+        ],
+        "updateAssignable": [
+          "description",
+          "expires_at",
+          "home_location",
+          "name",
+          "quantity",
+          "serial_number"
+        ]
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "kind",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "path_name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "serial_number",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "resource_approval_group": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "The number of calendars that require approval from the group\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "calendar_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "UTC time at which the approval group was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Only available when requested with the `?fields` param",
+          "example": 1,
+          "name": "form_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Unique identifier for the approval group",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Name of the approval group",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The number of people in the approval group\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "person_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The number of resources in the approval group\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "resource_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The number of rooms in the approval group\n\nOnly available when requested with the `?fields` param",
+          "example": 1,
+          "name": "room_count",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "UTC time at which the approval group was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A group of people that can be attached to a room or resource\nin order to require their approval for booking.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "calendar",
+          "id": "calendar-resourceapprovalgroup-calendars",
+          "name": "calendars",
+          "path": "/calendar/v2/resource_approval_groups/{resource_approval_group_id}/calendars",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "awaiting_response",
+            "future",
+            "not_in_conflict",
+            "not_overbooked",
+            "overbooked"
+          ],
+          "head": "event_resource_request",
+          "id": "eventresourcerequest-resourceapprovalgroup-event_resource_requests",
+          "name": "event_resource_requests",
+          "path": "/calendar/v2/resource_approval_groups/{resource_approval_group_id}/event_resource_requests",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "person",
+          "id": "person-resourceapprovalgroup-people",
+          "name": "people",
+          "path": "/calendar/v2/resource_approval_groups/{resource_approval_group_id}/people",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "resources",
+            "rooms"
+          ],
+          "head": "required_approval",
+          "id": "requiredapproval-resourceapprovalgroup-required_approvals",
+          "name": "required_approvals",
+          "path": "/calendar/v2/resource_approval_groups/{resource_approval_group_id}/required_approvals",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [
+            "resources",
+            "rooms"
+          ],
+          "head": "resource",
+          "id": "resource-resourceapprovalgroup-resources",
+          "name": "resources",
+          "path": "/calendar/v2/resource_approval_groups/{resource_approval_group_id}/resources",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "calendars",
+        "people",
+        "resources"
+      ],
+      "name": "ResourceApprovalGroup",
+      "orders": [
+        "created_at",
+        "name",
+        "updated_at"
+      ],
+      "path": "/calendar/v2/resource_approval_groups",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "resource_booking": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "UTC time at which the booking was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "UTC time at which usage of the booked room or resource ends",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "ends_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the booking",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The quantity of the rooms or resources booked",
+          "example": 1,
+          "name": "quantity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "UTC time at which usage of the booked room or resource starts",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "starts_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "UTC time at which the booking was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A specific booking of a room or resource for an event instance.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_resource_request",
+          "id": "eventresourcerequest-resourcebooking-event_resource_request",
+          "name": "event_resource_request",
+          "path": "/calendar/v2/resource_bookings/{resource_booking_id}/event_resource_request",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource",
+          "id": "resource-resourcebooking-resource",
+          "name": "resource",
+          "path": "/calendar/v2/resource_bookings/{resource_booking_id}/resource",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "event_resource_request",
+        "resource"
+      ],
+      "name": "ResourceBooking",
+      "orders": [
+        "created_at",
+        "ends_at",
+        "starts_at",
+        "updated_at"
+      ],
+      "path": "/calendar/v2/resource_bookings",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "ends_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "starts_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "EventInstance",
+          "name": "event_instance",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Resource",
+          "name": "resource",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "resource_folder": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "ancestry",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the folder was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the folder",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The type of folder, can either be `Room` or `Resource`",
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "The folder name",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "A string representing the location of the folder if it is nested.\n\nEach parent folder is separated by `/`",
+          "example": "string",
+          "name": "path_name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the folder was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An organizational folder containing rooms or resources.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource",
+          "id": "resource-resourcefolder-resources",
+          "name": "resources",
+          "path": "/calendar/v2/resource_folders/{resource_folder_id}/resources",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "resources"
+      ],
+      "name": "ResourceFolder",
+      "orders": [
+        "ancestry",
+        "created_at",
+        "name",
+        "updated_at"
+      ],
+      "path": "/calendar/v2/resource_folders",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "kind",
+          "name"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "name"
+        ]
+      },
+      "queries": [
+        {
+          "name": "ancestry",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "path_name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "resource_question": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "If `kind` is `dropdown`, represents a string of dropdown choices\nseparated by the `|` character",
+          "example": "string",
+          "name": "choices",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the question was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Optional description of the question",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Unique identifier for the question",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "Possible values:\n- `dropdown`: predefined list of choices as an answer\n- `paragraph`: expected answer is a paragraph\n- `text`: expected answer is a sentence\n- `yesno`: expected answer is 'Yes' or 'No'\n\n- `section_header`: used to separate questions in the UI, no expected answer",
+          "example": "string",
+          "name": "kind",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "If `kind` is `dropdown`,\n`true` indicates that more than one selection is permitted",
+          "example": true,
+          "name": "multiple_select",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "- `true` indicates answering the question is not required when booking\n- `false` indicates answering the question is required when booking",
+          "example": true,
+          "name": "optional",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Position of question in list in the UI",
+          "example": 1,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "The question to be answered",
+          "example": "string",
+          "name": "question",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the question was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A question to answer when requesting to book a room or resource.",
+      "edges": [],
+      "includes": [],
+      "name": "ResourceQuestion",
+      "orders": [],
+      "path": "/calendar/v2/resource_questions",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "choices",
+          "description",
+          "kind",
+          "multiple_select",
+          "optional",
+          "position",
+          "question"
+        ],
+        "edges": [
+          "resourcequestion-resource-resource_questions"
+        ],
+        "updateAssignable": [
+          "choices",
+          "description",
+          "kind",
+          "multiple_select",
+          "optional",
+          "position",
+          "question"
+        ]
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "kind",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Resource",
+          "name": "resource",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "resource_suggestion": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "UTC time at which the suggestion was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the suggestion",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "How many resources should be requested",
+          "example": 1,
+          "name": "quantity",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "UTC time at which the suggestion was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A resource and quantity suggested by a room setup.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource",
+          "id": "resource-resourcesuggestion-resource",
+          "name": "resource",
+          "path": "/calendar/v2/room_setups/{room_setup_id}/resource_suggestions/{resource_suggestion_id}/resource",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "resource"
+      ],
+      "name": "ResourceSuggestion",
+      "orders": [],
+      "path": "/calendar/v2/room_setups/{room_setup_id}/resource_suggestions",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Resource",
+          "name": "resource",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "RoomSetup",
+          "name": "room_setup",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "room_setup": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "UTC time at which the room setup was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "A description of the room setup",
+          "example": "string",
+          "name": "description",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "An object containing `url` and `thumbnail`.\n\n`url` is path to where room setup is stored.\n`thumbnail` contains `url` path to where thumbnail is stored.",
+          "example": "string",
+          "name": "diagram",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Path to where thumbnail version of room setup is stored",
+          "example": "string",
+          "name": "diagram_thumbnail_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Path to where room setup is stored",
+          "example": "string",
+          "name": "diagram_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Unique identifier for the room setup",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name of the room setup",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the room setup was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A diagram and list of suggested resources useful for predefined room setups.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "containing_resource",
+          "id": "containingresource-roomsetup-containing_resource",
+          "name": "containing_resource",
+          "path": "/calendar/v2/room_setups/{room_setup_id}/containing_resource",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "resource_suggestion",
+          "id": "resourcesuggestion-roomsetup-resource_suggestions",
+          "name": "resource_suggestions",
+          "path": "/calendar/v2/room_setups/{room_setup_id}/resource_suggestions",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "containing_resource",
+        "resource_suggestions"
+      ],
+      "name": "RoomSetup",
+      "orders": [
+        "created_at",
+        "name",
+        "updated_at"
+      ],
+      "path": "/calendar/v2/room_setups",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Resource",
+          "name": "containing_resource",
+          "note": "The resource this room setup is attached to",
+          "polymorphic": null
+        },
+        {
+          "association": "to_many",
+          "graphType": "ResourceSuggestion",
+          "name": "resource_suggestions",
+          "note": "A list of suggested resources for this room setup",
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "RoomSetup",
+          "name": "room_setup",
+          "note": "The shared room setup this is linked to",
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "tag": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "`true` indicates that this tag is used as a category on Church Center",
+          "example": true,
+          "name": "church_center_category",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Hex color code of the tag",
+          "example": "string",
+          "name": "color",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "UTC time at which the tag was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the tag",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The tag name",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "If the tag belongs to a TagGroup,\nposition indicates place in list within TagGroup in the UI.\n\nIf the tag does not belong to a TagGroup,\nposition indicates place in list under \"Individual Tags\" in the UI.",
+          "example": 1.42,
+          "name": "position",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "float"
+        },
+        {
+          "description": "UTC time at which the tag was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "An organizational tag that can be applied to events.\n\nApplied tags can be used to filter events on the calendar or\nfilter events for reports, iCal feeds, kiosk, and the widget.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event_instance",
+          "id": "eventinstance-tag-event_instances",
+          "name": "event_instances",
+          "path": "/calendar/v2/tags/{tag_id}/event_instances",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-tag-events",
+          "name": "events",
+          "path": "/calendar/v2/tags/{tag_id}/events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "tag_group",
+          "id": "taggroup-tag-tag_group",
+          "name": "tag_group",
+          "path": "/calendar/v2/tags/{tag_id}/tag_group",
+          "post": true,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "tag_group"
+      ],
+      "name": "Tag",
+      "orders": [
+        "name",
+        "position"
+      ],
+      "path": "/calendar/v2/tags",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "church_center_category",
+          "color",
+          "name",
+          "position"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "church_center_category",
+          "color",
+          "name",
+          "position"
+        ]
+      },
+      "queries": [
+        {
+          "name": "church_center_category",
+          "ops": [],
+          "type": "boolean"
+        },
+        {
+          "name": "color",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "id",
+          "ops": [],
+          "type": "primary_key"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "position",
+          "ops": [],
+          "type": "float"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "tag_group": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "UTC time at which the tag group was created",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": "Unique identifier for the tag group",
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": "The name of the tag group",
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "- `true` indicates tag from this tag group must be applied when creating an event",
+          "example": true,
+          "name": "required",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "UTC time at which the tag group was updated",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "A grouping of tags for organizational purposes.",
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-taggroup-events",
+          "name": "events",
+          "path": "/calendar/v2/tag_groups/{tag_group_id}/events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "tag",
+          "id": "tag-taggroup-tags",
+          "name": "tags",
+          "path": "/calendar/v2/tag_groups/{tag_group_id}/tags",
+          "post": true,
+          "response": "collection"
+        }
+      ],
+      "includes": [
+        "events",
+        "tags"
+      ],
+      "name": "TagGroup",
+      "orders": [
+        "name"
+      ],
+      "path": "/calendar/v2/tag_groups",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "name",
+          "required"
+        ],
+        "edges": [],
+        "updateAssignable": [
+          "name",
+          "required"
+        ]
+      },
+      "queries": [
+        {
+          "name": "created_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        },
+        {
+          "name": "name",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "updated_at",
+          "ops": [
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ],
+          "type": "date_time"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    }
+  }
+}
