@@ -24,7 +24,7 @@ const pco = enabled ? new PlanningCenter({ auth: { applicationId: applicationId!
 
 interface Probe {
     path: string;
-    outcome: 'ok' | 'no access' | 'not found' | 'error';
+    outcome: 'ok' | 'no access' | 'empty to-one' | 'unverified' | 'not found' | 'error';
     detail?: string;
 }
 
@@ -46,7 +46,7 @@ async function probe(path: string, fn: () => Promise<{ data: unknown }>, expectM
 function summarize(title: string, probes: Probe[]): void {
     const counts = probes.reduce<Record<string, number>>((acc, p) => ({ ...acc, [p.outcome]: (acc[p.outcome] ?? 0) + 1 }), {});
     console.info(`${title}: ${JSON.stringify(counts)}`);
-    for (const p of probes.filter((p) => p.outcome !== 'ok' && p.outcome !== 'no access')) {
+    for (const p of probes.filter((p) => p.outcome !== 'ok' && p.outcome !== 'no access' && p.outcome !== 'empty to-one')) {
         console.info(`  ${p.outcome}: ${p.path} ${p.detail ?? ''}`);
     }
 }
@@ -109,11 +109,32 @@ describe.skipIf(!enabled)('live: Planning Center API', () => {
 
     it('follows every edge from a person at the URLs the generator builds', async () => {
         const { data: me } = await pco.people.me.get();
-        const ref = pco.people.people.id(me!.id) as unknown as { edge(name: string): { perPage?(n: number): { list(): Promise<{ data: unknown }> }; get(): Promise<{ data: unknown }> } };
+        type EdgeRef = { edge(name: string): { perPage?(n: number): { list(): Promise<{ data: unknown }> }; get(): Promise<{ data: unknown }> } };
+        const follow = (personId: string, name: string, many: boolean) => {
+            const builder = (pco.people.people.id(personId) as unknown as EdgeRef).edge(name);
+            return many ? builder.perPage!(1).list() : builder.get();
+        };
         const probes: Probe[] = [];
         for (const [name, edge] of Object.entries(productGraphs.people.vertices.person!.edges)) {
-            const builder = ref.edge(name);
-            probes.push(await probe(`/people/v2/people/{me}/${name}`, () => (edge.many ? builder.perPage!(1).list() : builder.get()), edge.many));
+            const path = `/people/v2/people/{id}/${name}`;
+            const result = await probe(path, () => follow(me!.id, name, edge.many), edge.many);
+            if (result.outcome !== 'not found') {
+                probes.push(result);
+                continue;
+            }
+            // Links to a single record (marital_status, school, ...) 404 when the person has none
+            // set. Retry with someone who has one; only a 404 for them is a wrong URL.
+            const page = await pco.people.people.param('include', name).perPage(100).list().catch(() => undefined);
+            const withValue = page?.data.find((p) => {
+                const data = (p.relationships as Record<string, { data?: unknown }> | undefined)?.[name]?.data;
+                return Array.isArray(data) ? data.length > 0 : Boolean(data);
+            });
+            if (!withValue) {
+                probes.push({ path, outcome: 'unverified', detail: 'no person in the first 100 has this set' });
+                continue;
+            }
+            const retry = await probe(path, () => follow(withValue.id, name, edge.many), edge.many);
+            probes.push(retry.outcome === 'ok' ? { path, outcome: 'empty to-one' } : retry);
         }
         summarize('person edges', probes);
         expect(probes.filter((p) => p.outcome === 'not found').map((p) => p.path)).toEqual([]);
