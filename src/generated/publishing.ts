@@ -529,6 +529,7 @@ export interface ChannelDefaultTimeSchema {
     whereOps: {};
     order: 'position';
     create: {
+        _destroy?: unknown;
         /** The day of the week. 0 is Sunday, 1 is Monday, etc. */
         day_of_week?: number | null;
         /** Possible values: `weekly` */
@@ -538,6 +539,7 @@ export interface ChannelDefaultTimeSchema {
         position?: number | null;
     };
     update: {
+        _destroy?: unknown;
         /** The day of the week. 0 is Sunday, 1 is Monday, etc. */
         day_of_week?: number | null;
         /** Possible values: `weekly` */
@@ -669,6 +671,8 @@ export interface EpisodeSchema {
          * or a signed_identifier from an existing File.
          */
         art?: Record<string, unknown> | null;
+        attach_youtube_thumbnail?: unknown;
+        channel_id?: string;
         description?: string | null;
         library_audio_url?: string | null;
         library_video_url?: string | null;
@@ -697,6 +701,8 @@ export interface EpisodeSchema {
          * or a signed_identifier from an existing File.
          */
         art?: Record<string, unknown> | null;
+        attach_youtube_thumbnail?: unknown;
+        channel_id?: string;
         description?: string | null;
         library_audio_url?: string | null;
         library_video_url?: string | null;
@@ -756,6 +762,7 @@ export interface EpisodeResourceSchema {
     whereOps: {};
     order: 'position';
     create: {
+        _destroy?: unknown;
         featured?: boolean | null;
         icon?: string | null;
         position?: number | null;
@@ -764,6 +771,7 @@ export interface EpisodeResourceSchema {
         url?: string | null;
     };
     update: {
+        _destroy?: unknown;
         featured?: boolean | null;
         icon?: string | null;
         position?: number | null;
@@ -833,11 +841,13 @@ export interface EpisodeTimeSchema {
     whereOps: {};
     order: 'starts_at';
     create: {
+        _destroy?: unknown;
         starts_at?: string | null;
         video_embed_code?: string | null;
         video_url?: string | null;
     };
     update: {
+        _destroy?: unknown;
         starts_at?: string | null;
         video_embed_code?: string | null;
         video_url?: string | null;
@@ -1013,7 +1023,9 @@ export interface SpeakershipSchema {
     whereOps: {};
     order: never;
     create: {};
-    update: {};
+    update: {
+        _destroy?: unknown;
+    };
     delete: true;
     actions: never;
     edges: {

@@ -780,6 +780,16 @@ export interface ArrangementSchema {
          */
         chord_chart_font_size?: number | null;
         chord_chart_key?: string | null;
+        import_ccli_chord_chart?: unknown;
+        import_ccli_chord_pro?: unknown;
+        import_ccli_lyrics?: unknown;
+        import_chart_pro?: unknown;
+        import_chart_pro_options?: unknown;
+        import_rehearsal_mix?: unknown;
+        import_rehearsal_mix_options?: unknown;
+        import_rehearsal_pack?: unknown;
+        import_rehearsal_pack_options?: unknown;
+        isrc?: unknown;
         length?: number | null;
         lyrics_enabled?: boolean | null;
         /**
@@ -816,6 +826,7 @@ export interface ArrangementSchema {
          * - `12/8`
          */
         meter?: string | null;
+        mtid?: unknown;
         name?: string | null;
         notes?: string | null;
         number_chart_enabled?: boolean | null;
@@ -858,6 +869,8 @@ export interface ArrangementSchema {
          * - `11x17`
          */
         print_page_size?: string | null;
+        rehearsal_mix_id?: string;
+        rehearsal_mix_thumbnail?: unknown;
         /**
          * An array of strings containing a label and a number describing the section:
          *
@@ -879,6 +892,13 @@ export interface ArrangementSchema {
          */
         chord_chart_font_size?: number | null;
         chord_chart_key?: string | null;
+        import_chart_pro?: unknown;
+        import_chart_pro_options?: unknown;
+        import_rehearsal_mix?: unknown;
+        import_rehearsal_mix_options?: unknown;
+        import_rehearsal_pack?: unknown;
+        import_rehearsal_pack_options?: unknown;
+        isrc?: unknown;
         length?: number | null;
         lyrics_enabled?: boolean | null;
         /**
@@ -915,6 +935,7 @@ export interface ArrangementSchema {
          * - `12/8`
          */
         meter?: string | null;
+        mtid?: unknown;
         name?: string | null;
         notes?: string | null;
         number_chart_enabled?: boolean | null;
@@ -957,6 +978,8 @@ export interface ArrangementSchema {
          * - `11x17`
          */
         print_page_size?: string | null;
+        rehearsal_mix_id?: string;
+        rehearsal_mix_thumbnail?: unknown;
         /**
          * An array of strings containing a label and a number describing the section:
          *
@@ -1104,6 +1127,7 @@ export interface AttachmentSchema {
          */
         page_order?: string | null;
         remote_link?: string | null;
+        song_part?: unknown;
     };
     update: {
         attachment_type_ids?: string[];
@@ -1121,6 +1145,7 @@ export interface AttachmentSchema {
          */
         page_order?: string | null;
         remote_link?: string | null;
+        song_part?: unknown;
     };
     delete: true;
     actions: 'open' | 'preview';
@@ -1357,6 +1382,7 @@ export interface BlockoutSchema {
     whereOps: {};
     order: never;
     create: {
+        decline_conflicts?: unknown;
         ends_at?: string | null;
         reason?: string | null;
         /**
@@ -1414,6 +1440,7 @@ export interface BlockoutSchema {
         starts_at?: string | null;
     };
     update: {
+        decline_conflicts?: unknown;
         ends_at?: string | null;
         reason?: string | null;
         /**
@@ -1673,14 +1700,18 @@ export interface CustomSlideSchema {
     whereOps: {};
     order: never;
     create: {
+        attachment_id?: string;
         body?: string | null;
         enabled?: boolean | null;
+        item_id?: string;
         label?: string | null;
         order?: number | null;
     };
     update: {
+        attachment_id?: string;
         body?: string | null;
         enabled?: boolean | null;
+        item_id?: string;
         label?: string | null;
         order?: number | null;
     };
@@ -1738,6 +1769,7 @@ export interface EmailTemplateSchema {
     create: {
         html_body?: string | null;
         kind?: string | null;
+        shared?: unknown;
         subject?: string | null;
     };
     update: {
@@ -1924,6 +1956,7 @@ export interface ItemSchema {
     order: never;
     create: {
         arrangement_id?: string;
+        copy_item_id?: string;
         /**
          * An array of strings containing a label and a number describing the section:
          *
@@ -1948,6 +1981,9 @@ export interface ItemSchema {
         item_type?: string | null;
         key_id?: string;
         length?: number | null;
+        media_ids?: string[];
+        selected_attachment_id?: string;
+        selected_background_id?: string;
         selected_layout_id?: string;
         sequence?: number | null;
         /**
@@ -1975,6 +2011,9 @@ export interface ItemSchema {
         html_details?: string | null;
         key_id?: string;
         length?: number | null;
+        media_ids?: string[];
+        selected_attachment_id?: string;
+        selected_background_id?: string;
         selected_layout_id?: string;
         /**
          * There are 3 possible values:
@@ -2062,6 +2101,7 @@ export interface ItemNoteSchema {
     order: never;
     create: {
         content?: string | null;
+        item_note_category_id?: string;
     };
     update: {
         content?: string | null;
@@ -2203,6 +2243,12 @@ export interface KeySchema {
          * To set the key to minor append `m` to the key. e.g. `Cm`
          */
         ending_key?: string | null;
+        import_ccli_chord_chart?: unknown;
+        import_ccli_chord_chart_options?: unknown;
+        import_ccli_lyrics?: unknown;
+        import_chart_pro?: unknown;
+        import_rehearsal_mix?: unknown;
+        import_rehearsal_pack?: unknown;
         name?: string | null;
         /**
          * Possible Values:
@@ -2233,6 +2279,12 @@ export interface KeySchema {
          * To set the key to minor append `m` to the key. e.g. `Cm`
          */
         ending_key?: string | null;
+        import_ccli_chord_chart?: unknown;
+        import_ccli_chord_chart_options?: unknown;
+        import_ccli_lyrics?: unknown;
+        import_chart_pro?: unknown;
+        import_rehearsal_mix?: unknown;
+        import_rehearsal_pack?: unknown;
         name?: string | null;
         /**
          * Possible Values:
@@ -2420,6 +2472,8 @@ export interface MediaSchema {
          * - `video`
          */
         media_type?: string | null;
+        minutes?: unknown;
+        seconds?: unknown;
         themes?: string | null;
         title?: string | null;
     };
@@ -2453,6 +2507,8 @@ export interface MediaSchema {
          * - `video`
          */
         media_type?: string | null;
+        minutes?: unknown;
+        seconds?: unknown;
         themes?: string | null;
         title?: string | null;
     };
@@ -2519,6 +2575,8 @@ export interface NeededPositionSchema {
     order: never;
     create: {
         quantity?: number | null;
+        team_id?: string;
+        team_position_id?: string;
         time_id?: string;
         time_preference_option_id?: string;
     };
@@ -2712,6 +2770,7 @@ export interface PersonSchema {
          */
         plan_permissions?: string | null;
         preferred_app?: string | null;
+        remembered_items?: unknown;
         /**
          * The person's access to songs and arrangements, as a label: Scheduled Viewer, Viewer, Editor, or Administrator.
          */
@@ -3032,9 +3091,13 @@ export interface PlanNoteSchema {
     order: 'created_at' | 'updated_at';
     create: {
         content?: string | null;
+        plan_note_category_id?: string;
+        team_ids?: string[];
     };
     update: {
         content?: string | null;
+        plan_note_category_id?: string;
+        team_ids?: string[];
     };
     delete: true;
     actions: never;
@@ -3137,27 +3200,35 @@ export interface PlanPersonSchema {
     order: never;
     create: {
         decline_reason?: string | null;
+        declined_plan_times_ids?: string[];
         notes?: string | null;
         notification_prepared_at?: string | null;
         person_id?: string;
         prepare_notification?: boolean | null;
         responds_to_id?: string;
+        service_times_ids?: string[];
         /** Accepts one of 'C', 'U', 'D', or 'Confirmed', 'Unconfirmed', or 'Declined' */
         status?: string | null;
         team_id?: string;
         team_position_name?: string | null;
+        time_preference_options_ids?: string[];
+        times_ids?: string[];
     };
     update: {
         decline_reason?: string | null;
+        declined_plan_times_ids?: string[];
         notes?: string | null;
         notification_prepared_at?: string | null;
         person_id?: string;
         prepare_notification?: boolean | null;
         responds_to_id?: string;
+        service_times_ids?: string[];
         /** Accepts one of 'C', 'U', 'D', or 'Confirmed', 'Unconfirmed', or 'Declined' */
         status?: string | null;
         team_id?: string;
         team_position_name?: string | null;
+        time_preference_options_ids?: string[];
+        times_ids?: string[];
     };
     delete: true;
     actions: never;
@@ -3304,6 +3375,10 @@ export interface PlanTimeSchema {
     whereOps: {};
     order: 'starts_at';
     create: {
+        assigned_positions_ids?: string[];
+        assigned_teams_ids?: string[];
+        change_in_later_times?: unknown;
+        create_in_next_plan?: unknown;
         /** Planned end time. */
         ends_at?: string | null;
         name?: string | null;
@@ -3323,8 +3398,13 @@ export interface PlanTimeSchema {
          * - other
          */
         time_type?: string | null;
+        update_scheduled_people?: unknown;
     };
     update: {
+        assigned_positions_ids?: string[];
+        assigned_teams_ids?: string[];
+        change_in_later_times?: unknown;
+        create_in_next_plan?: unknown;
         /** Planned end time. */
         ends_at?: string | null;
         name?: string | null;
@@ -3344,6 +3424,7 @@ export interface PlanTimeSchema {
          * - other
          */
         time_type?: string | null;
+        update_scheduled_people?: unknown;
     };
     delete: true;
     actions: never;
@@ -3637,6 +3718,7 @@ export interface ServiceTypeSchema {
     create: {
         attachment_types_enabled?: boolean | null;
         background_check_permissions?: string | null;
+        create_teams?: unknown;
         /**
          * A array of hashes that maps an item title substring matcher to a color:
          *
@@ -3669,6 +3751,7 @@ export interface ServiceTypeSchema {
     update: {
         attachment_types_enabled?: boolean | null;
         background_check_permissions?: string | null;
+        create_teams?: unknown;
         /**
          * A array of hashes that maps an item title substring matcher to a color:
          *
@@ -3883,6 +3966,9 @@ export interface SongSchema {
         ccli_number?: number | null;
         copyright?: string | null;
         hidden?: boolean | null;
+        import_ccli_chord_chart?: unknown;
+        import_ccli_chord_pro?: unknown;
+        import_ccli_lyrics?: unknown;
         themes?: string | null;
         /**
          * The name of the song.
@@ -4011,16 +4097,24 @@ export interface SplitTeamRehearsalAssignmentSchema {
     whereOps: {};
     order: never;
     create: {
+        assigned_to?: unknown;
+        included_special_service_times_ids?: string[];
         /**
          * Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option. This is the default for special service times; writing it clears any per-time choices.
          */
         schedule_special_service_times?: boolean | null;
+        team_id?: string;
+        time_preference_options_ids?: string[];
     };
     update: {
+        assigned_to?: unknown;
+        included_special_service_times_ids?: string[];
         /**
          * Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option. This is the default for special service times; writing it clears any per-time choices.
          */
         schedule_special_service_times?: boolean | null;
+        team_id?: string;
+        time_preference_options_ids?: string[];
     };
     delete: true;
     actions: never;
@@ -4145,8 +4239,13 @@ export interface TeamSchema {
     order: 'created_at' | 'name' | 'updated_at';
     create: {
         assigned_directly?: boolean | null;
+        copy_from?: unknown;
+        copy_team_members?: unknown;
+        gap_alert_days?: unknown;
+        gap_alert_enabled?: unknown;
         name?: string | null;
         rehearsal_team?: boolean | null;
+        related_teams_ids?: string[];
         /**
          * This determines whether a team is a split team or not.Accepted values: 1. "plan" (default) 2. "time" (designates as a split team)
          */
@@ -4155,6 +4254,7 @@ export interface TeamSchema {
         service_type_ids?: string[];
         stage_color?: string | null;
         stage_variant?: string | null;
+        team_leader_ids?: string[];
     };
     update: {};
     delete: false;

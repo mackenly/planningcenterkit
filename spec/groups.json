@@ -1089,11 +1089,20 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": true,
-        "createAssignable": [],
+        "createAssignable": [
+          "group_type_id",
+          "name",
+          "public_enrollment",
+          "publicly_display_meeting_schedule",
+          "schedule",
+          "tag_ids",
+          "visibility"
+        ],
         "edges": [],
         "updateAssignable": [
           "group_type_id",
           "name",
+          "public_enrollment",
           "publicly_display_meeting_schedule",
           "schedule",
           "tag_ids",

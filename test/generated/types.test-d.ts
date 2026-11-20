@@ -30,6 +30,9 @@ describe('generated types', () => {
     it('types writes', () => {
         expectTypeOf<{ first_name: string }>().toMatchTypeOf<PeopleSchema['person']['create']>();
         expectTypeOf<PeopleSchema['person']['update']['nickname']>().toEqualTypeOf<string | null | undefined>();
+        // Only in Planning Center's OpenAPI spec, not its documentation graph: merged by fetch-spec.
+        expectTypeOf<PeopleSchema['person']['create']['marital_status_id']>().toEqualTypeOf<string | undefined>();
+        expectTypeOf<PeopleSchema['person']['update']['school_id']>().toEqualTypeOf<string | undefined>();
         expectTypeOf<PeopleSchema['person']['delete']>().toEqualTypeOf<true>();
         expectTypeOf<PeopleSchema['person']['actions']>().toEqualTypeOf<never>();
         expectTypeOf<PeopleSchema['list']['actions']>().toMatchTypeOf<string>();

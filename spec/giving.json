@@ -143,6 +143,7 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "batch_group_id",
           "description"
         ],
         "edges": [
@@ -150,6 +151,7 @@
           "batch-organization-batches"
         ],
         "updateAssignable": [
+          "batch_group_id",
           "description"
         ]
       },
@@ -455,9 +457,15 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "amount_cents",
+          "fund_id"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "amount_cents",
+          "fund_id"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -820,8 +828,10 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "batch_id",
           "campus_id",
           "fee_cents",
+          "labels_ids",
           "memo",
           "payment_brand",
           "payment_check_dated_at",
@@ -837,8 +847,10 @@
           "donation-batch-donations"
         ],
         "updateAssignable": [
+          "batch_id",
           "campus_id",
           "fee_cents",
+          "labels_ids",
           "memo",
           "payment_brand",
           "payment_check_dated_at",
@@ -1169,6 +1181,7 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "color_identifier",
           "description",
           "ledger_code",
           "name",
@@ -1178,6 +1191,7 @@
           "fund-organization-funds"
         ],
         "updateAssignable": [
+          "color_identifier",
           "description",
           "ledger_code",
           "name",
@@ -1354,6 +1368,7 @@
           "fair_market_value_cents",
           "fair_market_value_currency",
           "fund_id",
+          "internal_notes",
           "person_id",
           "received_on",
           "valuation_details"
@@ -1368,6 +1383,7 @@
           "fair_market_value_cents",
           "fair_market_value_currency",
           "fund_id",
+          "internal_notes",
           "person_id",
           "received_on",
           "valuation_details"
@@ -1530,7 +1546,9 @@
         "edges": [
           "note-donation-note"
         ],
-        "updateAssignable": []
+        "updateAssignable": [
+          "body"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -2114,7 +2132,9 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": true,
-        "createAssignable": [],
+        "createAssignable": [
+          "donor_number"
+        ],
         "edges": [],
         "updateAssignable": [
           "donor_number"

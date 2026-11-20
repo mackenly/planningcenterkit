@@ -33,8 +33,10 @@ await pco.people.people.id(person.id).phone_numbers.create({ number: '+155555501
 ```
 
 The first argument holds the attributes; the library wraps them in the JSON:API envelope
-(`{ data: { type: 'Person', attributes: {...} } }`) for you. Only attributes the docs list as
-assignable on create are accepted, so read-only fields like `created_at` are type errors.
+(`{ data: { type: 'Person', attributes: {...} } }`) for you. Only attributes Planning Center
+lists as assignable on create are accepted (from its documentation and its OpenAPI spec, which
+names extra fields such as `marital_status_id`), so read-only fields like `created_at` are type
+errors.
 
 ### Linking to other resources
 

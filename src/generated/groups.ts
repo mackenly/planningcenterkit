@@ -626,6 +626,7 @@ export interface GroupSchema {
         group_type_id?: string;
         /** The name/title of the group. */
         name?: string | null;
+        public_enrollment?: unknown;
         /**
          * Whether or not the group's meeting schedule is displayed on its public Church Center page.
          */

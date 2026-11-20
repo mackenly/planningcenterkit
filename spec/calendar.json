@@ -310,9 +310,21 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "access_restricted",
+          "approval_group_ids",
+          "color",
+          "description",
+          "name"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "access_restricted",
+          "approval_group_ids",
+          "color",
+          "description",
+          "name"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -727,9 +739,15 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "name",
+          "tags_ids"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "name",
+          "tags_ids"
+        ]
       },
       "queries": [
         {
@@ -1151,9 +1169,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "name"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "name"
+        ]
       },
       "queries": [
         {
@@ -1808,9 +1830,24 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "default_calendar_id",
+          "default_church_center_visibility",
+          "event_owner_id",
+          "feed_type",
+          "prefix_event_names",
+          "sync_campus_tags",
+          "tag_ids"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "default_calendar_id",
+          "default_church_center_visibility",
+          "event_owner_id",
+          "prefix_event_names",
+          "sync_campus_tags",
+          "tag_ids"
+        ]
       },
       "queries": [
         {
@@ -2272,9 +2309,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "calendar_starts_on"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "calendar_starts_on"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -2727,9 +2768,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "resource_approval_group_id"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "resource_approval_group_id"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -2970,6 +3015,9 @@
           "kind",
           "name",
           "quantity",
+          "resource_approval_group_ids",
+          "resource_folder_id",
+          "room_setup_ids",
           "serial_number"
         ],
         "edges": [
@@ -2981,6 +3029,8 @@
           "home_location",
           "name",
           "quantity",
+          "resource_approval_group_ids",
+          "resource_folder_id",
           "serial_number"
         ]
       },
@@ -3198,9 +3248,15 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "name",
+          "person_ids"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "name",
+          "person_ids"
+        ]
       },
       "queries": [
         {
@@ -3496,11 +3552,13 @@
         "canUpdate": true,
         "createAssignable": [
           "kind",
-          "name"
+          "name",
+          "resource_folder_id"
         ],
         "edges": [],
         "updateAssignable": [
-          "name"
+          "name",
+          "resource_folder_id"
         ]
       },
       "queries": [
@@ -4067,15 +4125,19 @@
         "createAssignable": [
           "church_center_category",
           "color",
+          "events_ids",
           "name",
-          "position"
+          "position",
+          "tag_group_id"
         ],
         "edges": [],
         "updateAssignable": [
           "church_center_category",
           "color",
+          "events_ids",
           "name",
-          "position"
+          "position",
+          "tag_group_id"
         ]
       },
       "queries": [

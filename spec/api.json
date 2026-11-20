@@ -221,9 +221,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "add_on_scopes"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "add_on_scopes"
+        ]
       },
       "queries": [],
       "relationships": [],

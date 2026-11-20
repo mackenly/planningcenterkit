@@ -285,12 +285,14 @@ export interface BatchSchema {
     };
     order: 'committed_at' | 'updated_at';
     create: {
+        batch_group_id?: string;
         /**
          * A brief description of what a batch is for. This is displayed in Giving to help differentiate different batches from one another. If no description is provided for a batch, it will be referred to as `Untitled batch` within Giving.
          */
         description?: string | null;
     };
     update: {
+        batch_group_id?: string;
         /**
          * A brief description of what a batch is for. This is displayed in Giving to help differentiate different batches from one another. If no description is provided for a batch, it will be referred to as `Untitled batch` within Giving.
          */
@@ -594,11 +596,13 @@ export interface DonationSchema {
     };
     order: 'completed_at' | 'created_at' | 'received_at' | 'updated_at';
     create: {
+        batch_id?: string;
         campus_id?: string;
         /**
          * The fee to process a donation. This should either be 0 or a negative integer. For a donation processed by Giving via Stripe, this is the amount the associated organization paid Stripe to process it. For donations not processed by Stripe, this can be used to record fees from other systems. Note: while `amount_cents` is assigned via a donation's designations, `fee_cents` is set here, and used by Giving to distribute fees across all designations in proportion to the amount of each designation.
          */
         fee_cents?: number | null;
+        labels_ids?: string[];
         /**
          * An optional short note donors can add to specify their gift intention (e.g. "In memory of..."). Only available when enabled by the church for specific funds. Can be set on batch donations when the [memo line feature](https://help.planningcenter.com/en/143011-manage-your-online-donation-form.html#UUID-0949cfc8-d262-e23a-0635-fa100ae331ba_section-id235309330415896-how-do-memo-lines-work-) allows it.
          */
@@ -635,11 +639,13 @@ export interface DonationSchema {
         received_at?: string | null;
     };
     update: {
+        batch_id?: string;
         campus_id?: string;
         /**
          * The fee to process a donation. This should either be 0 or a negative integer. For a donation processed by Giving via Stripe, this is the amount the associated organization paid Stripe to process it. For donations not processed by Stripe, this can be used to record fees from other systems. Note: while `amount_cents` is assigned via a donation's designations, `fee_cents` is set here, and used by Giving to distribute fees across all designations in proportion to the amount of each designation.
          */
         fee_cents?: number | null;
+        labels_ids?: string[];
         /**
          * An optional short note donors can add to specify their gift intention (e.g. "In memory of..."). Only available when enabled by the church for specific funds. Can be set on batch donations when the [memo line feature](https://help.planningcenter.com/en/143011-manage-your-online-donation-form.html#UUID-0949cfc8-d262-e23a-0635-fa100ae331ba_section-id235309330415896-how-do-memo-lines-work-) allows it.
          */
@@ -799,6 +805,7 @@ export interface FundSchema {
     whereOps: {};
     order: never;
     create: {
+        color_identifier?: unknown;
         /**
          * A short description that describes how the money given to the fund will be used. 255 characters maximum.
          */
@@ -819,6 +826,7 @@ export interface FundSchema {
         visibility?: string | null;
     };
     update: {
+        color_identifier?: unknown;
         /**
          * A short description that describes how the money given to the fund will be used. 255 characters maximum.
          */
@@ -935,6 +943,7 @@ export interface InKindDonationSchema {
         fair_market_value_cents?: number | null;
         fair_market_value_currency?: string | null;
         fund_id?: string;
+        internal_notes?: unknown;
         person_id?: string;
         /**
          * Required. The date an in-kind donation was received.
@@ -967,6 +976,7 @@ export interface InKindDonationSchema {
         fair_market_value_cents?: number | null;
         fair_market_value_currency?: string | null;
         fund_id?: string;
+        internal_notes?: unknown;
         person_id?: string;
         /**
          * Required. The date an in-kind donation was received.

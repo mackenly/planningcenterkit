@@ -931,9 +931,23 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "application",
+          "comparison",
+          "definition_class",
+          "definition_identifier",
+          "description",
+          "settings"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "application",
+          "comparison",
+          "definition_class",
+          "definition_identifier",
+          "description",
+          "settings"
+        ]
       },
       "queries": [
         {
@@ -1211,9 +1225,15 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "email_address",
+          "name"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "email_address",
+          "name"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -2082,9 +2102,27 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "active",
+          "allow_submitting_for_household_members",
+          "campus_id",
+          "description",
+          "form_category_id",
+          "login_required",
+          "name",
+          "send_submission_notification_to_submitter"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "active",
+          "allow_submitting_for_household_members",
+          "campus_id",
+          "description",
+          "form_category_id",
+          "login_required",
+          "name",
+          "send_submission_notification_to_submitter"
+        ]
       },
       "queries": [
         {
@@ -2326,9 +2364,28 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "description",
+          "field_type",
+          "fieldable_id",
+          "fieldable_type",
+          "form_field_conditions_ids",
+          "label",
+          "required",
+          "sequence",
+          "settings"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "description",
+          "field_type",
+          "fieldable_id",
+          "fieldable_type",
+          "form_field_conditions_ids",
+          "label",
+          "required",
+          "settings"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -2537,9 +2594,18 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "label",
+          "optionable_id",
+          "optionable_type",
+          "sequence"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "label",
+          "optionable_id",
+          "sequence"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -2775,9 +2841,15 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "form_field_id",
+          "value"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "form_field_id",
+          "value"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -2971,6 +3043,7 @@
           "avatar",
           "member_count",
           "name",
+          "people_ids",
           "primary_contact_id"
         ],
         "edges": [
@@ -2980,6 +3053,7 @@
           "avatar",
           "member_count",
           "name",
+          "people_ids",
           "primary_contact_id"
         ]
       },
@@ -3571,9 +3645,15 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": true,
-        "createAssignable": [],
+        "createAssignable": [
+          "campus_id",
+          "list_category_id"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "campus_id",
+          "list_category_id"
+        ]
       },
       "queries": [
         {
@@ -5353,7 +5433,10 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "note_category_id",
+          "person_id"
+        ],
         "edges": [],
         "updateAssignable": []
       },
@@ -6981,18 +7064,28 @@
           "created_by_id",
           "first_name",
           "gender",
+          "gender_id",
           "given_name",
           "grade",
           "graduation_year",
+          "in_app",
           "inactivated_at",
+          "inactive_reason_id",
           "last_name",
+          "marital_status_id",
           "medical_notes",
           "membership",
+          "membership_status_id",
           "middle_name",
+          "name_prefix",
+          "name_prefix_id",
+          "name_suffix",
+          "name_suffix_id",
           "nickname",
           "people_permissions",
           "primary_campus_id",
           "remote_id",
+          "school_id",
           "site_administrator",
           "status",
           "stripe_account_identifier",
@@ -7009,18 +7102,27 @@
           "child",
           "first_name",
           "gender",
+          "gender_id",
           "given_name",
           "grade",
           "graduation_year",
           "inactivated_at",
+          "inactive_reason_id",
           "last_name",
+          "marital_status_id",
           "medical_notes",
           "membership",
+          "membership_status_id",
           "middle_name",
+          "name_prefix",
+          "name_prefix_id",
+          "name_suffix",
+          "name_suffix_id",
           "nickname",
           "people_permissions",
           "primary_campus_id",
           "remote_id",
+          "school_id",
           "site_administrator",
           "status",
           "stripe_account_identifier",
@@ -7272,7 +7374,9 @@
         "canDestroy": false,
         "canUpdate": false,
         "createAssignable": [
-          "app_id"
+          "app_id",
+          "app_name",
+          "email_template_id"
         ],
         "edges": [
           "personapp-person-person_apps"
@@ -7946,6 +8050,7 @@
         "createAssignable": [
           "beginning_grade",
           "ending_grade",
+          "promotes_to_school_id",
           "school_types",
           "sequence",
           "value"
@@ -7956,6 +8061,7 @@
         "updateAssignable": [
           "beginning_grade",
           "ending_grade",
+          "promotes_to_school_id",
           "school_types",
           "sequence",
           "value"
@@ -8260,9 +8366,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "address"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "address"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -9469,12 +9579,16 @@
         "canDestroy": false,
         "canUpdate": false,
         "createAssignable": [
-          "note"
+          "note",
+          "note_category_id"
         ],
         "edges": [
           "workflowcardnote-workflowcard-notes"
         ],
-        "updateAssignable": []
+        "updateAssignable": [
+          "note",
+          "note_category_id"
+        ]
       },
       "queries": [
         {

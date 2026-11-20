@@ -175,9 +175,33 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "archived",
+          "attach_linked_resource_image",
+          "featured",
+          "hide_at",
+          "image",
+          "link",
+          "link_resource_id",
+          "link_type",
+          "show_at",
+          "summary",
+          "title"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "archived",
+          "attach_linked_resource_image",
+          "featured",
+          "hide_at",
+          "image",
+          "link",
+          "link_resource_id",
+          "link_type",
+          "show_at",
+          "summary",
+          "title"
+        ]
       },
       "queries": [
         {
@@ -223,9 +247,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "name"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "name"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -263,7 +291,9 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": true,
-        "createAssignable": [],
+        "createAssignable": [
+          "announcements_sort_mode"
+        ],
         "edges": [],
         "updateAssignable": [
           "announcements_sort_mode"
@@ -311,9 +341,14 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "_destroy",
+          "announcement_category_id"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "_destroy"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -351,9 +386,14 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "_destroy",
+          "campus_id"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "_destroy"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -810,9 +850,23 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "featured",
+          "icon",
+          "kind",
+          "position",
+          "title",
+          "url"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "featured",
+          "icon",
+          "kind",
+          "position",
+          "title",
+          "url"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -885,6 +939,7 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "_destroy",
           "day_of_week",
           "frequency",
           "hour",
@@ -893,6 +948,7 @@
         ],
         "edges": [],
         "updateAssignable": [
+          "_destroy",
           "day_of_week",
           "frequency",
           "hour",
@@ -1272,6 +1328,8 @@
         "canUpdate": true,
         "createAssignable": [
           "art",
+          "attach_youtube_thumbnail",
+          "channel_id",
           "description",
           "library_audio_url",
           "library_video_url",
@@ -1286,6 +1344,8 @@
         "edges": [],
         "updateAssignable": [
           "art",
+          "attach_youtube_thumbnail",
+          "channel_id",
           "description",
           "library_audio_url",
           "library_video_url",
@@ -1409,6 +1469,7 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "_destroy",
           "featured",
           "icon",
           "position",
@@ -1418,6 +1479,7 @@
         ],
         "edges": [],
         "updateAssignable": [
+          "_destroy",
           "featured",
           "icon",
           "position",
@@ -1601,12 +1663,14 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "_destroy",
           "starts_at",
           "video_embed_code",
           "video_url"
         ],
         "edges": [],
         "updateAssignable": [
+          "_destroy",
           "starts_at",
           "video_embed_code",
           "video_url"
@@ -1672,7 +1736,11 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": true,
-        "createAssignable": [],
+        "createAssignable": [
+          "auto_create_free_form_notes",
+          "enabled",
+          "template"
+        ],
         "edges": [],
         "updateAssignable": [
           "auto_create_free_form_notes",
@@ -2128,9 +2196,15 @@
         "canCreate": false,
         "canDestroy": true,
         "canUpdate": true,
-        "createAssignable": [],
+        "createAssignable": [
+          "_destroy",
+          "speaker_id",
+          "speaker_type"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "_destroy"
+        ]
       },
       "queries": [],
       "relationships": [

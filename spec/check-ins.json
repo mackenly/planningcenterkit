@@ -96,9 +96,23 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "color",
+          "created_at",
+          "event_id",
+          "limit",
+          "name",
+          "updated_at"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "color",
+          "created_at",
+          "event_id",
+          "limit",
+          "name",
+          "updated_at"
+        ]
       },
       "queries": [
         {
@@ -391,9 +405,16 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "check_in_times",
+          "confirmed",
+          "event_id",
+          "person_id"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "confirmed"
+        ]
       },
       "queries": [
         {
@@ -867,9 +888,19 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "allow_self_check_in",
+          "honor_show_at_time_on_cc",
+          "minimize_check_out_barcode",
+          "pre_select_enabled"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "allow_self_check_in",
+          "honor_show_at_time_on_cc",
+          "minimize_check_out_barcode",
+          "pre_select_enabled"
+        ]
       },
       "queries": [
         {
@@ -1553,9 +1584,15 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "attendance_type_id",
+          "total"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "attendance_type_id",
+          "total"
+        ]
       },
       "queries": [
         {
@@ -2091,7 +2128,12 @@
         "canUpdate": false,
         "createAssignable": [],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "distribute_evenly",
+          "distribution",
+          "milestone",
+          "prefer_recent_location"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -2855,9 +2897,17 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "code",
+          "kind",
+          "send_to"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "code",
+          "kind",
+          "send_to"
+        ]
       },
       "queries": [
         {

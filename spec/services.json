@@ -316,9 +316,20 @@
           "chord_chart_font",
           "chord_chart_font_size",
           "chord_chart_key",
+          "import_ccli_chord_chart",
+          "import_ccli_chord_pro",
+          "import_ccli_lyrics",
+          "import_chart_pro",
+          "import_chart_pro_options",
+          "import_rehearsal_mix",
+          "import_rehearsal_mix_options",
+          "import_rehearsal_pack",
+          "import_rehearsal_pack_options",
+          "isrc",
           "length",
           "lyrics_enabled",
           "meter",
+          "mtid",
           "name",
           "notes",
           "number_chart_enabled",
@@ -326,6 +337,8 @@
           "print_margin",
           "print_orientation",
           "print_page_size",
+          "rehearsal_mix_id",
+          "rehearsal_mix_thumbnail",
           "sequence"
         ],
         "edges": [
@@ -339,9 +352,17 @@
           "chord_chart_font",
           "chord_chart_font_size",
           "chord_chart_key",
+          "import_chart_pro",
+          "import_chart_pro_options",
+          "import_rehearsal_mix",
+          "import_rehearsal_mix_options",
+          "import_rehearsal_pack",
+          "import_rehearsal_pack_options",
+          "isrc",
           "length",
           "lyrics_enabled",
           "meter",
+          "mtid",
           "name",
           "notes",
           "number_chart_enabled",
@@ -349,6 +370,8 @@
           "print_margin",
           "print_orientation",
           "print_page_size",
+          "rehearsal_mix_id",
+          "rehearsal_mix_thumbnail",
           "sequence"
         ]
       },
@@ -699,7 +722,8 @@
           "filename",
           "import_to_item_details",
           "page_order",
-          "remote_link"
+          "remote_link",
+          "song_part"
         ],
         "edges": [
           "attachment-arrangement-attachments",
@@ -718,7 +742,8 @@
           "filename",
           "import_to_item_details",
           "page_order",
-          "remote_link"
+          "remote_link",
+          "song_part"
         ]
       },
       "queries": [
@@ -939,9 +964,29 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "aliases",
+          "attachment_type_group_id",
+          "capoed_chord_charts",
+          "chord_charts",
+          "exclusions",
+          "lyrics",
+          "name",
+          "number_charts",
+          "numeral_charts"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "aliases",
+          "attachment_type_group_id",
+          "capoed_chord_charts",
+          "chord_charts",
+          "exclusions",
+          "lyrics",
+          "name",
+          "number_charts",
+          "numeral_charts"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -997,9 +1042,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "name"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "name"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -1053,7 +1102,9 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "plan_time_id"
+        ],
         "edges": [],
         "updateAssignable": []
       },
@@ -1344,6 +1395,7 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "decline_conflicts",
           "ends_at",
           "reason",
           "repeat_frequency",
@@ -1358,6 +1410,7 @@
           "blockout-person-blockouts"
         ],
         "updateAssignable": [
+          "decline_conflicts",
           "ends_at",
           "reason",
           "repeat_frequency",
@@ -1558,7 +1611,9 @@
         "edges": [
           "blockoutexception-blockout-blockout_exceptions"
         ],
-        "updateAssignable": []
+        "updateAssignable": [
+          "date"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -1987,8 +2042,10 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "attachment_id",
           "body",
           "enabled",
+          "item_id",
           "label",
           "order"
         ],
@@ -1996,8 +2053,10 @@
           "customslide-item-custom_slides"
         ],
         "updateAssignable": [
+          "attachment_id",
           "body",
           "enabled",
+          "item_id",
           "label",
           "order"
         ]
@@ -2143,6 +2202,7 @@
         "createAssignable": [
           "html_body",
           "kind",
+          "shared",
           "subject"
         ],
         "edges": [
@@ -2656,12 +2716,16 @@
         "canUpdate": true,
         "createAssignable": [
           "arrangement_id",
+          "copy_item_id",
           "custom_arrangement_sequence",
           "description",
           "html_details",
           "item_type",
           "key_id",
           "length",
+          "media_ids",
+          "selected_attachment_id",
+          "selected_background_id",
           "selected_layout_id",
           "sequence",
           "service_position",
@@ -2679,6 +2743,9 @@
           "html_details",
           "key_id",
           "length",
+          "media_ids",
+          "selected_attachment_id",
+          "selected_background_id",
           "selected_layout_id",
           "service_position",
           "song_id",
@@ -2771,7 +2838,10 @@
         "edges": [
           "itemassignment-item-item_assignments"
         ],
-        "updateAssignable": []
+        "updateAssignable": [
+          "assignable_id",
+          "assignable_type"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -2870,7 +2940,8 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
-          "content"
+          "content",
+          "item_note_category_id"
         ],
         "edges": [
           "itemnote-item-item_notes"
@@ -2970,9 +3041,17 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "frequently_used",
+          "name",
+          "sequence"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "frequently_used",
+          "name",
+          "sequence"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -3050,9 +3129,17 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "exclude",
+          "plan_id",
+          "plan_time_id"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "exclude",
+          "plan_id",
+          "plan_time_id"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -3186,6 +3273,12 @@
         "createAssignable": [
           "alternate_keys",
           "ending_key",
+          "import_ccli_chord_chart",
+          "import_ccli_chord_chart_options",
+          "import_ccli_lyrics",
+          "import_chart_pro",
+          "import_rehearsal_mix",
+          "import_rehearsal_pack",
           "name",
           "starting_key"
         ],
@@ -3195,6 +3288,12 @@
         "updateAssignable": [
           "alternate_keys",
           "ending_key",
+          "import_ccli_chord_chart",
+          "import_ccli_chord_chart_options",
+          "import_ccli_lyrics",
+          "import_chart_pro",
+          "import_rehearsal_mix",
+          "import_rehearsal_pack",
           "name",
           "starting_key"
         ]
@@ -3468,9 +3567,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "person_id"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "person_id"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -3722,6 +3825,8 @@
         "createAssignable": [
           "creator_name",
           "media_type",
+          "minutes",
+          "seconds",
           "themes",
           "title"
         ],
@@ -3731,6 +3836,8 @@
         "updateAssignable": [
           "creator_name",
           "media_type",
+          "minutes",
+          "seconds",
           "themes",
           "title"
         ]
@@ -3915,6 +4022,8 @@
         "canUpdate": true,
         "createAssignable": [
           "quantity",
+          "team_id",
+          "team_position_id",
           "time_id",
           "time_preference_option_id"
         ],
@@ -4389,9 +4498,27 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "allow_mp3_download",
+          "calendar_starts_on_sunday",
+          "ccli",
+          "ccli_auto_reporting_enabled",
+          "ccli_reporting_enabled",
+          "charge_for_extra_space",
+          "required_to_set_download_permission",
+          "time_zone"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "allow_mp3_download",
+          "calendar_starts_on_sunday",
+          "ccli",
+          "ccli_auto_reporting_enabled",
+          "ccli_reporting_enabled",
+          "charge_for_extra_space",
+          "required_to_set_download_permission",
+          "time_zone"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -4992,6 +5119,7 @@
           "person_permissions",
           "plan_permissions",
           "preferred_app",
+          "remembered_items",
           "song_permissions"
         ]
       },
@@ -5823,14 +5951,18 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
-          "content"
+          "content",
+          "plan_note_category_id",
+          "team_ids"
         ],
         "edges": [
           "plannote-plan-notes",
           "plannote-plantemplate-notes"
         ],
         "updateAssignable": [
-          "content"
+          "content",
+          "plan_note_category_id",
+          "team_ids"
         ]
       },
       "queries": [
@@ -5944,9 +6076,17 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "name",
+          "sequence",
+          "team_ids"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "name",
+          "sequence",
+          "team_ids"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -6217,14 +6357,18 @@
         "canUpdate": true,
         "createAssignable": [
           "decline_reason",
+          "declined_plan_times_ids",
           "notes",
           "notification_prepared_at",
           "person_id",
           "prepare_notification",
           "responds_to_id",
+          "service_times_ids",
           "status",
           "team_id",
-          "team_position_name"
+          "team_position_name",
+          "time_preference_options_ids",
+          "times_ids"
         ],
         "edges": [
           "planperson-plan-team_members",
@@ -6232,14 +6376,18 @@
         ],
         "updateAssignable": [
           "decline_reason",
+          "declined_plan_times_ids",
           "notes",
           "notification_prepared_at",
           "person_id",
           "prepare_notification",
           "responds_to_id",
+          "service_times_ids",
           "status",
           "team_id",
-          "team_position_name"
+          "team_position_name",
+          "time_preference_options_ids",
+          "times_ids"
         ]
       },
       "queries": [
@@ -6366,9 +6514,13 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "status"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "status"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -6732,21 +6884,31 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
+          "assigned_positions_ids",
+          "assigned_teams_ids",
+          "change_in_later_times",
+          "create_in_next_plan",
           "ends_at",
           "name",
           "starts_at",
           "team_reminders",
-          "time_type"
+          "time_type",
+          "update_scheduled_people"
         ],
         "edges": [
           "plantime-plan-plan_times"
         ],
         "updateAssignable": [
+          "assigned_positions_ids",
+          "assigned_teams_ids",
+          "change_in_later_times",
+          "create_in_next_plan",
           "ends_at",
           "name",
           "starts_at",
           "team_reminders",
-          "time_type"
+          "time_type",
+          "update_scheduled_people"
         ]
       },
       "queries": [
@@ -6910,9 +7072,39 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "amazon",
+          "header_items",
+          "item_descriptions",
+          "item_lengths",
+          "itunes",
+          "media_items",
+          "regular_items",
+          "series_and_plan_titles",
+          "series_artwork",
+          "service_times",
+          "song_items",
+          "spotify",
+          "vimeo",
+          "youtube"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "amazon",
+          "header_items",
+          "item_descriptions",
+          "item_lengths",
+          "itunes",
+          "media_items",
+          "regular_items",
+          "series_and_plan_titles",
+          "series_artwork",
+          "service_times",
+          "song_items",
+          "spotify",
+          "vimeo",
+          "youtube"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -6974,9 +7166,17 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "body",
+          "title",
+          "type"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "body",
+          "title",
+          "type"
+        ]
       },
       "queries": [],
       "relationships": [],
@@ -7533,9 +7733,17 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "artwork",
+          "plan_ids",
+          "title"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "artwork",
+          "plan_ids",
+          "title"
+        ]
       },
       "queries": [
         {
@@ -7863,6 +8071,7 @@
         "createAssignable": [
           "attachment_types_enabled",
           "background_check_permissions",
+          "create_teams",
           "custom_item_types",
           "frequency",
           "last_plan_from",
@@ -7879,6 +8088,7 @@
         "updateAssignable": [
           "attachment_types_enabled",
           "background_check_permissions",
+          "create_teams",
           "custom_item_types",
           "frequency",
           "last_plan_from",
@@ -8454,6 +8664,9 @@
           "ccli_number",
           "copyright",
           "hidden",
+          "import_ccli_chord_chart",
+          "import_ccli_chord_pro",
+          "import_ccli_lyrics",
           "themes",
           "title"
         ],
@@ -8727,13 +8940,21 @@
         "canDestroy": true,
         "canUpdate": true,
         "createAssignable": [
-          "schedule_special_service_times"
+          "assigned_to",
+          "included_special_service_times_ids",
+          "schedule_special_service_times",
+          "team_id",
+          "time_preference_options_ids"
         ],
         "edges": [
           "splitteamrehearsalassignment-plantime-split_team_rehearsal_assignments"
         ],
         "updateAssignable": [
-          "schedule_special_service_times"
+          "assigned_to",
+          "included_special_service_times_ids",
+          "schedule_special_service_times",
+          "team_id",
+          "time_preference_options_ids"
         ]
       },
       "queries": [],
@@ -9160,19 +9381,39 @@
         "canUpdate": false,
         "createAssignable": [
           "assigned_directly",
+          "copy_from",
+          "copy_team_members",
+          "gap_alert_days",
+          "gap_alert_enabled",
           "name",
           "rehearsal_team",
+          "related_teams_ids",
           "schedule_to",
           "secure_team",
           "service_type_ids",
           "stage_color",
-          "stage_variant"
+          "stage_variant",
+          "team_leader_ids"
         ],
         "edges": [
           "team-organization-teams",
           "team-servicetype-teams"
         ],
-        "updateAssignable": []
+        "updateAssignable": [
+          "assigned_directly",
+          "copy_from",
+          "copy_team_members",
+          "gap_alert_days",
+          "gap_alert_enabled",
+          "name",
+          "rehearsal_team",
+          "related_teams_ids",
+          "schedule_to",
+          "secure_team",
+          "stage_color",
+          "stage_variant",
+          "team_leader_ids"
+        ]
       },
       "queries": [
         {
@@ -9288,9 +9529,18 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "person_id",
+          "send_responses_for_accepts",
+          "send_responses_for_blockouts",
+          "send_responses_for_declines"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "send_responses_for_accepts",
+          "send_responses_for_blockouts",
+          "send_responses_for_declines"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -9416,9 +9666,22 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "attachment_types_ids",
+          "name",
+          "negative_tag_groups",
+          "sequence",
+          "tag_groups",
+          "tags"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "attachment_types_ids",
+          "name",
+          "negative_tag_groups",
+          "tag_groups",
+          "tags"
+        ]
       },
       "queries": [],
       "relationships": [
@@ -9526,7 +9789,12 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": true,
-        "createAssignable": [],
+        "createAssignable": [
+          "general_emails_enabled",
+          "reminders_enabled",
+          "scheduling_replies_enabled",
+          "scheduling_requests_enabled"
+        ],
         "edges": [],
         "updateAssignable": [
           "general_emails_enabled",
@@ -9630,9 +9898,15 @@
         "canCreate": false,
         "canDestroy": false,
         "canUpdate": false,
-        "createAssignable": [],
+        "createAssignable": [
+          "day_of_week",
+          "hour_of_day"
+        ],
         "edges": [],
-        "updateAssignable": []
+        "updateAssignable": [
+          "day_of_week",
+          "hour_of_day"
+        ]
       },
       "queries": [],
       "relationships": [],

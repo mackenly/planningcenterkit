@@ -1309,6 +1309,9 @@ export interface ResourceSchema {
         name?: string | null;
         /** The quantity of the resource */
         quantity?: number | null;
+        resource_approval_group_ids?: string[];
+        resource_folder_id?: string;
+        room_setup_ids?: string[];
         /** The serial number of the resource */
         serial_number?: string | null;
     };
@@ -1323,6 +1326,8 @@ export interface ResourceSchema {
         name?: string | null;
         /** The quantity of the resource */
         quantity?: number | null;
+        resource_approval_group_ids?: string[];
+        resource_folder_id?: string;
         /** The serial number of the resource */
         serial_number?: string | null;
     };
@@ -1529,10 +1534,12 @@ export interface ResourceFolderSchema {
         kind?: string | null;
         /** The folder name */
         name?: string | null;
+        resource_folder_id?: string;
     };
     update: {
         /** The folder name */
         name?: string | null;
+        resource_folder_id?: string;
     };
     delete: true;
     actions: never;
@@ -1810,6 +1817,7 @@ export interface TagSchema {
         church_center_category?: boolean | null;
         /** Hex color code of the tag */
         color?: string | null;
+        events_ids?: string[];
         /** The tag name */
         name?: string | null;
         /**
@@ -1820,12 +1828,14 @@ export interface TagSchema {
          * position indicates place in list under "Individual Tags" in the UI.
          */
         position?: number | null;
+        tag_group_id?: string;
     };
     update: {
         /** `true` indicates that this tag is used as a category on Church Center */
         church_center_category?: boolean | null;
         /** Hex color code of the tag */
         color?: string | null;
+        events_ids?: string[];
         /** The tag name */
         name?: string | null;
         /**
@@ -1836,6 +1846,7 @@ export interface TagSchema {
          * position indicates place in list under "Individual Tags" in the UI.
          */
         position?: number | null;
+        tag_group_id?: string;
     };
     delete: true;
     actions: never;

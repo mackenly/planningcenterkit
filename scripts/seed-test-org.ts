@@ -79,9 +79,7 @@ async function main(auth: { applicationId: string; secret: string }): Promise<vo
         create: () => pco.people.campuses.create({ name: 'Test Campus' }),
     });
 
-    // Planning Center accepts these ids on Person (its OpenAPI spec lists them), but the
-    // documentation graph the types are generated from doesn't, so they're added untyped.
-    type PersonWrite = Parameters<typeof pco.people.people.create>[0] & Record<string, unknown>;
+    type PersonWrite = Parameters<typeof pco.people.people.create>[0];
 
     const people: Array<{ first_name: string; attributes: PersonWrite }> = [
         {

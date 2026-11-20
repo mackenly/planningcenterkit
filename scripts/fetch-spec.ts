@@ -176,7 +176,16 @@ interface OpenApiInfo {
     posts: Set<string>;
     /** pathKey -> where field -> operators. */
     whereOps: Map<string, Map<string, Set<WhereOperatorName>>>;
+    /**
+     * Writable fields from the `<vertex>_attributes_assignable_on_<create|update>` schemas, keyed
+     * by {@link assignableKey}. The documentation graph leaves many of these out (for example
+     * `marital_status_id` on Person), so they're merged into each vertex's permissions.
+     */
+    assignable: Map<string, { create: Set<string>; update: Set<string> }>;
 }
+
+/** OpenAPI schema prefix for a vertex id: `marital_status` -> `maritalstatus`. */
+const assignableKey = (vertexId: string) => vertexId.replace(/_/g, '').toLowerCase();
 
 function analyzeOpenApi(doc: any, basePath: string): OpenApiInfo {
     const responses = new Map<string, 'collection' | 'resource'>();
@@ -212,7 +221,15 @@ function analyzeOpenApi(doc: any, basePath: string): OpenApiInfo {
             ops.add(match[2] as WhereOperatorName);
         }
     }
-    return { responses, posts, whereOps };
+    const assignable = new Map<string, { create: Set<string>; update: Set<string> }>();
+    for (const [name, schema] of Object.entries<any>(schemas)) {
+        const match = /^(.+)_attributes_assignable_on_(create|update)$/.exec(name);
+        if (!match) continue;
+        let entry = assignable.get(match[1]!);
+        if (!entry) assignable.set(match[1]!, (entry = { create: new Set(), update: new Set() }));
+        for (const field of Object.keys(deref(schema)?.properties ?? {})) entry[match[2] as 'create' | 'update'].add(field);
+    }
+    return { responses, posts, whereOps, assignable };
 }
 
 // ---------------------------------------------------------------------------
@@ -316,6 +333,8 @@ async function fetchProduct(info: ProductInfo): Promise<SpecProduct> {
             ops: [...(ops.get(q.attributes.name) ?? [])].sort() as WhereOperatorName[],
         })).sort(byName);
 
+        const writable = oa?.assignable.get(assignableKey(v.id));
+
         vertices[v.id] = {
             name: attrs.name,
             description: text(attrs.description),
@@ -330,8 +349,8 @@ async function fetchProduct(info: ProductInfo): Promise<SpecProduct> {
                 canUpdate: p.can_update === true,
                 canDestroy: p.can_destroy === true,
                 edges: uniqSorted(p.edges ?? []),
-                createAssignable: uniqSorted(p.create_assignable ?? []),
-                updateAssignable: uniqSorted(p.update_assignable ?? []),
+                createAssignable: uniqSorted([...(p.create_assignable ?? []), ...(writable?.create ?? [])]),
+                updateAssignable: uniqSorted([...(p.update_assignable ?? []), ...(writable?.update ?? [])]),
             },
             actions,
             edges,

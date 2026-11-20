@@ -1728,6 +1728,7 @@ export interface HouseholdSchema {
         avatar?: string | null;
         member_count?: number | null;
         name?: string | null;
+        people_ids?: string[];
         primary_contact_id?: string | null;
     };
     update: {
@@ -1735,6 +1736,7 @@ export interface HouseholdSchema {
         avatar?: string | null;
         member_count?: number | null;
         name?: string | null;
+        people_ids?: string[];
         primary_contact_id?: string | null;
     };
     delete: true;
@@ -1910,7 +1912,10 @@ export interface ListSchema {
         | 'total_people'
         | 'updated_at';
     create: {};
-    update: {};
+    update: {
+        campus_id?: string;
+        list_category_id?: string;
+    };
     delete: false;
     actions: 'mailchimp_sync' | 'run';
     edges: {
@@ -2885,21 +2890,31 @@ export interface PersonSchema {
         created_by_id?: string;
         first_name?: string | null;
         gender?: string | null;
+        gender_id?: string;
         given_name?: string | null;
         grade?: number | null;
         graduation_year?: number | null;
+        in_app?: unknown;
         /**
          * Set to an ISO 8601 date or time to make the profile inactive. Set to "null" to reactivate the profile.
          */
         inactivated_at?: string | null;
+        inactive_reason_id?: string;
         last_name?: string | null;
+        marital_status_id?: string;
         medical_notes?: string | null;
         membership?: string | null;
+        membership_status_id?: string;
         middle_name?: string | null;
+        name_prefix?: unknown;
+        name_prefix_id?: string;
+        name_suffix?: unknown;
+        name_suffix_id?: string;
         nickname?: string | null;
         people_permissions?: string | null;
         primary_campus_id?: string;
         remote_id?: number | null;
+        school_id?: string;
         site_administrator?: boolean | null;
         /**
          * Set to "inactive" to set "inactivated_at" to the current time and make the profile inactive. Set to anything else to clear "inactivated_at" and reactivate the profile.
@@ -2919,6 +2934,7 @@ export interface PersonSchema {
         child?: boolean | null;
         first_name?: string | null;
         gender?: string | null;
+        gender_id?: string;
         given_name?: string | null;
         grade?: number | null;
         graduation_year?: number | null;
@@ -2926,14 +2942,22 @@ export interface PersonSchema {
          * Set to an ISO 8601 date or time to make the profile inactive. Set to "null" to reactivate the profile.
          */
         inactivated_at?: string | null;
+        inactive_reason_id?: string;
         last_name?: string | null;
+        marital_status_id?: string;
         medical_notes?: string | null;
         membership?: string | null;
+        membership_status_id?: string;
         middle_name?: string | null;
+        name_prefix?: unknown;
+        name_prefix_id?: string;
+        name_suffix?: unknown;
+        name_suffix_id?: string;
         nickname?: string | null;
         people_permissions?: string | null;
         primary_campus_id?: string;
         remote_id?: number | null;
+        school_id?: string;
         site_administrator?: boolean | null;
         /**
          * Set to "inactive" to set "inactivated_at" to the current time and make the profile inactive. Set to anything else to clear "inactivated_at" and reactivate the profile.
@@ -3013,6 +3037,8 @@ export interface PersonAppSchema {
     order: never;
     create: {
         app_id?: string;
+        app_name?: unknown;
+        email_template_id?: string;
     };
     update: {};
     delete: false;
@@ -3247,6 +3273,7 @@ export interface SchoolOptionSchema {
     create: {
         beginning_grade?: string | null;
         ending_grade?: string | null;
+        promotes_to_school_id?: string;
         school_types?: unknown[] | null;
         sequence?: number | null;
         value?: string | null;
@@ -3254,6 +3281,7 @@ export interface SchoolOptionSchema {
     update: {
         beginning_grade?: string | null;
         ending_grade?: string | null;
+        promotes_to_school_id?: string;
         school_types?: unknown[] | null;
         sequence?: number | null;
         value?: string | null;
@@ -3729,6 +3757,7 @@ export interface WorkflowCardNoteSchema {
     order: 'created_at' | 'updated_at';
     create: {
         note?: string | null;
+        note_category_id?: string;
     };
     update: {};
     delete: false;
