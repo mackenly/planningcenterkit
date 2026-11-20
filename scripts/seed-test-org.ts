@@ -66,7 +66,7 @@ async function main(auth: { applicationId: string; secret: string }): Promise<vo
     const schoolId = await ensure({
         label: 'school',
         find: () => pco.people.school_options.first(),
-        create: () => pco.people.school_options.create({ value: 'Test Elementary', beginning_grade: '1', ending_grade: '5' }),
+        create: () => pco.people.school_options.create({ value: 'Test Elementary' }),
     });
     const inactiveReasonId = await ensure({
         label: 'inactive reason',
@@ -131,7 +131,12 @@ async function main(auth: { applicationId: string; secret: string }): Promise<vo
 
 main({ applicationId, secret }).catch((error: unknown) => {
     // Planning Center errors carry the URL and Planning Center's message, never credentials.
-    console.error(error instanceof PcoApiError ? error.message : error);
+    if (error instanceof PcoApiError) {
+        console.error(error.message);
+        if (error.errors.length) console.error(JSON.stringify(error.errors, null, 2));
+    } else {
+        console.error(error);
+    }
     process.exit(1);
 });
 
