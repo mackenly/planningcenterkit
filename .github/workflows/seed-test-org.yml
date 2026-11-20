@@ -1,0 +1,41 @@
+name: Seed test organization
+
+# WRITES to the Planning Center organization behind PCO_TEST_CLIENT_ID / PCO_TEST_SECRET: creates
+# the PCK-Test people (and any missing options) that the live tests use. Idempotent. Runs only
+# when started by hand, never on push or schedule:
+#   - Actions > Seed test organization > Run workflow (once this file is on main), or
+#   - adding the `seed-test-org` label to a pull request from this repository (fork PRs get no
+#     secrets). Remove and re-add the label to run it again.
+
+on:
+    workflow_dispatch:
+    pull_request:
+        types: [labeled]
+
+permissions:
+    contents: read
+
+jobs:
+    seed:
+        if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'seed-test-org'
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        # Shares the organization's rate limit with the live tests.
+        concurrency:
+            group: pco-live
+            cancel-in-progress: false
+        env:
+            PCO_TEST_CLIENT_ID: ${{ secrets.PCO_TEST_CLIENT_ID }}
+            PCO_TEST_SECRET: ${{ secrets.PCO_TEST_SECRET }}
+        steps:
+            - name: Require credentials
+              if: env.PCO_TEST_CLIENT_ID == '' || env.PCO_TEST_SECRET == ''
+              run: |
+                  echo "PCO_TEST_CLIENT_ID / PCO_TEST_SECRET are not available to this run."
+                  exit 1
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '24.x'
+            - run: npm ci
+            - run: npm run seed:test-org
