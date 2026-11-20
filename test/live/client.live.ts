@@ -123,14 +123,20 @@ describe.skipIf(!enabled)('live: Planning Center API', () => {
                 continue;
             }
             // Links to a single record (marital_status, school, ...) 404 when the person has none
-            // set. Retry with someone who has one; only a 404 for them is a wrong URL.
-            const page = await pco.people.people.param('include', name).perPage(100).list().catch(() => undefined);
-            const withValue = page?.data.find((p) => {
+            // set. Retry with someone who has one; only a 404 for them is a wrong URL. Look at the
+            // people `npm run seed:test-org` creates (last name PCK-Test) first, then anyone.
+            const hasValue = (p: { relationships?: unknown }) => {
                 const data = (p.relationships as Record<string, { data?: unknown }> | undefined)?.[name]?.data;
                 return Array.isArray(data) ? data.length > 0 : Boolean(data);
-            });
+            };
+            let withValue: { id: string } | undefined;
+            for (const people of [pco.people.people.where('last_name', 'PCK-Test'), pco.people.people.perPage(100)]) {
+                const page = await people.param('include', name).list().catch(() => undefined);
+                withValue = page?.data.find(hasValue);
+                if (withValue) break;
+            }
             if (!withValue) {
-                probes.push({ path, outcome: 'unverified', detail: 'no person in the first 100 has this set' });
+                probes.push({ path, outcome: 'unverified', detail: 'nobody has this set; run npm run seed:test-org' });
                 continue;
             }
             const retry = await probe(path, () => follow(withValue.id, name, edge.many), edge.many);

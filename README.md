@@ -469,6 +469,7 @@ so fixes to resource types usually belong in `scripts/` rather than `src/generat
 | `npm run generate` | Regenerates `src/generated/` from `spec/` |
 | `npm test` | Unit and type tests (Vitest) |
 | `npm run test:live` | Read-only tests against a real organization; needs `PCO_TEST_CLIENT_ID` and `PCO_TEST_SECRET` (a personal access token), skipped otherwise |
+| `npm run seed:test-org` | **Writes** to the organization in `PCO_TEST_CLIENT_ID`/`PCO_TEST_SECRET`: adds two `PCK-Test` people with marital status, name prefix/suffix, school, campus, and inactive reason set, so `test:live` can check those links. Safe to re-run |
 | `npm run typecheck` | `tsc` over sources, tests, scripts, and examples |
 | `npm run build` | Builds ESM and CommonJS output into `dist/` |
 | `npm run check` | Typecheck, test, and build |
