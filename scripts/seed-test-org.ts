@@ -95,7 +95,19 @@ async function main(auth: { applicationId: string; secret: string }): Promise<vo
     const campusId = await ensure({
         label: 'campus',
         find: () => pco.people.campuses.first(),
-        create: [() => pco.people.campuses.create({ name: 'Test Campus' })],
+        create: [
+            () =>
+                pco.people.campuses.create({
+                    name: 'Test Campus',
+                    street: '1 Test Street',
+                    city: 'Springfield',
+                    state: 'IL',
+                    zip: '62701',
+                    country: 'US',
+                    latitude: '39.7817',
+                    longitude: '-89.6501',
+                }),
+        ],
     });
 
     type PersonWrite = Parameters<typeof pco.people.people.create>[0];
