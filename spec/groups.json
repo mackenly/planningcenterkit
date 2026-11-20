@@ -5,7 +5,7 @@
   "product": "groups",
   "slug": "groups",
   "title": "Planning Center Groups",
-  "version": "2023-07-10",
+  "version": "2026-11-10",
   "vertices": {
     "attendance": {
       "actions": [],
@@ -179,6 +179,14 @@
           "type": "string"
         },
         {
+          "description": "Custom message displayed on Church Center when enrollment is closed. When blank, a default message is shown.",
+          "example": "string",
+          "name": "closed_message",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
           "description": "Date when enrollment should automatically close",
           "example": "string",
           "name": "date_limit",
@@ -211,6 +219,22 @@
           "type": "integer"
         },
         {
+          "description": "Number of members that, once exceeded, sends an alert to administrators.",
+          "example": 1,
+          "name": "member_limit_alert",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": "Whether or not pending membership requests count toward the `member_limit`.",
+          "example": true,
+          "name": "member_limit_include_pending",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
           "description": "Whether or not the `member_limit` has been reached",
           "example": true,
           "name": "member_limit_reached",
@@ -219,7 +243,7 @@
           "type": "boolean"
         },
         {
-          "description": "Current enrollment status. Possible values:\n* `open` - strategy is not `closed` and no limits have been reached\n* `closed` - strategy is `closed` _or_ limits have been reached\n* `full` - member limit has been reached\n* `private` - group is unlisted",
+          "description": "Current enrollment status. Possible values:\n\n* `open` - strategy is not `closed` and no limits have been reached\n* `closed` - strategy is `closed` _or_ limits have been reached\n* `full` - member limit has been reached\n* `private` - group is unlisted",
           "example": "string",
           "name": "status",
           "note": null,
@@ -266,6 +290,14 @@
     "event": {
       "actions": [],
       "attributes": [
+        {
+          "description": "The date and time leaders were last asked to take attendance for this event.",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "attendance_last_requested_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
         {
           "description": "This is a group setting that applies to all the events in the group.\nIf selected, an email will be sent to the primary email address of the group leader\n60 minutes before the event start time, asking them to report attendance.",
           "example": true,
@@ -374,6 +406,22 @@
           "description": "`true` if the event is a repeating event. Otherwise `false`.",
           "example": true,
           "name": "repeating",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "`true` if people who RSVP can bring guests. Always `false` when RSVPs are disabled.",
+          "example": true,
+          "name": "rsvp_guests_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "`true` if people can RSVP to this event. Always `false` for canceled events.",
+          "example": true,
+          "name": "rsvps_enabled",
           "note": null,
           "permissionLevel": "public",
           "type": "boolean"
@@ -689,6 +737,30 @@
           "type": "date_time"
         },
         {
+          "description": "Whether or not new events for this group send automated reminders by default.",
+          "example": true,
+          "name": "default_event_automated_reminders_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not new events for this group allow RSVP guest counts by default.",
+          "example": true,
+          "name": "default_event_rsvp_guests_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not new events for this group have RSVPs enabled by default.",
+          "example": true,
+          "name": "default_event_rsvps_enabled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
           "description": "A longform description of the group. Can contain HTML markup.",
           "example": "string",
           "name": "description",
@@ -729,7 +801,7 @@
           "type": "string"
         },
         {
-          "description": "A hash of header image URLs. The keys are `thumbnail`, `medium`, and `original`.\n\n```json\n{\n  \"thumbnail\": \"https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/thumbnail_image-1676676396838.jpg\",\n  \"medium\": \"https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/medium_image-1676676396838.jpg\",\n  \"original\": \"https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/image-1676676396838.jpg\"\n}\n```",
+          "description": "A hash of header image URLs. The keys are `thumbnail`, `medium`, and `original`.",
           "example": {},
           "name": "header_image",
           "note": null,
@@ -745,17 +817,17 @@
           "type": "primary_key"
         },
         {
-          "description": "Whether or not group leaders have access to the entire\nchurch database on the admin side of Groups. (Not recommended)",
+          "description": "Whether or not the first names of group leaders are displayed on the group's public Church Center page.",
           "example": true,
-          "name": "leaders_can_search_people_database",
+          "name": "leader_name_visible_on_public_page",
           "note": null,
           "permissionLevel": "public",
           "type": "boolean"
         },
         {
-          "description": "Whether or not the group is visible on Church Center",
+          "description": "Whether or not group leaders have access to the entire\nchurch database on the admin side of Groups. (Not recommended)",
           "example": true,
-          "name": "listed",
+          "name": "leaders_can_search_people_database",
           "note": null,
           "permissionLevel": "public",
           "type": "boolean"
@@ -772,6 +844,14 @@
           "description": "Whether or not group members can see other members' info",
           "example": true,
           "name": "members_are_confidential",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not members, not just leaders, can start new conversations in the group's Chat.",
+          "example": true,
+          "name": "members_can_create_conversations",
           "note": null,
           "permissionLevel": "public",
           "type": "boolean"
@@ -801,6 +881,22 @@
           "type": "string"
         },
         {
+          "description": "Whether or not the group's meeting schedule is displayed on its public Church Center page.",
+          "example": true,
+          "name": "publicly_display_meeting_schedule",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "Whether or not group leaders and attendance takers are emailed shortly before each event starts asking them to take attendance.",
+          "example": true,
+          "name": "request_event_attendance_from_leaders",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
           "description": "A text summary of the group's typical meeting schedule.\nCan be a string like \"Sundays at 9:30am\" or \"Every other Tuesday at 7pm\".",
           "example": "string",
           "name": "schedule",
@@ -820,6 +916,14 @@
           "description": "The URL for the group's virtual location. A zoom link, for example.\nThis could be set even if `location_type_preference` is `physical`.\nThis is useful if you want to display a zoom link even if the group is meeting in person.",
           "example": "string",
           "name": "virtual_location_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "If and how the group is visible on Church Center:\n\n- \"private\": Not visible to anyone, aside from members of the group.\n- \"link_only\": Visible by sharing a direct link to the group, as well as by the group's members.\n- \"public\": Visible in the public group directory.\n\nWhen ordering, values sort as \"public\", \"link_only\", then \"private\".\n\n\nPossible values: `private`, `link_only`, or `public`",
+          "example": "value",
+          "name": "visibility",
           "note": null,
           "permissionLevel": "public",
           "type": "string"
@@ -975,10 +1079,10 @@
         "contact_email",
         "created_at",
         "enrollment_limit",
-        "listed",
         "members_are_confidential",
         "memberships_count",
-        "name"
+        "name",
+        "visibility"
       ],
       "path": "/groups/v2/groups",
       "permissions": {
@@ -990,8 +1094,10 @@
         "updateAssignable": [
           "group_type_id",
           "name",
+          "publicly_display_meeting_schedule",
           "schedule",
-          "tag_ids"
+          "tag_ids",
+          "visibility"
         ]
       },
       "queries": [
@@ -1004,9 +1110,21 @@
           "name": "name",
           "ops": [],
           "type": "string"
+        },
+        {
+          "name": "visibility",
+          "ops": [],
+          "type": "string"
         }
       ],
       "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "attendance_reply_to_person",
+          "note": "The person set as the reply-to address on automated attendance request emails sent to leaders.\nWhen this is `null`, a manager or administrator of the group type is used instead.",
+          "polymorphic": null
+        },
         {
           "association": "to_one",
           "graphType": "GroupType",
@@ -1157,6 +1275,14 @@
       "actions": [],
       "attributes": [
         {
+          "description": "`true` if closed and full groups are shown by default on the group type's Church Center page. Otherwise `false`.",
+          "example": true,
+          "name": "church_center_closed_and_full_groups_visible",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
           "description": "`true` if the map view is visible on the public groups list page. Otherwise `false`.",
           "example": true,
           "name": "church_center_map_visible",
@@ -1203,6 +1329,14 @@
           "note": null,
           "permissionLevel": "public",
           "type": "primary_key"
+        },
+        {
+          "description": "`true` if group leaders can enable or disable Chat for their groups. Otherwise `false`.",
+          "example": true,
+          "name": "leaders_can_enable_chat",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
         },
         {
           "description": "The name of the group type",
@@ -1397,7 +1531,15 @@
         "updateAssignable": []
       },
       "queries": [],
-      "relationships": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Group",
+          "name": "group",
+          "note": "The group this location belongs to. `null` for shared locations, which any group or event can use.",
+          "polymorphic": null
+        }
+      ],
       "resourceOnly": false
     },
     "membership": {
@@ -1456,6 +1598,7 @@
         }
       ],
       "includes": [
+        "group",
         "person"
       ],
       "name": "Membership",
@@ -1614,11 +1757,9 @@
             "enrollment",
             "group",
             "group_type",
-            "hidden",
             "meeting_schedule",
             "my_groups",
             "people_database_searchable",
-            "published",
             "tag"
           ],
           "head": "group",
@@ -1633,7 +1774,8 @@
           "details": "memberships for all groups in this organization",
           "filters": [
             "group",
-            "leader"
+            "leader",
+            "person"
           ],
           "head": "membership",
           "id": "membership-organization-memberships",

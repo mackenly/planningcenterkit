@@ -762,7 +762,7 @@
           "type": "string"
         },
         {
-          "description": "Whether or not the selection type is available to the public.",
+          "description": "Whether the selection type is available on Church Center right now. A selection\ntype scheduled to open later, or one that has closed, is `false`.",
           "example": true,
           "name": "publicly_available",
           "note": null,

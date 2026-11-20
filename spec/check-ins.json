@@ -155,7 +155,7 @@
           "example": "string",
           "name": "emergency_contact_name",
           "note": null,
-          "permissionLevel": "public",
+          "permissionLevel": "non_self_station",
           "type": "string"
         },
         {
@@ -163,7 +163,7 @@
           "example": "string",
           "name": "emergency_contact_phone_number",
           "note": null,
-          "permissionLevel": "public",
+          "permissionLevel": "non_self_station",
           "type": "string"
         },
         {
@@ -203,7 +203,7 @@
           "example": "string",
           "name": "medical_notes",
           "note": null,
-          "permissionLevel": "public",
+          "permissionLevel": "non_self_station",
           "type": "string"
         },
         {
@@ -227,7 +227,7 @@
           "example": "string",
           "name": "security_code",
           "note": null,
-          "permissionLevel": "public",
+          "permissionLevel": "non_self_station",
           "type": "string"
         },
         {

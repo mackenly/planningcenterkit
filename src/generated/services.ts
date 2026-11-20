@@ -442,7 +442,6 @@ export const servicesGraph = {
             edges: {
                 declined_plan_times: { vertex: 'plan_time', many: true, canCreate: false },
                 plan_times: { vertex: 'plan_time', many: true, canCreate: false },
-                respond_to: { vertex: 'person', many: true, canCreate: false },
                 team: { vertex: 'team', many: true, canCreate: false },
             },
             actions: ['accept', 'decline'],
@@ -591,7 +590,7 @@ export const servicesGraph = {
                 team_leaders: { vertex: 'team_leader', many: true, canCreate: false },
                 team_positions: { vertex: 'team_position', many: true, canCreate: false },
             },
-            actions: [],
+            actions: ['archive', 'unarchive'],
             canUpdate: false,
             canDelete: false,
             canonicalPath: '/services/v2/teams',
@@ -1054,6 +1053,9 @@ export interface AttachmentSchema {
         licenses_remaining: number | null;
         licenses_used: number | null;
         linked_url: string | null;
+        /**
+         * The shared order of pages to display for this file in Music Stand. Page numbers start at 1 and 0 inserts a blank page. Blank pages are left out of responses unless the request includes `blank_pages=true`. A person can override this for themselves with a PageOrder.
+         */
         page_order: string | null;
         pco_type: string | null;
         remote_link: string | null;
@@ -1097,6 +1099,9 @@ export interface AttachmentSchema {
         file_upload_identifier?: string | null;
         filename?: string | null;
         import_to_item_details?: boolean | null;
+        /**
+         * The shared order of pages to display for this file in Music Stand. Page numbers start at 1 and 0 inserts a blank page. Blank pages are left out of responses unless the request includes `blank_pages=true`. A person can override this for themselves with a PageOrder.
+         */
         page_order?: string | null;
         remote_link?: string | null;
     };
@@ -1111,6 +1116,9 @@ export interface AttachmentSchema {
         file_upload_identifier?: string | null;
         filename?: string | null;
         import_to_item_details?: boolean | null;
+        /**
+         * The shared order of pages to display for this file in Music Stand. Page numbers start at 1 and 0 inserts a blank page. Blank pages are left out of responses unless the request includes `blank_pages=true`. A person can override this for themselves with a PageOrder.
+         */
         page_order?: string | null;
         remote_link?: string | null;
     };
@@ -3259,6 +3267,12 @@ export interface PlanTimeSchema {
         recorded: boolean | null;
         /** Only available when requested with the `?fields` param */
         scheduled_team_ids: unknown[] | null;
+        /**
+         * True for a service time that matches none of the service type's regular service times.
+         *
+         * Only available when requested with the `?fields` param
+         */
+        special_service_time: boolean | null;
         /** Planned start time. */
         starts_at: string | null;
         /**
@@ -3466,7 +3480,6 @@ export interface ScheduleSchema {
     edges: {
         declined_plan_times: { vertex: 'plan_time'; many: true; filters: never; create: false };
         plan_times: { vertex: 'plan_time'; many: true; filters: never; create: false };
-        respond_to: { vertex: 'person'; many: true; filters: never; create: false };
         team: { vertex: 'team'; many: true; filters: never; create: false };
     };
 }
@@ -3983,13 +3996,14 @@ export interface SplitTeamRehearsalAssignmentSchema {
     type: 'SplitTeamRehearsalAssignment';
     attributes: {
         /**
-         * Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option
+         * Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option. This is the default for special service times; writing it clears any per-time choices.
          */
         schedule_special_service_times: boolean | null;
     };
-    relationships: 'team' | 'time_preference_options';
+    relationships: 'included_special_service_times' | 'team' | 'time_preference_options';
     includes: never;
     related: {
+        included_special_service_times: 'plan_time';
         team: 'team';
         time_preference_options: 'time_preference_option';
     };
@@ -3998,13 +4012,13 @@ export interface SplitTeamRehearsalAssignmentSchema {
     order: never;
     create: {
         /**
-         * Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option
+         * Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option. This is the default for special service times; writing it clears any per-time choices.
          */
         schedule_special_service_times?: boolean | null;
     };
     update: {
         /**
-         * Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option
+         * Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option. This is the default for special service times; writing it clears any per-time choices.
          */
         schedule_special_service_times?: boolean | null;
     };
@@ -4130,9 +4144,7 @@ export interface TeamSchema {
     whereOps: {};
     order: 'created_at' | 'name' | 'updated_at';
     create: {
-        archived_at?: string | null;
         assigned_directly?: boolean | null;
-        deleted_at?: string | null;
         name?: string | null;
         rehearsal_team?: boolean | null;
         /**
@@ -4146,7 +4158,7 @@ export interface TeamSchema {
     };
     update: {};
     delete: false;
-    actions: never;
+    actions: 'archive' | 'unarchive';
     edges: {
         people: { vertex: 'person'; many: true; filters: never; create: false };
         person_team_position_assignments: { vertex: 'person_team_position_assignment'; many: true; filters: never; create: false };

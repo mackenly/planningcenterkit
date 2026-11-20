@@ -1,7 +1,7 @@
 /**
  * Planning Center Groups API (`/groups/v2`).
  *
- * Generated from the Planning Center API documentation, version 2023-07-10, by
+ * Generated from the Planning Center API documentation, version 2026-11-10, by
  * scripts/generate.ts. Do not edit: run `npm run spec:fetch && npm run generate`.
  *
  * @module
@@ -14,7 +14,7 @@ export const groupsGraph = {
     product: 'groups',
     slug: 'groups',
     basePath: '/groups/v2',
-    version: '2023-07-10',
+    version: '2026-11-10',
     rootVertex: 'organization',
     root: {
         campuses: { vertex: 'campus', many: true, canCreate: false },
@@ -209,7 +209,7 @@ export const groupsGraph = {
 /**
  * Type-level schema of {@link Attendance}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/attendance
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/attendance
  */
 export interface AttendanceSchema {
     type: 'Attendance';
@@ -248,7 +248,7 @@ export interface AttendanceSchema {
 /**
  * Type-level schema of {@link Campus}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/campus
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/campus
  */
 export interface CampusSchema {
     type: 'Campus';
@@ -278,7 +278,7 @@ export interface CampusSchema {
 /**
  * Type-level schema of {@link Enrollment}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/enrollment
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/enrollment
  */
 export interface EnrollmentSchema {
     type: 'Enrollment';
@@ -287,16 +287,25 @@ export interface EnrollmentSchema {
         auto_closed: boolean | null;
         /** Brief description as to which limit automatically closed enrollment */
         auto_closed_reason: string | null;
+        /**
+         * Custom message displayed on Church Center when enrollment is closed. When blank, a default message is shown.
+         */
+        closed_message: string | null;
         /** Date when enrollment should automatically close */
         date_limit: string | null;
         /** Whether or not the `date_limit` has been reached */
         date_limit_reached: boolean | null;
         /** Total number of members allowed before enrollment should automatically close */
         member_limit: number | null;
+        /** Number of members that, once exceeded, sends an alert to administrators. */
+        member_limit_alert: number | null;
+        /** Whether or not pending membership requests count toward the `member_limit`. */
+        member_limit_include_pending: boolean | null;
         /** Whether or not the `member_limit` has been reached */
         member_limit_reached: boolean | null;
         /**
          * Current enrollment status. Possible values:
+         *
          * * `open` - strategy is not `closed` and no limits have been reached
          * * `closed` - strategy is `closed` _or_ limits have been reached
          * * `full` - member limit has been reached
@@ -326,11 +335,13 @@ export interface EnrollmentSchema {
 /**
  * Type-level schema of {@link Event}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/event
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/event
  */
 export interface EventSchema {
     type: 'Event';
     attributes: {
+        /** The date and time leaders were last asked to take attendance for this event. */
+        attendance_last_requested_at: string | null;
         /**
          * This is a group setting that applies to all the events in the group.
          * If selected, an email will be sent to the primary email address of the group leader
@@ -364,6 +375,12 @@ export interface EventSchema {
         reminders_sent_at: string | null;
         /** `true` if the event is a repeating event. Otherwise `false`. */
         repeating: boolean | null;
+        /**
+         * `true` if people who RSVP can bring guests. Always `false` when RSVPs are disabled.
+         */
+        rsvp_guests_enabled: boolean | null;
+        /** `true` if people can RSVP to this event. Always `false` for canceled events. */
+        rsvps_enabled: boolean | null;
         /** The date and time the event starts. */
         starts_at: string | null;
         /**
@@ -415,7 +432,7 @@ export interface EventSchema {
 /**
  * Type-level schema of {@link EventNote}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/event_note
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/event_note
  */
 export interface EventNoteSchema {
     type: 'EventNote';
@@ -444,7 +461,7 @@ export interface EventNoteSchema {
 /**
  * Type-level schema of {@link Group}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group
  */
 export interface GroupSchema {
     type: 'Group';
@@ -476,6 +493,12 @@ export interface GroupSchema {
         contact_email: string | null;
         /** The date and time the group was created. */
         created_at: string | null;
+        /** Whether or not new events for this group send automated reminders by default. */
+        default_event_automated_reminders_enabled: boolean | null;
+        /** Whether or not new events for this group allow RSVP guest counts by default. */
+        default_event_rsvp_guests_enabled: boolean | null;
+        /** Whether or not new events for this group have RSVPs enabled by default. */
+        default_event_rsvps_enabled: boolean | null;
         /** A longform description of the group. Can contain HTML markup. */
         description: string | null;
         /** The plain text version of the group description. */
@@ -495,23 +518,17 @@ export interface GroupSchema {
         events_visibility: string | null;
         /**
          * A hash of header image URLs. The keys are `thumbnail`, `medium`, and `original`.
-         *
-         * ```json
-         * {
-         *   "thumbnail": "https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/thumbnail_image-1676676396838.jpg",
-         *   "medium": "https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/medium_image-1676676396838.jpg",
-         *   "original": "https://groups-production.s3.amazonaws.com/uploads/group/header_image/1986065/image-1676676396838.jpg"
-         * }
-         * ```
          */
         header_image: Record<string, unknown> | null;
+        /**
+         * Whether or not the first names of group leaders are displayed on the group's public Church Center page.
+         */
+        leader_name_visible_on_public_page: boolean | null;
         /**
          * Whether or not group leaders have access to the entire
          * church database on the admin side of Groups. (Not recommended)
          */
         leaders_can_search_people_database: boolean | null;
-        /** Whether or not the group is visible on Church Center */
-        listed: boolean | null;
         /**
          * The location type preference for the group.
          *
@@ -522,6 +539,10 @@ export interface GroupSchema {
         /** Whether or not group members can see other members' info */
         members_are_confidential: boolean | null;
         /**
+         * Whether or not members, not just leaders, can start new conversations in the group's Chat.
+         */
+        members_can_create_conversations: boolean | null;
+        /**
          * The number of members in the group, includes leaders.
          * Does not include membership requests.
          */
@@ -530,6 +551,14 @@ export interface GroupSchema {
         name: string | null;
         /** The public URL for the group on Church Center. */
         public_church_center_web_url: string | null;
+        /**
+         * Whether or not the group's meeting schedule is displayed on its public Church Center page.
+         */
+        publicly_display_meeting_schedule: boolean | null;
+        /**
+         * Whether or not group leaders and attendance takers are emailed shortly before each event starts asking them to take attendance.
+         */
+        request_event_attendance_from_leaders: boolean | null;
         /**
          * A text summary of the group's typical meeting schedule.
          * Can be a string like "Sundays at 9:30am" or "Every other Tuesday at 7pm".
@@ -549,6 +578,19 @@ export interface GroupSchema {
          */
         virtual_location_url: string | null;
         /**
+         * If and how the group is visible on Church Center:
+         *
+         * - "private": Not visible to anyone, aside from members of the group.
+         * - "link_only": Visible by sharing a direct link to the group, as well as by the group's members.
+         * - "public": Visible in the public group directory.
+         *
+         * When ordering, values sort as "public", "link_only", then "private".
+         *
+         *
+         * Possible values: `private`, `link_only`, or `public`
+         */
+        visibility: string | null;
+        /**
          * DEPRECATED: This is a private attribute used by Home widgets that we plan to remove soon.
          *
          *
@@ -556,9 +598,10 @@ export interface GroupSchema {
          */
         widget_status: Record<string, unknown> | null;
     };
-    relationships: 'group_type' | 'location';
+    relationships: 'attendance_reply_to_person' | 'group_type' | 'location';
     includes: 'enrollment' | 'group_type' | 'location';
     related: {
+        attendance_reply_to_person: 'person';
         enrollment: 'enrollment';
         group_type: 'group_type';
         location: 'location';
@@ -566,6 +609,7 @@ export interface GroupSchema {
     where: {
         archive_status: string;
         name: string;
+        visibility: string;
     };
     whereOps: {};
     order:
@@ -573,15 +617,19 @@ export interface GroupSchema {
         | 'contact_email'
         | 'created_at'
         | 'enrollment_limit'
-        | 'listed'
         | 'members_are_confidential'
         | 'memberships_count'
-        | 'name';
+        | 'name'
+        | 'visibility';
     create: {};
     update: {
         group_type_id?: string;
         /** The name/title of the group. */
         name?: string | null;
+        /**
+         * Whether or not the group's meeting schedule is displayed on its public Church Center page.
+         */
+        publicly_display_meeting_schedule?: boolean | null;
         /**
          * A text summary of the group's typical meeting schedule.
          * Can be a string like "Sundays at 9:30am" or "Every other Tuesday at 7pm".
@@ -594,6 +642,19 @@ export interface GroupSchema {
          * Only available when requested with the `?fields` param
          */
         tag_ids?: number | null;
+        /**
+         * If and how the group is visible on Church Center:
+         *
+         * - "private": Not visible to anyone, aside from members of the group.
+         * - "link_only": Visible by sharing a direct link to the group, as well as by the group's members.
+         * - "public": Visible in the public group directory.
+         *
+         * When ordering, values sort as "public", "link_only", then "private".
+         *
+         *
+         * Possible values: `private`, `link_only`, or `public`
+         */
+        visibility?: string | null;
     };
     delete: false;
     actions: 'assign_campuses' | 'disable_chat' | 'duplicate' | 'enable_chat';
@@ -626,7 +687,7 @@ export interface GroupSchema {
 /**
  * Type-level schema of {@link GroupApplication}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group_application
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group_application
  */
 export interface GroupApplicationSchema {
     type: 'GroupApplication';
@@ -671,11 +732,15 @@ export interface GroupApplicationSchema {
 /**
  * Type-level schema of {@link GroupType}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group_type
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group_type
  */
 export interface GroupTypeSchema {
     type: 'GroupType';
     attributes: {
+        /**
+         * `true` if closed and full groups are shown by default on the group type's Church Center page. Otherwise `false`.
+         */
+        church_center_closed_and_full_groups_visible: boolean | null;
         /**
          * `true` if the map view is visible on the public groups list page. Otherwise `false`.
          */
@@ -691,6 +756,10 @@ export interface GroupTypeSchema {
         default_group_settings: string | null;
         /** A description of the group type */
         description: string | null;
+        /**
+         * `true` if group leaders can enable or disable Chat for their groups. Otherwise `false`.
+         */
+        leaders_can_enable_chat: boolean | null;
         /** The name of the group type */
         name: string | null;
         /** The position of the group type in relation to other group types. */
@@ -723,7 +792,7 @@ export interface GroupTypeSchema {
 /**
  * Type-level schema of {@link Location}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/location
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/location
  */
 export interface LocationSchema {
     type: 'Location';
@@ -759,7 +828,7 @@ export interface LocationSchema {
          */
         strategy: string | null;
     };
-    relationships: never;
+    relationships: 'group';
     includes: 'group';
     related: {
         group: 'group';
@@ -780,7 +849,7 @@ export interface LocationSchema {
 /**
  * Type-level schema of {@link Membership}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/membership
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/membership
  */
 export interface MembershipSchema {
     type: 'Membership';
@@ -794,7 +863,7 @@ export interface MembershipSchema {
         role: string | null;
     };
     relationships: 'group' | 'person';
-    includes: 'person';
+    includes: 'group' | 'person';
     related: {
         group: 'group';
         person: 'person';
@@ -835,7 +904,7 @@ export interface MembershipSchema {
 /**
  * Type-level schema of {@link Organization}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/organization
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/organization
  */
 export interface OrganizationSchema {
     type: 'Organization';
@@ -861,7 +930,7 @@ export interface OrganizationSchema {
 /**
  * Type-level schema of {@link Owner}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/owner
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/owner
  */
 export interface OwnerSchema {
     type: 'Owner';
@@ -889,7 +958,7 @@ export interface OwnerSchema {
 /**
  * Type-level schema of {@link Person}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/person
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/person
  */
 export interface PersonSchema {
     type: 'Person';
@@ -970,7 +1039,7 @@ export interface PersonSchema {
 /**
  * Type-level schema of {@link Resource}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/resource
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/resource
  */
 export interface ResourceSchema {
     type: 'Resource';
@@ -1009,7 +1078,7 @@ export interface ResourceSchema {
 /**
  * Type-level schema of {@link RSVP}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/rsvp
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/rsvp
  */
 export interface RSVPSchema {
     type: 'RSVP';
@@ -1043,7 +1112,7 @@ export interface RSVPSchema {
 /**
  * Type-level schema of {@link Tag}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/tag
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/tag
  */
 export interface TagSchema {
     type: 'Tag';
@@ -1077,7 +1146,7 @@ export interface TagSchema {
 /**
  * Type-level schema of {@link TagGroup}: attributes, query options, writable fields, and edges.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/tag_group
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/tag_group
  */
 export interface TagGroupSchema {
     type: 'TagGroup';
@@ -1155,14 +1224,12 @@ export type GroupsRoot = {
         | 'enrollment'
         | 'group'
         | 'group_type'
-        | 'hidden'
         | 'meeting_schedule'
         | 'my_groups'
         | 'people_database_searchable'
-        | 'published'
         | 'tag'; create: false };
     /** memberships for all groups in this organization */
-    memberships: { vertex: 'membership'; many: true; filters: 'group' | 'leader'; create: false };
+    memberships: { vertex: 'membership'; many: true; filters: 'group' | 'leader' | 'person'; create: false };
     /** people for this organization */
     people: { vertex: 'person'; many: true; filters: never; create: false };
     /** tag groups in this organization */
@@ -1176,39 +1243,39 @@ type SchemaCheck = [AssertSchema<GroupsSchema>, AssertRoot<GroupsRoot>];
 /**
  * Individual event attendance for a person.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/attendance
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/attendance
  */
 export type Attendance = PcoResource<AttendanceSchema>;
 /**
  * Attributes of {@link Attendance}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/attendance
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/attendance
  */
 export type AttendanceAttributes = AttendanceSchema['attributes'];
 
 /**
  * A campus as defined in Planning Center Accounts
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/campus
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/campus
  */
 export type Campus = PcoResource<CampusSchema>;
 /**
  * Attributes of {@link Campus}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/campus
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/campus
  */
 export type CampusAttributes = CampusSchema['attributes'];
 
 /**
  * Details on how and when members can join a `Group`.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/enrollment
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/enrollment
  */
 export type Enrollment = PcoResource<EnrollmentSchema>;
 /**
  * Attributes of {@link Enrollment}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/enrollment
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/enrollment
  */
 export type EnrollmentAttributes = EnrollmentSchema['attributes'];
 
@@ -1216,52 +1283,52 @@ export type EnrollmentAttributes = EnrollmentSchema['attributes'];
  * An event is a meeting of a group. It has a start and end time, and can be
  * either physical or virtual.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/event
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/event
  */
 export type Event = PcoResource<EventSchema>;
 /**
  * Attributes of {@link Event}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/event
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/event
  */
 export type EventAttributes = EventSchema['attributes'];
 
 /**
  * Notes that group leaders can write for an event, generally related to attendance.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/event_note
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/event_note
  */
 export type EventNote = PcoResource<EventNoteSchema>;
 /**
  * Attributes of {@link EventNote}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/event_note
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/event_note
  */
 export type EventNoteAttributes = EventNoteSchema['attributes'];
 
 /**
  * A group of people that meet together regularly.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group
  */
 export type Group = PcoResource<GroupSchema>;
 /**
  * Attributes of {@link Group}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group
  */
 export type GroupAttributes = GroupSchema['attributes'];
 
 /**
  * A group application is a request to join a group which can be approved or rejected.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group_application
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group_application
  */
 export type GroupApplication = PcoResource<GroupApplicationSchema>;
 /**
  * Attributes of {@link GroupApplication}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group_application
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group_application
  */
 export type GroupApplicationAttributes = GroupApplicationSchema['attributes'];
 
@@ -1269,26 +1336,26 @@ export type GroupApplicationAttributes = GroupApplicationSchema['attributes'];
  * A group type is a category of groups.
  * For example, a church might have group types for "Small Groups" and "Classes".
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group_type
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group_type
  */
 export type GroupType = PcoResource<GroupTypeSchema>;
 /**
  * Attributes of {@link GroupType}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/group_type
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/group_type
  */
 export type GroupTypeAttributes = GroupTypeSchema['attributes'];
 
 /**
  * A physical event location
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/location
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/location
  */
 export type Location = PcoResource<LocationSchema>;
 /**
  * Attributes of {@link Location}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/location
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/location
  */
 export type LocationAttributes = LocationSchema['attributes'];
 
@@ -1297,39 +1364,39 @@ export type LocationAttributes = LocationSchema['attributes'];
  *
  * A `Person` can only have one active `Membership` to a `Group` at a time.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/membership
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/membership
  */
 export type Membership = PcoResource<MembershipSchema>;
 /**
  * Attributes of {@link Membership}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/membership
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/membership
  */
 export type MembershipAttributes = MembershipSchema['attributes'];
 
 /**
  * The organization represents a single church. Every other resource is scoped to this record.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/organization
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/organization
  */
 export type Organization = PcoResource<OrganizationSchema>;
 /**
  * Attributes of {@link Organization}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/organization
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/organization
  */
 export type OrganizationAttributes = OrganizationSchema['attributes'];
 
 /**
  * The owner/creator of an event note.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/owner
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/owner
  */
 export type Owner = PcoResource<OwnerSchema>;
 /**
  * Attributes of {@link Owner}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/owner
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/owner
  */
 export type OwnerAttributes = OwnerSchema['attributes'];
 
@@ -1337,26 +1404,26 @@ export type OwnerAttributes = OwnerSchema['attributes'];
  * A person is a user of Planning Center.
  * They can be a member of a group, a leader of a group, or an administrator.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/person
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/person
  */
 export type Person = PcoResource<PersonSchema>;
 /**
  * Attributes of {@link Person}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/person
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/person
  */
 export type PersonAttributes = PersonSchema['attributes'];
 
 /**
  * A file or link resource that can be shared with a group.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/resource
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/resource
  */
 export type Resource = PcoResource<ResourceSchema>;
 /**
  * Attributes of {@link Resource}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/resource
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/resource
  */
 export type ResourceAttributes = ResourceSchema['attributes'];
 
@@ -1366,13 +1433,13 @@ export type ResourceAttributes = ResourceSchema['attributes'];
  * When an event reminder is sent, `awaiting_response` RSVPs are generated for
  * any remaining members, or `not_sent` if they're missing an email address.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/rsvp
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/rsvp
  */
 export type RSVP = PcoResource<RSVPSchema>;
 /**
  * Attributes of {@link RSVP}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/rsvp
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/rsvp
  */
 export type RSVPAttributes = RSVPSchema['attributes'];
 
@@ -1380,13 +1447,13 @@ export type RSVPAttributes = RSVPSchema['attributes'];
  * Tags are used to filter groups.
  * They can be organized into tag_groups.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/tag
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/tag
  */
 export type Tag = PcoResource<TagSchema>;
 /**
  * Attributes of {@link Tag}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/tag
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/tag
  */
 export type TagAttributes = TagSchema['attributes'];
 
@@ -1395,12 +1462,12 @@ export type TagAttributes = TagSchema['attributes'];
  * For example you could have a "Life Stage" tag group
  * with tags like "Child", "Teen", "Adult", etc.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/tag_group
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/tag_group
  */
 export type TagGroup = PcoResource<TagGroupSchema>;
 /**
  * Attributes of {@link TagGroup}.
  *
- * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2023-07-10/vertices/tag_group
+ * @see https://api.planningcenteronline.com/docs/apps/groups/versions/2026-11-10/vertices/tag_group
  */
 export type TagGroupAttributes = TagGroupSchema['attributes'];

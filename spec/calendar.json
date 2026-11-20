@@ -644,7 +644,9 @@
           "deprecated": false,
           "details": null,
           "filters": [
-            "future"
+            "canceled",
+            "future",
+            "not_canceled"
           ],
           "head": "event_instance",
           "id": "eventinstance-event-event_instances",
@@ -932,6 +934,22 @@
           "note": null,
           "permissionLevel": "public",
           "type": "boolean"
+        },
+        {
+          "description": "Indicates whether the event instance is canceled",
+          "example": true,
+          "name": "canceled",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": "UTC time at which the event instance was canceled. `null` when it is not canceled",
+          "example": "2000-01-01T12:00:00Z",
+          "name": "canceled_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
         },
         {
           "description": "The URL for the event on Church Center",
@@ -2012,6 +2030,7 @@
             "approved_rejected_conflict",
             "approver",
             "approver_subscriber",
+            "canceled",
             "conflict",
             "event_request_approved",
             "event_request_approved_pending",
@@ -2027,6 +2046,7 @@
             "manager_approver",
             "manager_approver_subscriber",
             "manager_subscriber",
+            "not_canceled",
             "not_pending_event_requests",
             "owner",
             "owner_approver",
@@ -3997,7 +4017,10 @@
         {
           "deprecated": false,
           "details": null,
-          "filters": [],
+          "filters": [
+            "canceled",
+            "not_canceled"
+          ],
           "head": "event_instance",
           "id": "eventinstance-tag-event_instances",
           "name": "event_instances",

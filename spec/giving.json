@@ -637,7 +637,7 @@
           "type": "primary_key"
         },
         {
-          "description": "An optional short note donors can add to specify their gift intention (e.g. \"In memory of...\"). Only available when enabled by the church for specific funds.",
+          "description": "An optional short note donors can add to specify their gift intention (e.g. \"In memory of...\"). Only available when enabled by the church for specific funds. Can be set on batch donations when the [memo line feature](https://help.planningcenter.com/en/143011-manage-your-online-donation-form.html#UUID-0949cfc8-d262-e23a-0635-fa100ae331ba_section-id235309330415896-how-do-memo-lines-work-) allows it.",
           "example": "string",
           "name": "memo",
           "note": null,
@@ -822,6 +822,7 @@
         "createAssignable": [
           "campus_id",
           "fee_cents",
+          "memo",
           "payment_brand",
           "payment_check_dated_at",
           "payment_check_number",
@@ -838,6 +839,7 @@
         "updateAssignable": [
           "campus_id",
           "fee_cents",
+          "memo",
           "payment_brand",
           "payment_check_dated_at",
           "payment_check_number",
@@ -2619,7 +2621,8 @@
         }
       ],
       "includes": [
-        "designations"
+        "designations",
+        "payment_method"
       ],
       "name": "RecurringDonation",
       "orders": [],

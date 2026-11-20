@@ -231,6 +231,48 @@
       "relationships": [],
       "resourceOnly": false
     },
+    "announcement_settings": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": "How Announcements are sorted. `manual` uses the order set with the `reorder_announcements` action.\n\nPossible values: `default`, `manual`",
+          "example": "string",
+          "name": "announcements_sort_mode",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": "Settings for how an Organization's Announcements are displayed",
+      "edges": [],
+      "includes": [],
+      "name": "AnnouncementSettings",
+      "orders": [],
+      "path": "/publishing/v2/announcement_settings",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": true,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": [
+          "announcements_sort_mode"
+        ]
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
     "announcements_announcement_category": {
       "actions": [],
       "attributes": [
@@ -923,6 +965,14 @@
         {
           "description": null,
           "example": "string",
+          "name": "attach_youtube_thumbnail_job_id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
           "name": "church_center_url",
           "note": null,
           "permissionLevel": "public",
@@ -1204,6 +1254,7 @@
         "channel",
         "episode_resources",
         "episode_times",
+        "note_template",
         "series",
         "speakerships"
       ],
@@ -1634,7 +1685,14 @@
       "resourceOnly": false
     },
     "organization": {
-      "actions": [],
+      "actions": [
+        {
+          "deprecated": false,
+          "description": "Reorder Announcements",
+          "name": "reorder_announcements",
+          "path": "/publishing/v2/reorder_announcements"
+        }
+      ],
       "attributes": [
         {
           "description": "Only available when requested with the `?fields` param",
@@ -1683,6 +1741,17 @@
           "path": "/publishing/v2/announcement_categories",
           "post": false,
           "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "announcement_settings",
+          "id": "announcementsettings-organization-announcement_settings",
+          "name": "announcement_settings",
+          "path": "/publishing/v2/announcement_settings",
+          "post": false,
+          "response": "resource"
         },
         {
           "deprecated": false,

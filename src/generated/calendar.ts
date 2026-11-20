@@ -570,7 +570,7 @@ export interface EventSchema {
         calendar: { vertex: 'calendar'; many: true; filters: never; create: false };
         conflicts: { vertex: 'conflict'; many: true; filters: never; create: false };
         event_connections: { vertex: 'event_connection'; many: true; filters: never; create: true };
-        event_instances: { vertex: 'event_instance'; many: true; filters: 'future'; create: false };
+        event_instances: { vertex: 'event_instance'; many: true; filters: 'canceled' | 'future' | 'not_canceled'; create: false };
         event_resource_requests: { vertex: 'event_resource_request'; many: true; filters: never; create: false };
         feed: { vertex: 'feed'; many: true; filters: never; create: false };
         owner: { vertex: 'person'; many: true; filters: never; create: false };
@@ -663,6 +663,12 @@ export interface EventInstanceSchema {
     attributes: {
         /** Indicates whether event instance lasts all day */
         all_day_event: boolean | null;
+        /** Indicates whether the event instance is canceled */
+        canceled: boolean | null;
+        /**
+         * UTC time at which the event instance was canceled. `null` when it is not canceled
+         */
+        canceled_at: string | null;
         /** The URL for the event on Church Center */
         church_center_url: string | null;
         /** Compact representation of event instance's recurrence pattern */
@@ -1834,7 +1840,7 @@ export interface TagSchema {
     delete: true;
     actions: never;
     edges: {
-        event_instances: { vertex: 'event_instance'; many: true; filters: never; create: false };
+        event_instances: { vertex: 'event_instance'; many: true; filters: 'canceled' | 'not_canceled'; create: false };
         events: { vertex: 'event'; many: true; filters: never; create: false };
         tag_group: { vertex: 'tag_group'; many: true; filters: never; create: false };
     };
@@ -1945,6 +1951,7 @@ export type CalendarRoot = {
         | 'approved_rejected_conflict'
         | 'approver'
         | 'approver_subscriber'
+        | 'canceled'
         | 'conflict'
         | 'event_request_approved'
         | 'event_request_approved_pending'
@@ -1960,6 +1967,7 @@ export type CalendarRoot = {
         | 'manager_approver'
         | 'manager_approver_subscriber'
         | 'manager_subscriber'
+        | 'not_canceled'
         | 'not_pending_event_requests'
         | 'owner'
         | 'owner_approver'

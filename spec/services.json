@@ -587,7 +587,7 @@
           "type": "string"
         },
         {
-          "description": null,
+          "description": "The shared order of pages to display for this file in Music Stand. Page numbers start at 1 and 0 inserts a blank page. Blank pages are left out of responses unless the request includes `blank_pages=true`. A person can override this for themselves with a PageOrder.",
           "example": "string",
           "name": "page_order",
           "note": null,
@@ -4552,7 +4552,7 @@
           "example": "string",
           "name": "ical_code",
           "note": null,
-          "permissionLevel": "scheduler_or_current",
+          "permissionLevel": "ical_code_viewable_by_me",
           "type": "string"
         },
         {
@@ -4584,7 +4584,7 @@
           "example": "2000-01-01T12:00:00Z",
           "name": "logged_in_at",
           "note": null,
-          "permissionLevel": "scheduler",
+          "permissionLevel": "last_login_viewable_by_me",
           "type": "date_time"
         },
         {
@@ -4680,7 +4680,7 @@
           "example": true,
           "name": "passed_background_check",
           "note": null,
-          "permissionLevel": "scheduler",
+          "permissionLevel": "background_check_viewable_by_me",
           "type": "boolean"
         },
         {
@@ -4760,7 +4760,7 @@
           "example": 1,
           "name": "preferred_max_plans_per_day",
           "note": null,
-          "permissionLevel": "scheduler_or_current",
+          "permissionLevel": "scheduling_preferences_viewable_by_me",
           "type": "integer"
         },
         {
@@ -4768,7 +4768,7 @@
           "example": 1,
           "name": "preferred_max_plans_per_month",
           "note": null,
-          "permissionLevel": "scheduler_or_current",
+          "permissionLevel": "scheduling_preferences_viewable_by_me",
           "type": "integer"
         },
         {
@@ -6663,6 +6663,14 @@
           "type": "array"
         },
         {
+          "description": "True for a service time that matches none of the service type's regular service times.\n\nOnly available when requested with the `?fields` param",
+          "example": true,
+          "name": "special_service_time",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
           "description": "Planned start time.",
           "example": "2000-01-01T12:00:00Z",
           "name": "starts_at",
@@ -7182,17 +7190,6 @@
           "id": "plantime-schedule-plan_times",
           "name": "plan_times",
           "path": "/services/v2/people/{person_id}/schedules/{schedule_id}/plan_times",
-          "post": false,
-          "response": "collection"
-        },
-        {
-          "deprecated": false,
-          "details": null,
-          "filters": [],
-          "head": "person",
-          "id": "person-schedule-respond_to",
-          "name": "respond_to",
-          "path": "/services/v2/people/{person_id}/schedules/{schedule_id}/respond_to",
           "post": false,
           "response": "collection"
         },
@@ -8697,7 +8694,7 @@
           "type": "primary_key"
         },
         {
-          "description": "Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option",
+          "description": "Controls if the related rehearsal/other time is assigned when a person is scheduled to a split team service time that does not match a Time Preference Option. This is the default for special service times; writing it clears any per-time choices.",
           "example": true,
           "name": "schedule_special_service_times",
           "note": null,
@@ -8741,6 +8738,13 @@
       },
       "queries": [],
       "relationships": [
+        {
+          "association": "to_many",
+          "graphType": "PlanTime",
+          "name": "included_special_service_times",
+          "note": null,
+          "polymorphic": null
+        },
         {
           "association": "to_one",
           "graphType": "Team",
@@ -8916,7 +8920,20 @@
       "resourceOnly": false
     },
     "team": {
-      "actions": [],
+      "actions": [
+        {
+          "deprecated": false,
+          "description": "Archive a Team.",
+          "name": "archive",
+          "path": "/services/v2/teams/{team_id}/archive"
+        },
+        {
+          "deprecated": false,
+          "description": "Restore an archived Team.",
+          "name": "unarchive",
+          "path": "/services/v2/teams/{team_id}/unarchive"
+        }
+      ],
       "attributes": [
         {
           "description": null,
@@ -9142,9 +9159,7 @@
         "canDestroy": false,
         "canUpdate": false,
         "createAssignable": [
-          "archived_at",
           "assigned_directly",
-          "deleted_at",
           "name",
           "rehearsal_team",
           "schedule_to",

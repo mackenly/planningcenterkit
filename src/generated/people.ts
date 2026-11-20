@@ -915,8 +915,8 @@ export interface CampusSchema {
         date_format: number | null;
         description: string | null;
         geolocation_set_manually: boolean | null;
-        latitude: number | null;
-        longitude: number | null;
+        latitude: string | null;
+        longitude: string | null;
         name: string | null;
         phone_number: string | null;
         state: string | null;
@@ -954,8 +954,8 @@ export interface CampusSchema {
         date_format?: number | null;
         description?: string | null;
         geolocation_set_manually?: boolean | null;
-        latitude?: number | null;
-        longitude?: number | null;
+        latitude?: string | null;
+        longitude?: string | null;
         name?: string | null;
         phone_number?: string | null;
         state?: string | null;
@@ -973,8 +973,8 @@ export interface CampusSchema {
         date_format?: number | null;
         description?: string | null;
         geolocation_set_manually?: boolean | null;
-        latitude?: number | null;
-        longitude?: number | null;
+        latitude?: string | null;
+        longitude?: string | null;
         name?: string | null;
         phone_number?: string | null;
         state?: string | null;
@@ -1031,7 +1031,7 @@ export interface ConditionSchema {
         definition_class: string | null;
         definition_identifier: string | null;
         description: string | null;
-        settings: string | null;
+        settings: Record<string, unknown> | null;
         updated_at: string | null;
     };
     relationships: 'created_by';
@@ -1046,7 +1046,7 @@ export interface ConditionSchema {
         definition_class: string;
         definition_identifier: string;
         description: string;
-        settings: string;
+        settings: unknown;
         updated_at: string | Date;
     };
     whereOps: {
@@ -1194,7 +1194,7 @@ export interface FieldDatumSchema {
     type: 'FieldDatum';
     attributes: {
         created_at: string | null;
-        file: string | null;
+        file: Record<string, unknown> | null;
         file_content_type: string | null;
         file_name: string | null;
         file_size: number | null;
@@ -1211,7 +1211,7 @@ export interface FieldDatumSchema {
     where: {
         created_at: string | Date;
         field_definition_id: string | number;
-        file: string;
+        file: unknown;
         file_content_type: string;
         file_name: string;
         file_size: number;
@@ -1256,13 +1256,13 @@ export interface FieldDatumSchema {
 export interface FieldDefinitionSchema {
     type: 'FieldDefinition';
     attributes: {
-        config: string | null;
+        config: Record<string, unknown> | null;
         data_type: string | null;
         deleted_at: string | null;
         name: string | null;
         sequence: number | null;
         slug: string | null;
-        tab_id: string | null;
+        tab_id: number | null;
     };
     relationships: 'tab';
     includes: 'field_options' | 'tab';
@@ -1271,20 +1271,20 @@ export interface FieldDefinitionSchema {
         tab: 'tab';
     };
     where: {
-        config: string;
+        config: unknown;
         data_type: string;
         deleted_at: string | Date;
         name: string;
         sequence: number;
         slug: string;
-        tab_id: string;
+        tab_id: string | number;
     };
     whereOps: {
         deleted_at: 'gt' | 'gte' | 'lt' | 'lte';
     };
     order: 'config' | 'data_type' | 'deleted_at' | 'name' | 'sequence' | 'slug' | 'tab_id';
     create: {
-        config?: string | null;
+        config?: Record<string, unknown> | null;
         data_type?: string | null;
         deleted_at?: string | null;
         name?: string | null;
@@ -1292,7 +1292,7 @@ export interface FieldDefinitionSchema {
         slug?: string | null;
     };
     update: {
-        config?: string | null;
+        config?: Record<string, unknown> | null;
         data_type?: string | null;
         deleted_at?: string | null;
         name?: string | null;
@@ -1381,12 +1381,14 @@ export interface FormSchema {
     whereOps: {};
     order:
         | 'active'
+        | 'active_automations_count'
         | 'archived_at'
         | 'campus'
         | 'category'
         | 'created_at'
         | 'deleted_at'
         | 'description'
+        | 'last_submitted_at'
         | 'name'
         | 'recently_viewed'
         | 'submission_count'
@@ -1456,7 +1458,7 @@ export interface FormFieldSchema {
         label: string | null;
         required: boolean | null;
         sequence: number | null;
-        settings: string | null;
+        settings: Record<string, unknown> | null;
         updated_at: string | null;
     };
     relationships: 'fieldable' | 'form' | 'form_field_conditions' | 'options';
@@ -1935,7 +1937,7 @@ export interface ListCategorySchema {
     attributes: {
         created_at: string | null;
         name: string | null;
-        organization_id: string | null;
+        organization_id: number | null;
         updated_at: string | null;
     };
     relationships: 'organization';
@@ -1947,7 +1949,7 @@ export interface ListCategorySchema {
     where: {
         created_at: string | Date;
         name: string;
-        organization_id: string;
+        organization_id: string | number;
         updated_at: string | Date;
     };
     whereOps: {
@@ -2169,7 +2171,7 @@ export interface MessageSchema {
         bounced_at: string | null;
         created_at: string | null;
         delivery_status: string | null;
-        file: string | null;
+        file: Record<string, unknown> | null;
         from_address: string | null;
         from_name: string | null;
         /** Possible values: `email`, `sms`, or `church_center_message` */
@@ -2194,7 +2196,7 @@ export interface MessageSchema {
         bounced_at: string | Date;
         created_at: string | Date;
         delivery_status: string;
-        file: string;
+        file: unknown;
         from_address: string;
         kind: string;
         reject_reason: string;
@@ -2366,12 +2368,12 @@ export interface NoteSchema {
     type: 'Note';
     attributes: {
         created_at: string | null;
-        created_by_id: string | null;
+        created_by_id: number | null;
         display_date: string | null;
         note: string | null;
-        note_category_id: string | null;
-        organization_id: string | null;
-        person_id: string | null;
+        note_category_id: number | null;
+        organization_id: number | null;
+        person_id: number | null;
         updated_at: string | null;
     };
     relationships: 'created_by' | 'note_category' | 'organization' | 'person';
@@ -2386,7 +2388,7 @@ export interface NoteSchema {
     where: {
         created_at: string | Date;
         note: string;
-        note_category_id: string;
+        note_category_id: string | number;
         updated_at: string | Date;
     };
     whereOps: {
@@ -2398,14 +2400,14 @@ export interface NoteSchema {
         created_at?: string | null;
         display_date?: string | null;
         note?: string | null;
-        note_category_id?: string | null;
+        note_category_id?: number | null;
         updated_at?: string | null;
     };
     update: {
         created_at?: string | null;
         display_date?: string | null;
         note?: string | null;
-        note_category_id?: string | null;
+        note_category_id?: number | null;
         updated_at?: string | null;
     };
     delete: true;
@@ -2428,7 +2430,7 @@ export interface NoteCategorySchema {
         created_at: string | null;
         locked: boolean | null;
         name: string | null;
-        organization_id: string | null;
+        organization_id: number | null;
         updated_at: string | null;
     };
     relationships: 'organization';
@@ -2443,7 +2445,7 @@ export interface NoteCategorySchema {
         created_at: string | Date;
         locked: boolean;
         name: string;
-        organization_id: string;
+        organization_id: string | number;
         updated_at: string | Date;
     };
     whereOps: {
@@ -2478,7 +2480,7 @@ export interface NoteCategoryShareSchema {
         group: string | null;
         /** Possible values: `view`, `view_create`, or `manage` */
         permission: string | null;
-        person_id: string | null;
+        person_id: number | null;
     };
     relationships: 'note_category' | 'person';
     includes: 'person';
@@ -2496,14 +2498,14 @@ export interface NoteCategoryShareSchema {
         group?: string | null;
         /** Possible values: `view`, `view_create`, or `manage` */
         permission?: string | null;
-        person_id?: string | null;
+        person_id?: number | null;
     };
     update: {
         /** Possible values: `No Access`, `Viewer`, `Editor`, or `Manager` */
         group?: string | null;
         /** Possible values: `view`, `view_create`, or `manage` */
         permission?: string | null;
-        person_id?: string | null;
+        person_id?: number | null;
     };
     delete: true;
     actions: never;
@@ -2560,7 +2562,7 @@ export interface OrganizationSchema {
         contact_website: string | null;
         country_code: string | null;
         created_at: string | null;
-        date_format: number | null;
+        date_format: string | null;
         grades: unknown[] | null;
         name: string | null;
         time_zone: string | null;
@@ -3029,8 +3031,8 @@ export interface PersonMergerSchema {
     type: 'PersonMerger';
     attributes: {
         created_at: string | null;
-        person_to_keep_id: string | null;
-        person_to_remove_id: string | null;
+        person_to_keep_id: number | null;
+        person_to_remove_id: number | null;
     };
     relationships: 'person_to_keep' | 'person_to_remove';
     includes: never;
@@ -3040,8 +3042,8 @@ export interface PersonMergerSchema {
     };
     where: {
         created_at: string | Date;
-        person_to_keep_id: string;
-        person_to_remove_id: string;
+        person_to_keep_id: string | number;
+        person_to_remove_id: string | number;
     };
     whereOps: {
         created_at: 'gt' | 'gte' | 'lt' | 'lte';
@@ -3431,7 +3433,7 @@ export interface WorkflowSchema {
     type: 'Workflow';
     attributes: {
         archived_at: string | null;
-        campus_id: string | null;
+        campus_id: number | null;
         completed_card_count: number | null;
         created_at: string | null;
         deleted_at: string | null;
@@ -3450,7 +3452,7 @@ export interface WorkflowSchema {
         total_unassigned_card_count: number | null;
         total_unassigned_steps_count: number | null;
         updated_at: string | null;
-        workflow_category_id: string | null;
+        workflow_category_id: number | null;
     };
     relationships: 'campus' | 'workflow_category';
     includes: 'category' | 'shares' | 'steps';
@@ -3463,13 +3465,13 @@ export interface WorkflowSchema {
     };
     where: {
         archived_at: string | Date;
-        campus_id: string;
+        campus_id: string | number;
         created_at: string | Date;
         deleted_at: string | Date;
         id: string;
         name: string;
         updated_at: string | Date;
-        workflow_category_id: string;
+        workflow_category_id: string | number;
     };
     whereOps: {
         archived_at: 'gt' | 'gte' | 'lt' | 'lte';
@@ -3478,6 +3480,7 @@ export interface WorkflowSchema {
         updated_at: 'gt' | 'gte' | 'lt' | 'lte';
     };
     order:
+        | 'active_automations_count'
         | 'archived_at'
         | 'campus_id'
         | 'campus_name'
@@ -3493,14 +3496,14 @@ export interface WorkflowSchema {
         | 'workflow_category_id'
         | 'workflow_category_name';
     create: {
-        campus_id?: string | null;
+        campus_id?: number | null;
         name?: string | null;
-        workflow_category_id?: string | null;
+        workflow_category_id?: number | null;
     };
     update: {
-        campus_id?: string | null;
+        campus_id?: number | null;
         name?: string | null;
-        workflow_category_id?: string | null;
+        workflow_category_id?: number | null;
     };
     delete: true;
     actions: never;
@@ -3781,7 +3784,7 @@ export interface WorkflowShareSchema {
         group: string | null;
         /** Possible values: `view`, `manage_cards`, or `manage` */
         permission: string | null;
-        person_id: string | null;
+        person_id: number | null;
     };
     relationships: 'person' | 'workflow';
     includes: 'person';
@@ -3799,7 +3802,7 @@ export interface WorkflowShareSchema {
         group?: string | null;
         /** Possible values: `view`, `manage_cards`, or `manage` */
         permission?: string | null;
-        person_id?: string | null;
+        person_id?: number | null;
     };
     update: {
         /** Possible values: `No Access`, `Viewer`, `Editor`, or `Manager` */
@@ -4058,6 +4061,7 @@ export type PeopleRoot = {
     forms: { vertex: 'form'; many: true; filters:
         | 'archived'
         | 'closed'
+        | 'has_active_automations'
         | 'not_archived'
         | 'open'
         | 'recently_deleted'
@@ -4100,6 +4104,7 @@ export type PeopleRoot = {
     workflow_assignee_summaries: { vertex: 'workflow_assignee_summary'; many: true; filters: never; create: false };
     workflows: { vertex: 'workflow'; many: true; filters:
         | 'archived'
+        | 'has_active_automations'
         | 'has_my_cards'
         | 'manage_cards_allowed'
         | 'needs_attention'

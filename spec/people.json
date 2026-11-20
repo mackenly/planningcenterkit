@@ -544,19 +544,19 @@
         },
         {
           "description": null,
-          "example": 1.42,
+          "example": "string",
           "name": "latitude",
           "note": null,
           "permissionLevel": "public",
-          "type": "float"
+          "type": "string"
         },
         {
           "description": null,
-          "example": 1.42,
+          "example": "string",
           "name": "longitude",
           "note": null,
           "permissionLevel": "public",
-          "type": "float"
+          "type": "string"
         },
         {
           "description": null,
@@ -881,11 +881,11 @@
         },
         {
           "description": null,
-          "example": "string",
+          "example": {},
           "name": "settings",
           "note": null,
           "permissionLevel": "public",
-          "type": "string"
+          "type": "json"
         },
         {
           "description": null,
@@ -974,7 +974,7 @@
         {
           "name": "settings",
           "ops": [],
-          "type": "string"
+          "type": "json"
         },
         {
           "name": "updated_at",
@@ -1405,11 +1405,11 @@
         },
         {
           "description": null,
-          "example": "string",
+          "example": {},
           "name": "file",
           "note": null,
           "permissionLevel": "public",
-          "type": "string"
+          "type": "json"
         },
         {
           "description": null,
@@ -1560,7 +1560,7 @@
         {
           "name": "file",
           "ops": [],
-          "type": "string"
+          "type": "json"
         },
         {
           "name": "file_content_type",
@@ -1616,11 +1616,11 @@
       "attributes": [
         {
           "description": null,
-          "example": "string",
+          "example": {},
           "name": "config",
           "note": null,
           "permissionLevel": "public",
-          "type": "string"
+          "type": "json"
         },
         {
           "description": null,
@@ -1672,11 +1672,11 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "tab_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         }
       ],
       "collectionOnly": false,
@@ -1749,7 +1749,7 @@
         {
           "name": "config",
           "ops": [],
-          "type": "string"
+          "type": "json"
         },
         {
           "name": "data_type",
@@ -1784,7 +1784,7 @@
         {
           "name": "tab_id",
           "ops": [],
-          "type": "primary_key"
+          "type": "integer"
         }
       ],
       "relationships": [
@@ -2064,12 +2064,14 @@
       "name": "Form",
       "orders": [
         "active",
+        "active_automations_count",
         "archived_at",
         "campus",
         "category",
         "created_at",
         "deleted_at",
         "description",
+        "last_submitted_at",
         "name",
         "recently_viewed",
         "submission_count",
@@ -2267,11 +2269,11 @@
         },
         {
           "description": null,
-          "example": "string",
+          "example": {},
           "name": "settings",
           "note": null,
           "permissionLevel": "public",
-          "type": "string"
+          "type": "json"
         },
         {
           "description": null,
@@ -3647,11 +3649,11 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "organization_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "description": null,
@@ -3722,7 +3724,7 @@
         {
           "name": "organization_id",
           "ops": [],
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "name": "updated_at",
@@ -4215,11 +4217,11 @@
         },
         {
           "description": null,
-          "example": "string",
+          "example": {},
           "name": "file",
           "note": null,
           "permissionLevel": "private",
-          "type": "string"
+          "type": "json"
         },
         {
           "description": null,
@@ -4400,7 +4402,7 @@
         {
           "name": "file",
           "ops": [],
-          "type": "string"
+          "type": "json"
         },
         {
           "name": "from_address",
@@ -4825,11 +4827,11 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "created_by_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "description": null,
@@ -4857,27 +4859,27 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "note_category_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "organization_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "person_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "description": null,
@@ -4982,7 +4984,7 @@
         {
           "name": "note_category_id",
           "ops": [],
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "name": "updated_at",
@@ -5064,11 +5066,11 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "organization_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "description": null,
@@ -5169,7 +5171,7 @@
         {
           "name": "organization_id",
           "ops": [],
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "name": "updated_at",
@@ -5222,11 +5224,11 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "person_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         }
       ],
       "collectionOnly": false,
@@ -5440,11 +5442,11 @@
         },
         {
           "description": null,
-          "example": 1,
+          "example": "string",
           "name": "date_format",
           "note": null,
           "permissionLevel": "public",
-          "type": "integer"
+          "type": "string"
         },
         {
           "description": null,
@@ -5612,6 +5614,7 @@
           "filters": [
             "archived",
             "closed",
+            "has_active_automations",
             "not_archived",
             "open",
             "recently_deleted",
@@ -5914,6 +5917,7 @@
           "details": null,
           "filters": [
             "archived",
+            "has_active_automations",
             "has_my_cards",
             "manage_cards_allowed",
             "needs_attention",
@@ -7315,19 +7319,19 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "person_to_keep_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "person_to_remove_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         }
       ],
       "collectionOnly": false,
@@ -7362,12 +7366,12 @@
         {
           "name": "person_to_keep_id",
           "ops": [],
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "name": "person_to_remove_id",
           "ops": [],
-          "type": "primary_key"
+          "type": "integer"
         }
       ],
       "relationships": [
@@ -8389,11 +8393,11 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "campus_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "description": null,
@@ -8533,11 +8537,11 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "workflow_category_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         }
       ],
       "collectionOnly": false,
@@ -8607,6 +8611,7 @@
       ],
       "name": "Workflow",
       "orders": [
+        "active_automations_count",
         "archived_at",
         "campus_id",
         "campus_name",
@@ -8655,7 +8660,7 @@
         {
           "name": "campus_id",
           "ops": [],
-          "type": "primary_key"
+          "type": "integer"
         },
         {
           "name": "created_at",
@@ -8700,7 +8705,7 @@
         {
           "name": "workflow_category_id",
           "ops": [],
-          "type": "primary_key"
+          "type": "integer"
         }
       ],
       "relationships": [
@@ -9385,7 +9390,7 @@
           "association": "to_one",
           "graphType": "Person",
           "name": "person",
-          "note": "The person the `person_name` attribute refers to. Null when the activity was performed by an integration rather than a person.",
+          "note": "The person the `person_name` attribute refers to. Null when the activity was performed by an integration or an automation rather than a person.",
           "polymorphic": null
         },
         {
@@ -9617,11 +9622,11 @@
         },
         {
           "description": null,
-          "example": "primary_key",
+          "example": 1,
           "name": "person_id",
           "note": null,
           "permissionLevel": "public",
-          "type": "primary_key"
+          "type": "integer"
         }
       ],
       "collectionOnly": false,

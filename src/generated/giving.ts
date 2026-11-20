@@ -506,7 +506,7 @@ export interface DonationSchema {
         /** The currency of `fee_cents`. Based on the organization's currency. */
         fee_currency: string | null;
         /**
-         * An optional short note donors can add to specify their gift intention (e.g. "In memory of..."). Only available when enabled by the church for specific funds.
+         * An optional short note donors can add to specify their gift intention (e.g. "In memory of..."). Only available when enabled by the church for specific funds. Can be set on batch donations when the [memo line feature](https://help.planningcenter.com/en/143011-manage-your-online-donation-form.html#UUID-0949cfc8-d262-e23a-0635-fa100ae331ba_section-id235309330415896-how-do-memo-lines-work-) allows it.
          */
         memo: string | null;
         /**
@@ -600,6 +600,10 @@ export interface DonationSchema {
          */
         fee_cents?: number | null;
         /**
+         * An optional short note donors can add to specify their gift intention (e.g. "In memory of..."). Only available when enabled by the church for specific funds. Can be set on batch donations when the [memo line feature](https://help.planningcenter.com/en/143011-manage-your-online-donation-form.html#UUID-0949cfc8-d262-e23a-0635-fa100ae331ba_section-id235309330415896-how-do-memo-lines-work-) allows it.
+         */
+        memo?: string | null;
+        /**
          * For cards, this is the card brand (eg Visa, Mastercard, etc). For checks and bank accounts, this is the bank name. For cash donations, this should be `null`.
          */
         payment_brand?: string | null;
@@ -636,6 +640,10 @@ export interface DonationSchema {
          * The fee to process a donation. This should either be 0 or a negative integer. For a donation processed by Giving via Stripe, this is the amount the associated organization paid Stripe to process it. For donations not processed by Stripe, this can be used to record fees from other systems. Note: while `amount_cents` is assigned via a donation's designations, `fee_cents` is set here, and used by Giving to distribute fees across all designations in proportion to the amount of each designation.
          */
         fee_cents?: number | null;
+        /**
+         * An optional short note donors can add to specify their gift intention (e.g. "In memory of..."). Only available when enabled by the church for specific funds. Can be set on batch donations when the [memo line feature](https://help.planningcenter.com/en/143011-manage-your-online-donation-form.html#UUID-0949cfc8-d262-e23a-0635-fa100ae331ba_section-id235309330415896-how-do-memo-lines-work-) allows it.
+         */
+        memo?: string | null;
         /**
          * For cards, this is the card brand (eg Visa, Mastercard, etc). For checks and bank accounts, this is the bank name. For cash donations, this should be `null`.
          */
@@ -1477,9 +1485,10 @@ export interface RecurringDonationSchema {
         updated_at: string | null;
     };
     relationships: 'person';
-    includes: 'designations';
+    includes: 'designations' | 'payment_method';
     related: {
         designations: 'recurring_donation_designation';
+        payment_method: 'payment_method';
         person: 'person';
     };
     where: {

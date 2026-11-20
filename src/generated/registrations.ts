@@ -437,7 +437,10 @@ export interface SelectionTypeSchema {
          * Only available when requested with the `?fields` param
          */
         price_formatted: string | null;
-        /** Whether or not the selection type is available to the public. */
+        /**
+         * Whether the selection type is available on Church Center right now. A selection
+         * type scheduled to open later, or one that has closed, is `false`.
+         */
         publicly_available: boolean | null;
         updated_at: string | null;
         /** Whether the selection type offers a waitlist once it is full. */

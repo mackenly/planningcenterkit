@@ -441,7 +441,7 @@ types were generated from in `X-PCO-API-Version`, so responses always match the 
 | Check-Ins | 2025-05-28 |
 | Current | 2018-08-01 |
 | Giving | 2019-10-18 |
-| Groups | 2023-07-10 |
+| Groups | 2026-11-10 |
 | People | 2026-10-05 |
 | Publishing | 2024-03-25 |
 | Registrations | 2025-05-01 |

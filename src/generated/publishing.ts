@@ -18,6 +18,7 @@ export const publishingGraph = {
     rootVertex: 'organization',
     root: {
         announcement_categories: { vertex: 'announcement_category', many: true, canCreate: false },
+        announcement_settings: { vertex: 'announcement_settings', many: false, canCreate: false },
         announcements: { vertex: 'announcement', many: true, canCreate: false },
         channels: { vertex: 'channel', many: true, canCreate: true },
         episodes: { vertex: 'episode', many: true, canCreate: true },
@@ -43,6 +44,14 @@ export const publishingGraph = {
             canUpdate: false,
             canDelete: false,
             canonicalPath: '/publishing/v2/announcement_categories',
+        },
+        announcement_settings: {
+            type: 'AnnouncementSettings',
+            edges: {},
+            actions: [],
+            canUpdate: true,
+            canDelete: false,
+            canonicalPath: '/publishing/v2/announcement_settings',
         },
         announcements_announcement_category: {
             type: 'AnnouncementsAnnouncementCategory',
@@ -143,7 +152,7 @@ export const publishingGraph = {
         organization: {
             type: 'Organization',
             edges: {},
-            actions: [],
+            actions: ['reorder_announcements'],
             canUpdate: false,
             canDelete: false,
         },
@@ -239,6 +248,41 @@ export interface AnnouncementCategorySchema {
     order: 'name';
     create: {};
     update: {};
+    delete: false;
+    actions: never;
+    edges: {};
+}
+
+/**
+ * Type-level schema of {@link AnnouncementSettings}: attributes, query options, writable fields, and edges.
+ *
+ * @see https://api.planningcenteronline.com/docs/apps/publishing/versions/2024-03-25/vertices/announcement_settings
+ */
+export interface AnnouncementSettingsSchema {
+    type: 'AnnouncementSettings';
+    attributes: {
+        /**
+         * How Announcements are sorted. `manual` uses the order set with the `reorder_announcements` action.
+         *
+         * Possible values: `default`, `manual`
+         */
+        announcements_sort_mode: string | null;
+    };
+    relationships: never;
+    includes: never;
+    related: {};
+    where: {};
+    whereOps: {};
+    order: never;
+    create: {};
+    update: {
+        /**
+         * How Announcements are sorted. `manual` uses the order set with the `reorder_announcements` action.
+         *
+         * Possible values: `default`, `manual`
+         */
+        announcements_sort_mode?: string | null;
+    };
     delete: false;
     actions: never;
     edges: {};
@@ -544,6 +588,7 @@ export interface EpisodeSchema {
          * or a signed_identifier from an existing File.
          */
         art: Record<string, unknown> | null;
+        attach_youtube_thumbnail_job_id: string | null;
         church_center_url: string | null;
         created_at: string | null;
         description: string | null;
@@ -595,11 +640,18 @@ export interface EpisodeSchema {
         video_url: string | null;
     };
     relationships: 'series';
-    includes: 'channel' | 'episode_resources' | 'episode_times' | 'series' | 'speakerships';
+    includes:
+        | 'channel'
+        | 'episode_resources'
+        | 'episode_times'
+        | 'note_template'
+        | 'series'
+        | 'speakerships';
     related: {
         channel: 'channel';
         episode_resources: 'episode_resource';
         episode_times: 'episode_time';
+        note_template: 'note_template';
         series: 'series';
         speakerships: 'speakership';
     };
@@ -847,7 +899,7 @@ export interface OrganizationSchema {
     create: {};
     update: {};
     delete: false;
-    actions: never;
+    actions: 'reorder_announcements';
     edges: {};
 }
 
@@ -973,6 +1025,7 @@ export interface SpeakershipSchema {
 export type PublishingSchema = {
     announcement: AnnouncementSchema;
     announcement_category: AnnouncementCategorySchema;
+    announcement_settings: AnnouncementSettingsSchema;
     announcements_announcement_category: AnnouncementsAnnouncementCategorySchema;
     announcements_campus: AnnouncementsCampusSchema;
     channel: ChannelSchema;
@@ -993,6 +1046,7 @@ export type PublishingSchema = {
 /** Edges available from the product root (`/publishing/v2`). */
 export type PublishingRoot = {
     announcement_categories: { vertex: 'announcement_category'; many: true; filters: never; create: false };
+    announcement_settings: { vertex: 'announcement_settings'; many: false; filters: never; create: false };
     announcements: { vertex: 'announcement'; many: true; filters:
         | 'active'
         | 'active_and_scheduled'
@@ -1045,6 +1099,19 @@ export type AnnouncementCategory = PcoResource<AnnouncementCategorySchema>;
  * @see https://api.planningcenteronline.com/docs/apps/publishing/versions/2024-03-25/vertices/announcement_category
  */
 export type AnnouncementCategoryAttributes = AnnouncementCategorySchema['attributes'];
+
+/**
+ * Settings for how an Organization's Announcements are displayed
+ *
+ * @see https://api.planningcenteronline.com/docs/apps/publishing/versions/2024-03-25/vertices/announcement_settings
+ */
+export type AnnouncementSettings = PcoResource<AnnouncementSettingsSchema>;
+/**
+ * Attributes of {@link AnnouncementSettings}.
+ *
+ * @see https://api.planningcenteronline.com/docs/apps/publishing/versions/2024-03-25/vertices/announcement_settings
+ */
+export type AnnouncementSettingsAttributes = AnnouncementSettingsSchema['attributes'];
 
 /**
  * A AnnouncementsAnnouncementCategory resource.
