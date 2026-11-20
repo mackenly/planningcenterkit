@@ -32,51 +32,70 @@ async function main(auth: { applicationId: string; secret: string }): Promise<vo
     interface Option {
         label: string;
         find: () => Promise<{ id: string } | undefined>;
-        create: () => Promise<{ data: { id: string } }>;
+        /** Tried in order until one succeeds; Planning Center's validation isn't documented. */
+        create: Array<() => Promise<{ data: { id: string } }>>;
+        /** When every create attempt fails: skip this option (its link stays unverified) instead of failing. */
+        optional?: boolean;
     }
 
     /** Returns the id of an existing option, or creates one. */
-    async function ensure(option: Option): Promise<string> {
+    async function ensure(option: Option): Promise<string | undefined> {
         const existing = await option.find();
         if (existing) {
             console.log(`  ${option.label}: using existing ${existing.id}`);
             return existing.id;
         }
-        const { data } = await option.create();
-        console.log(`  ${option.label}: created ${data.id}`);
-        return data.id;
+        let lastError: unknown;
+        for (const attempt of option.create) {
+            try {
+                const { data } = await attempt();
+                console.log(`  ${option.label}: created ${data.id}`);
+                return data.id;
+            } catch (error) {
+                if (!(error instanceof PcoApiError) || error.status !== 400 && error.status !== 422) throw error;
+                lastError = error;
+            }
+        }
+        if (!option.optional) throw lastError;
+        console.warn(`  ${option.label}: SKIPPED, Planning Center rejected every attempt (${(lastError as Error).message})`);
+        return undefined;
     }
 
     console.log('Options:');
     const maritalStatusId = await ensure({
         label: 'marital status',
         find: () => pco.people.marital_statuses.first(),
-        create: () => pco.people.marital_statuses.create({ value: 'Married' }),
+        create: [() => pco.people.marital_statuses.create({ value: 'Married' })],
     });
     const namePrefixId = await ensure({
         label: 'name prefix',
         find: () => pco.people.name_prefixes.first(),
-        create: () => pco.people.name_prefixes.create({ value: 'Dr.' }),
+        create: [() => pco.people.name_prefixes.create({ value: 'Dr.' })],
     });
     const nameSuffixId = await ensure({
         label: 'name suffix',
         find: () => pco.people.name_suffixes.first(),
-        create: () => pco.people.name_suffixes.create({ value: 'Jr.' }),
+        create: [() => pco.people.name_suffixes.create({ value: 'Jr.' })],
     });
     const schoolId = await ensure({
         label: 'school',
         find: () => pco.people.school_options.first(),
-        create: () => pco.people.school_options.create({ value: 'Test Elementary' }),
+        create: [
+            () => pco.people.school_options.create({ value: 'Test Elementary', school_types: ['elementary'], beginning_grade: '1', ending_grade: '5' }),
+            () => pco.people.school_options.create({ value: 'Test Elementary', school_types: ['Elementary'], beginning_grade: '1', ending_grade: '5' }),
+            () => pco.people.school_options.create({ value: 'Test Elementary', school_types: ['elementary'] }),
+        ],
+        optional: true,
     });
     const inactiveReasonId = await ensure({
         label: 'inactive reason',
         find: () => pco.people.inactive_reasons.first(),
-        create: () => pco.people.inactive_reasons.create({ value: 'Moved' }),
+        create: [() => pco.people.inactive_reasons.create({ value: 'Moved' })],
     });
     const campusId = await ensure({
         label: 'campus',
         find: () => pco.people.campuses.first(),
-        create: () => pco.people.campuses.create({ name: 'Test Campus' }),
+        create: [() => pco.people.campuses.create({ name: 'Test Campus' })],
     });
 
     type PersonWrite = Parameters<typeof pco.people.people.create>[0];
@@ -118,6 +137,10 @@ async function main(auth: { applicationId: string; secret: string }): Promise<vo
     const { data: seeded, related } = await pco.people.people.where('last_name', MARKER).include(...links).list();
     let missing = 0;
     for (const link of links) {
+        if (link === 'school' && !schoolId) {
+            console.log(`  ${link}: skipped (no school option)`);
+            continue;
+        }
         const holder = seeded.find((p) => related(p, link).length > 0);
         console.log(`  ${link}: ${holder ? `set on ${holder.attributes.first_name} ${MARKER}` : 'NOT SET'}`);
         if (!holder) missing++;
