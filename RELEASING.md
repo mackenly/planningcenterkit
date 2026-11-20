@@ -99,6 +99,18 @@ something new from the spec, teach `scripts/spec-diff.ts` about it too;
   protect `main` later, the patch/minor path will fail to push; either allow the bot to bypass the
   rule or switch that path to a pull request.
 
+## Release notes
+
+Every release creates a GitHub Release. When a release changes `spec/` (any refresh, however it
+was released), its notes start with a **Planning Center API changes** section: `spec-diff`
+against the previous release's tag, grouped into breaking changes, additions, and documentation
+changes per product. A product moving to a new API version appears there as
+`version: API version 2023-07-10 -> 2026-11-10`. GitHub's generated notes (merged PRs, compare
+link) follow.
+
+The section is left out when the spec didn't change, and for the first 1.0.0 release, since the
+0.x tags have no `spec/` to compare against.
+
 ## Cutting 1.0.0
 
 `feature/v1-rewrite` replaces the 0.x API, so its first release must be a major (0.4.x -> 1.0.0).

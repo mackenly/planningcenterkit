@@ -94,6 +94,9 @@ jobs:
             id-token: write
         steps:
             - uses: actions/checkout@v4
+              with:
+                  # Full history and tags, so the release notes can diff against the last release.
+                  fetch-depth: 0
             - name: Set up Node.js
               uses: actions/setup-node@v4
               with:
@@ -117,6 +120,28 @@ jobs:
                   default: patch
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # Release notes lead with what changed in Planning Center's API since the previous
+            # release (spec-diff against that tag): new pinned versions, removed or retyped fields,
+            # additions. Left empty when the spec didn't change, or when the previous tag predates
+            # spec/ (the 0.x -> 1.0 release). GitHub's generated notes follow either way.
+            - name: Summarize Planning Center API changes
+              id: notes
+              env:
+                  NEW_TAG: ${{ steps.versioning.outputs.newTag }}
+              run: |
+                  notes="$RUNNER_TEMP/release-notes.md"
+                  : > "$notes"
+                  prev="$(git describe --tags --abbrev=0 "${NEW_TAG}^" 2>/dev/null || true)"
+                  if [ -n "$prev" ] && git cat-file -e "$prev:spec" 2>/dev/null; then
+                      node scripts/spec-diff.ts --base-ref "$prev" --markdown > "$notes.tmp" || true
+                      if [ -s "$notes.tmp" ] && ! head -1 "$notes.tmp" | grep -q ': none$'; then
+                          mv "$notes.tmp" "$notes"
+                          echo "Release notes include Planning Center API changes since $prev."
+                      fi
+                  else
+                      echo "No spec/ at the previous release (${prev:-none}); skipping the API change summary."
+                  fi
+                  echo "file=$notes" >> "$GITHUB_OUTPUT"
             - name: Publish to GitHub Packages
               run: npm publish --access public
               env:
@@ -136,6 +161,8 @@ jobs:
               with:
                   tag: ${{ steps.versioning.outputs.newTag }}
                   name: ${{ steps.versioning.outputs.newTag }}
+                  # GitHub prepends this body to its generated notes.
+                  bodyFile: ${{ steps.notes.outputs.file }}
                   generateReleaseNotes: true
                   draft: false
                   prerelease: false
