@@ -36,9 +36,9 @@ jobs:
                 node-version: [22.x, 24.x, 26.x]
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version: ${{ matrix.node-version }}
             - run: npm ci
@@ -66,9 +66,9 @@ jobs:
             - name: Skip without credentials
               if: env.PCO_TEST_CLIENT_ID == '' || env.PCO_TEST_SECRET == ''
               run: echo "PCO_TEST_CLIENT_ID / PCO_TEST_SECRET not available; skipping live tests."
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v7
               if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
               with:
                   node-version: '24.x'
@@ -93,12 +93,12 @@ jobs:
             packages: write
             id-token: write
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with:
                   # Full history and tags, so the release notes can diff against the last release.
                   fetch-depth: 0
             - name: Set up Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version: '24.x'
                   registry-url: 'https://npm.pkg.github.com'
@@ -146,7 +146,7 @@ jobs:
               run: npm publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v7
               with:
                   node-version: '24.x'
                   registry-url: 'https://registry.npmjs.org/'

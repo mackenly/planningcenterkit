@@ -20,7 +20,8 @@ A ground-up rewrite. See [Migrating from 0.x](https://planningcenterkit.mackenly
   `param`; `list()`, `all()`, `pages()`, `toArray()`, `first()`, `count()`, `get()`; and
   `related()` for typed access to side-loaded resources.
 - **Typed writes**: `create()`, `update()`, `delete()`, and `action()`, present only where the API
-  supports them, with payloads typed from the documented assignable attributes.
+  supports them, with payloads typed from the documented assignable attributes, including the
+  fields only Planning Center's OpenAPI spec lists (e.g. `marital_status_id` on Person).
 - **Resource types** for every resource, e.g. `People.Person`, `Services.Plan`, `CheckIns.CheckIn`.
 - **Authentication**: personal access tokens, OAuth with automatic (single-flight) refresh and an
   `onTokenRefresh` hook for persisting rotated refresh tokens, and custom token providers.

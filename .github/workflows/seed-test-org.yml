@@ -33,8 +33,8 @@ jobs:
               run: |
                   echo "PCO_TEST_CLIENT_ID / PCO_TEST_SECRET are not available to this run."
                   exit 1
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v7
               with:
                   node-version: '24.x'
             - run: npm ci
