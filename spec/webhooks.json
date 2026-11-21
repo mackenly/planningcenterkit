@@ -1,0 +1,507 @@
+{
+  "basePath": "/webhooks/v2",
+  "entry": "organization",
+  "openApi": true,
+  "product": "webhooks",
+  "slug": "webhooks",
+  "title": "Webhooks",
+  "version": "2022-10-20",
+  "vertices": {
+    "available_event": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "string",
+          "name": "action",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "app",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "resource",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "type",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "version",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": true,
+      "deprecated": false,
+      "description": "An event supported by webhooks",
+      "edges": [],
+      "includes": [],
+      "name": "AvailableEvent",
+      "orders": [],
+      "path": "/webhooks/v2/available_events",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "delivery": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "object_url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "request_body",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "request_headers",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "response_body",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "response_headers",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": 1,
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "integer"
+        },
+        {
+          "description": null,
+          "example": 1.42,
+          "name": "timing",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "float"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [],
+      "includes": [],
+      "name": "Delivery",
+      "orders": [
+        "created_at"
+      ],
+      "path": "/webhooks/v2/webhook_subscriptions/{webhook_subscription_id}/events/{event_id}/deliveries",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Event",
+          "name": "event",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "event": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "ignore",
+          "path": "/webhooks/v2/webhook_subscriptions/{webhook_subscription_id}/events/{event_id}/ignore"
+        },
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "redeliver",
+          "path": "/webhooks/v2/webhook_subscriptions/{webhook_subscription_id}/events/{event_id}/redeliver"
+        }
+      ],
+      "attributes": [
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "payload",
+          "note": "A string encoded JSON object. E.G. `\"{\\\"data\\\":{...}}\"`",
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Possible values: `pending`, `delivered`, `failed`, `skipped`, `duplicated`, `ignored_failed`, `ignored_skipped`, or `ignored_duplicated`",
+          "example": "value",
+          "name": "status",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "uuid",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "delivery",
+          "id": "delivery-event-deliveries",
+          "name": "deliveries",
+          "path": "/webhooks/v2/webhook_subscriptions/{webhook_subscription_id}/events/{event_id}/deliveries",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Event",
+      "orders": [
+        "created_at"
+      ],
+      "path": "/webhooks/v2/webhook_subscriptions/{webhook_subscription_id}/events",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [
+        {
+          "name": "status",
+          "ops": [],
+          "type": "string"
+        },
+        {
+          "name": "uuid",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [
+        {
+          "association": "to_one",
+          "graphType": "Person",
+          "name": "person",
+          "note": null,
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
+          "graphType": "Subscription",
+          "name": "subscription",
+          "note": null,
+          "polymorphic": null
+        }
+      ],
+      "resourceOnly": false
+    },
+    "organization": {
+      "actions": [],
+      "attributes": [
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "available_event",
+          "id": "availableevent-organization-available_events",
+          "name": "available_events",
+          "path": "/webhooks/v2/available_events",
+          "post": false,
+          "response": "collection"
+        },
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "webhook_subscription",
+          "id": "webhooksubscription-organization-webhook_subscriptions",
+          "name": "webhook_subscriptions",
+          "path": "/webhooks/v2/webhook_subscriptions",
+          "post": true,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "Organization",
+      "orders": [],
+      "path": "/webhooks/v2",
+      "permissions": {
+        "canCreate": false,
+        "canDestroy": false,
+        "canUpdate": false,
+        "createAssignable": [],
+        "edges": [],
+        "updateAssignable": []
+      },
+      "queries": [],
+      "relationships": [],
+      "resourceOnly": false
+    },
+    "webhook_subscription": {
+      "actions": [
+        {
+          "deprecated": false,
+          "description": null,
+          "name": "rotate_secret",
+          "path": "/webhooks/v2/webhook_subscriptions/{webhook_subscription_id}/rotate_secret"
+        }
+      ],
+      "attributes": [
+        {
+          "description": null,
+          "example": true,
+          "name": "active",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "boolean"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "application_id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": "Every delivery will include a header `X-PCO-Webhooks-Authenticity`.\n\nThis header will be the `HMAC-SHA256` value of this the `authenticity_secret` used as the key,\nand the message as the webhook body.\n\n`hmac_sha256(authenticity_secret, webhook_body)`",
+          "example": "string",
+          "name": "authenticity_secret",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "created_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "primary_key",
+          "name": "id",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "primary_key"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "name",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        },
+        {
+          "description": null,
+          "example": "2000-01-01T12:00:00Z",
+          "name": "updated_at",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "date_time"
+        },
+        {
+          "description": null,
+          "example": "string",
+          "name": "url",
+          "note": null,
+          "permissionLevel": "public",
+          "type": "string"
+        }
+      ],
+      "collectionOnly": false,
+      "deprecated": false,
+      "description": null,
+      "edges": [
+        {
+          "deprecated": false,
+          "details": null,
+          "filters": [],
+          "head": "event",
+          "id": "event-webhooksubscription-events",
+          "name": "events",
+          "path": "/webhooks/v2/webhook_subscriptions/{webhook_subscription_id}/events",
+          "post": false,
+          "response": "collection"
+        }
+      ],
+      "includes": [],
+      "name": "WebhookSubscription",
+      "orders": [],
+      "path": "/webhooks/v2/webhook_subscriptions",
+      "permissions": {
+        "canCreate": true,
+        "canDestroy": true,
+        "canUpdate": true,
+        "createAssignable": [
+          "active",
+          "name",
+          "url"
+        ],
+        "edges": [
+          "subscription-organization-subscriptions",
+          "webhooksubscription-organization-webhook_subscriptions"
+        ],
+        "updateAssignable": [
+          "active"
+        ]
+      },
+      "queries": [
+        {
+          "name": "application_id",
+          "ops": [],
+          "type": "string"
+        }
+      ],
+      "relationships": [],
+      "resourceOnly": false
+    }
+  }
+}

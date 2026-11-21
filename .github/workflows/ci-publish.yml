@@ -13,37 +13,92 @@ on:
             - main
         paths-ignore:
             - '**/*.md'
+    # Manual releases, and the automatic spec refresh (.github/workflows/refresh-spec.yml), which
+    # dispatches this workflow with the semver level spec-diff computed. See RELEASING.md.
     workflow_dispatch:
+        inputs:
+            version_type:
+                description: 'Version bump: auto reads commit message keywords (see RELEASING.md)'
+                type: choice
+                options:
+                    - auto
+                    - patch
+                    - minor
+                    - major
+                default: auto
 
 jobs:
     build-and-test:
         runs-on: ubuntu-latest
+        timeout-minutes: 15
         strategy:
             matrix:
                 node-version: [22.x, 24.x, 26.x]
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
             - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version: ${{ matrix.node-version }}
-            - run: npm install
-            - run: npm run build
+            - run: npm ci
+            - run: npm run typecheck
             - run: npm test
+            - run: npm run build
 
-    publish:
+    # Read-only tests against a real Planning Center organization. They run only when the
+    # PCO_TEST_CLIENT_ID and PCO_TEST_SECRET repository secrets exist (a personal access token's
+    # application ID and secret). Secrets aren't available to pull requests from forks or
+    # Dependabot, so the job passes without running there. The job itself always runs (its steps
+    # are skipped instead) so `publish`, which needs it, isn't skipped along with it.
+    live:
         needs: build-and-test
         runs-on: ubuntu-latest
+        timeout-minutes: 15
+        # Shares the organization's rate limit with the spec refresh's live run.
+        concurrency:
+            group: pco-live
+            cancel-in-progress: false
+        env:
+            PCO_TEST_CLIENT_ID: ${{ secrets.PCO_TEST_CLIENT_ID }}
+            PCO_TEST_SECRET: ${{ secrets.PCO_TEST_SECRET }}
+        steps:
+            - name: Skip without credentials
+              if: env.PCO_TEST_CLIENT_ID == '' || env.PCO_TEST_SECRET == ''
+              run: echo "PCO_TEST_CLIENT_ID / PCO_TEST_SECRET not available; skipping live tests."
+            - uses: actions/checkout@v7
+              if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
+            - uses: actions/setup-node@v7
+              if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
+              with:
+                  node-version: '24.x'
+            - run: npm ci
+              if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
+            - run: npm run test:live
+              if: env.PCO_TEST_CLIENT_ID != '' && env.PCO_TEST_SECRET != ''
+
+    publish:
+        needs: [build-and-test, live]
+        runs-on: ubuntu-latest
         if: github.repository_owner == 'mackenly' && github.ref == 'refs/heads/main'
+        timeout-minutes: 15
+        # One release at a time, repo-wide: the spec refresh job shares this group, so a refresh
+        # never pushes to main while a release is bumping the version (and vice versa). Queued
+        # runs wait instead of being cancelled mid-publish.
+        concurrency:
+            group: release-main
+            cancel-in-progress: false
         permissions:
             contents: write
             packages: write
             id-token: write
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
+              with:
+                  # Full history and tags, so the release notes can diff against the last release.
+                  fetch-depth: 0
             - name: Set up Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version: '24.x'
                   registry-url: 'https://npm.pkg.github.com'
@@ -55,16 +110,43 @@ jobs:
               uses: phips28/gh-action-bump-version@master
               with:
                   tag-prefix: 'v'
-                  patch-wording: 'bump-patch,fixes,Fixes,bugfix,Bugfix,patch,hotfix,Hotfix'
-                  minor-wording: 'bump-minor,adds,Adds,new'
-                  major-wording: 'bump-major,MAJOR,removes,Removes,delete,Delete'
+                  # Manual dispatch with an explicit level overrides keywords; '' means auto.
+                  version-type: ${{ inputs.version_type != 'auto' && inputs.version_type || '' }}
+                  # Keywords are matched as substrings of the pushed commit messages (major wins,
+                  # then minor; a conventional `type!:` subject is also major). Anything else is
+                  # a patch.
+                  minor-wording: 'feat:,feat(,bump-minor'
+                  major-wording: 'BREAKING CHANGE,bump-major'
+                  default: patch
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # Release notes lead with what changed in Planning Center's API since the previous
+            # release (spec-diff against that tag): new pinned versions, removed or retyped fields,
+            # additions. Left empty when the spec didn't change, or when the previous tag predates
+            # spec/ (the 0.x -> 1.0 release). GitHub's generated notes follow either way.
+            - name: Summarize Planning Center API changes
+              id: notes
+              env:
+                  NEW_TAG: ${{ steps.versioning.outputs.newTag }}
+              run: |
+                  notes="$RUNNER_TEMP/release-notes.md"
+                  : > "$notes"
+                  prev="$(git describe --tags --abbrev=0 "${NEW_TAG}^" 2>/dev/null || true)"
+                  if [ -n "$prev" ] && git cat-file -e "$prev:spec" 2>/dev/null; then
+                      node scripts/spec-diff.ts --base-ref "$prev" --markdown > "$notes.tmp" || true
+                      if [ -s "$notes.tmp" ] && ! head -1 "$notes.tmp" | grep -q ': none$'; then
+                          mv "$notes.tmp" "$notes"
+                          echo "Release notes include Planning Center API changes since $prev."
+                      fi
+                  else
+                      echo "No spec/ at the previous release (${prev:-none}); skipping the API change summary."
+                  fi
+                  echo "file=$notes" >> "$GITHUB_OUTPUT"
             - name: Publish to GitHub Packages
               run: npm publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v7
               with:
                   node-version: '24.x'
                   registry-url: 'https://registry.npmjs.org/'
@@ -79,6 +161,8 @@ jobs:
               with:
                   tag: ${{ steps.versioning.outputs.newTag }}
                   name: ${{ steps.versioning.outputs.newTag }}
+                  # GitHub prepends this body to its generated notes.
+                  bodyFile: ${{ steps.notes.outputs.file }}
                   generateReleaseNotes: true
                   draft: false
                   prerelease: false

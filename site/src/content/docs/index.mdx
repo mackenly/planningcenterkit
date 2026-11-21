@@ -1,0 +1,69 @@
+---
+title: Unofficial Planning Center Kit
+description: An unofficial, fully typed, zero-dependency TypeScript client for every Planning Center API, generated from Planning Center's own API documentation.
+sidebar:
+  order: 0
+  label: Overview
+---
+
+`@mackenly/planningcenterkit` is a fully typed, zero-dependency TypeScript client for every Planning Center API: People, Services, Check-Ins, Groups, Giving, Calendar, Registrations, Publishing, Current, Webhooks, and the API product.
+
+<Aside type="note" title="Unofficial">
+  <Render file="unofficial" />
+</Aside>
+
+```ts
+import { PlanningCenter } from '@mackenly/planningcenterkit';
+
+const pco = new PlanningCenter({
+    auth: { applicationId: process.env.PCO_APP_ID!, secret: process.env.PCO_SECRET! },
+});
+
+for await (const person of pco.people.people.where('status', 'active').order('last_name').all()) {
+    console.log(person.attributes.name); // string | null
+}
+```
+
+## Install
+
+<PackageManagers pkg="@mackenly/planningcenterkit" />
+
+Runs on Node.js 22+, Bun, Deno, Cloudflare Workers, Vercel, and any runtime with `fetch`, `AbortSignal`, and WebCrypto.
+
+## Why Planning Center Kit
+
+- **Every product, every resource.** All 11 Planning Center products are generated from Planning Center's published API documentation, so every resource, edge, include, `where` field, `order` field, filter, and action is there.
+- **Types for everything.** Attribute types, create and update payloads, valid query names, and the resources you read from `included` are typed and autocompleted. Typos fail at compile time.
+- **Names match Planning Center's docs.** Edges and attributes are `snake_case` exactly as in Planning Center's reference.
+- **Handles the hard parts.** Automatic pagination, rate limiting from Planning Center's headers, `Retry-After`, retries with backoff, timeouts, and `AbortSignal` support.
+- **OAuth done right.** Automatic token refresh with rotating refresh tokens, an `onTokenRefresh` hook to persist them, and helpers for the authorization flow with PKCE.
+- **Webhooks.** Constant-time signature verification with WebCrypto and typed event parsing.
+- **Zero dependencies.** ESM and CommonJS builds, tree-shakeable per-product imports, and npm packages published with provenance.
+
+## Where to go next
+
+<CardGrid>
+  <Card title="Getting started" icon="ph:rocket-launch">
+    Install, get credentials, and make your [first queries and writes](/guides/getting-started/).
+  </Card>
+  <Card title="Querying" icon="ph:funnel">
+    [Filter, include, sort, paginate](/guides/querying/), and follow nested resources.
+  </Card>
+  <Card title="Authentication" icon="ph:key">
+    [Personal access tokens and OAuth](/guides/authentication/) with PKCE and token rotation.
+  </Card>
+  <Card title="Reference" icon="ph:books">
+    [Every product and resource](/reference/): client paths, attributes, query options, and writes.
+  </Card>
+</CardGrid>
+
+## For AI agents
+
+This site publishes itself for coding agents:
+
+- [`/llms.txt`](/llms.txt) indexes every page's Markdown version, and every page URL answers `Accept: text/markdown`.
+- A remote MCP server at `https://planningcenterkit.mackenly.com/mcp` (Streamable HTTP, no key) serves `list_pages` and `get_page`.
+- Agent Skills for using the client, receiving webhooks, and running the OAuth flow are listed at [`/.well-known/agent-skills/index.json`](/.well-known/agent-skills/index.json).
+
+
+The npm package also ships `AGENTS.md` and `llms.txt` for agents working in your project.

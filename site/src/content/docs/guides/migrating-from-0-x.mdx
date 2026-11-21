@@ -1,0 +1,148 @@
+---
+title: "Migrating from 0.x"
+description: "Move from the 0.x PcoPeople client to the 1.0 PlanningCenter client."
+sidebar:
+  order: 9
+---
+
+Version 1.0 is a ground-up rewrite. The 0.x releases exposed a single hand-written `PcoPeople`
+class; 1.0 generates a typed client for every resource in all 11 Planning Center products. Nothing
+from the 0.x API is kept, but the mapping is mechanical.
+
+## At a glance
+
+| 0.x | 1.0 |
+| --- | --- |
+| `import { PcoPeople } from '@mackenly/planningcenterkit'` | `import { PlanningCenter } from '@mackenly/planningcenterkit'` |
+| `new PcoPeople({ appId, personalAccessToken })` | `new PlanningCenter({ auth: { applicationId, secret } })` |
+| `new PcoPeople({ token, clientId, clientSecret, refreshToken, expiresAt })` | `new PlanningCenter({ auth: { accessToken, clientId, clientSecret, refreshToken, expiresAt, onTokenRefresh } })` |
+| `customApiBaseUrl` | `baseUrl` |
+| `version` (one version for everything, default `2024-06-09`) | Each product pinned to its own documented version; override with `versions: { people: '...' }` |
+| `client.getPerson()` | `pco.people.people.list()` (one page) or `.all()` (every page) |
+| `.include(['emails', 'addresses'])` | `.include('emails', 'addresses')` |
+| `.where('first_name', '=', 'Ada')` | `.where('first_name', 'Ada')` |
+| `.where('created_at', '[gte]=', '2026-01-01')` | `.where('created_at', 'gte', '2026-01-01')` |
+| `.orderBy('last_name', 'desc')` | `.order('-last_name')` |
+| `.orderBy('last_name', 'asc')` | `.order('last_name')` |
+| `.paginate(limit, offset)` | `.perPage(n).offset(n)`, or let `all()` paginate |
+| `client.get('/people/v2/...')` | `pco.request({ method: 'GET', path: '/people/v2/...' })` |
+| `client.post(endpoint, body)` / `patch` / `delete` | `pco.request({ method: 'POST', path, body })`, or the typed `create()`, `update()`, `delete()` |
+| `PcoClient.getExpiration(expiresIn)` | `tokens.expiresAt` from the OAuth helpers, or `normalizeTokens(raw).expiresAt` |
+| `throw new Error('API request failed with status 404 ...')` | `PcoNotFoundError` and the other typed error classes |
+
+## Client setup
+
+Before:
+
+```js
+import { PcoPeople } from '@mackenly/planningcenterkit';
+
+const client = new PcoPeople({ appId: process.env.PCO_APP_ID, personalAccessToken: process.env.PCO_SECRET });
+```
+
+After:
+
+```ts
+import { PlanningCenter } from '@mackenly/planningcenterkit';
+
+const pco = new PlanningCenter({
+    auth: { applicationId: process.env.PCO_APP_ID!, secret: process.env.PCO_SECRET! },
+});
+```
+
+`appId` is now `applicationId`, and `personalAccessToken` is `secret` (the token's secret).
+
+For OAuth, `token` is now `accessToken`. The new client refreshes tokens itself, and because
+Planning Center refresh tokens rotate, you should add `onTokenRefresh` to save the new ones; see
+[Authentication](/guides/authentication/#oauth).
+
+## Queries
+
+The old client kept query state on the instance, so a `where` or `include` leaked into the next
+call. Builders are now immutable and start from the collection you query:
+
+Before:
+
+```js
+const people = await client
+    .include(['emails'])
+    .where('search_name_or_email', '=', 'ada@example.com')
+    .orderBy('created_at', 'desc')
+    .paginate(25, 0)
+    .getPerson();
+// people.data, people.included, people.meta
+```
+
+After:
+
+```ts
+const people = await pco.people.people
+    .include('emails')
+    .where('search_name_or_email', 'ada@example.com')
+    .order('-created_at')
+    .perPage(25)
+    .list();
+// people.data, people.included, people.meta, plus people.related(), people.totalCount, people.nextOffset
+```
+
+Differences to watch for:
+
+- **Order direction.** In 0.x, `orderBy(field, 'asc')` sent `-field`, which Planning Center treats
+  as *descending*, and `'desc'` sent `field` (ascending). 1.0 uses Planning Center's own syntax:
+  `order('field')` is ascending and `order('-field')` is descending. Check any sorted queries.
+- **Defaults.** 0.x always sent `order=created_at`, `limit=10`, and `offset=0`. 1.0 sends only
+  what you set, so Planning Center's defaults apply (25 per page; `all()` uses 100).
+- **Operators.** 0.x pasted the operator string into the URL. 1.0 takes `'gt' | 'gte' | 'lt' | 'lte'`
+  and only on fields that support comparison.
+- **Every product.** `getPerson()` covered only `/people/v2/people`. Now every collection and
+  nested edge has its own typed builder: `pco.people.households`, `pco.services.service_types.id('1').plans`,
+  `pco.checkIns.check_ins`, and so on. See [Querying](/guides/querying/).
+
+## Raw requests
+
+`get`, `post`, `patch`, and `delete` on the client become one `request()` that is authenticated,
+rate limited, and retried. Query parameters go in `query` instead of the URL, and the body is a
+plain object (it's serialized for you):
+
+```ts
+const doc = await pco.request({ method: 'GET', path: '/people/v2/people', query: { 'where[first_name]': 'Ada' } });
+await pco.request({
+    method: 'PATCH',
+    path: '/people/v2/people/123',
+    body: { data: { type: 'Person', id: '123', attributes: { nickname: 'Ada' } } },
+});
+```
+
+Raw requests don't send an API version header unless you pass `version`. Prefer the typed methods
+where they exist:
+
+```ts
+await pco.people.people.id('123').update({ nickname: 'Ada' });
+```
+
+## Errors
+
+0.x threw a plain `Error` with the status in the message. 1.0 throws typed errors with the
+parsed response:
+
+```ts
+import { PcoApiError, PcoNotFoundError, PcoValidationError } from '@mackenly/planningcenterkit';
+
+try {
+    await pco.people.people.id('123').update({ first_name: '' });
+} catch (err) {
+    if (err instanceof PcoNotFoundError) console.log('gone');
+    else if (err instanceof PcoValidationError) console.log(err.fieldErrors);
+    else if (err instanceof PcoApiError) console.log(err.status, err.errors);
+    else throw err;
+}
+```
+
+See [Errors and retries](/guides/errors-and-retries/).
+
+## Packaging
+
+- Node.js 22 or newer is required (or Bun, Deno, Workers).
+- The package ships ESM and CommonJS builds with `exports`; deep imports into `dist/` are no longer
+  supported. Use the documented subpaths (`/people`, `/webhooks`, `/oauth`, ...) instead.
+- The package has no runtime dependencies.

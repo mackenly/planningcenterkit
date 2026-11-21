@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Written by examples/oauth-flow.ts
+.pco-tokens.json
