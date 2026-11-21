@@ -1,31 +1,68 @@
 name: Docs
 
+# Pull requests build and test the docs; pushes to main (and dispatches, such as the spec
+# refresh's) test them and then deploy.
 on:
     push:
         branches:
             - main
-        paths:
+        paths: &docs-paths
             - 'site/**'
             - 'spec/**'
             - 'scripts/generate-reference.ts'
+            - 'scripts/docs-smoke.ts'
             - 'README.md'
             - '.github/workflows/docs.yml'
+    pull_request:
+        branches:
+            - main
+        paths: *docs-paths
     workflow_dispatch:
 
 permissions:
     contents: read
 
-# One deployment at a time; don't cancel a deployment that's already running.
-concurrency:
-    group: docs-deploy
-    cancel-in-progress: false
-
 jobs:
-    deploy:
+    # Builds the site, then serves the build with `wrangler dev` (local; no Cloudflare account) and
+    # checks every page, link, Markdown version, and agent endpoint. See scripts/docs-smoke.ts.
+    test:
         runs-on: ubuntu-latest
         timeout-minutes: 20
         steps:
             # Full history: "Last updated" dates and the sitemap come from git.
+            - uses: actions/checkout@v7
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: '24.x'
+                  cache: npm
+                  cache-dependency-path: |
+                      package-lock.json
+                      site/package-lock.json
+            - run: npm ci
+            - run: npm ci
+              working-directory: site
+            # Generates the reference pages from spec/, then builds the site.
+            - run: npm run docs:build
+            # Astro and TypeScript diagnostics.
+            - run: npm run typecheck
+              working-directory: site
+            # Nimbus's preflight: config, routes, MDX components, and the lint rules in astro.config.ts.
+            - run: npx @cloudflare/nimbus-docs check
+              working-directory: site
+            - run: npm run docs:smoke
+
+    deploy:
+        needs: test
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        # One deployment at a time; don't cancel a deployment that's already running.
+        concurrency:
+            group: docs-deploy
+            cancel-in-progress: false
+        steps:
             - uses: actions/checkout@v7
               with:
                   fetch-depth: 0

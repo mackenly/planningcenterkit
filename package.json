@@ -61,7 +61,8 @@
     "docs:dev": "npm run docs:reference && npm --prefix site run dev",
     "docs:build": "npm run docs:reference && npm --prefix site run build",
     "test:live": "vitest run --config vitest.live.config.ts",
-    "seed:test-org": "npm run build && node scripts/seed-test-org.ts"
+    "seed:test-org": "npm run build && node scripts/seed-test-org.ts",
+    "docs:smoke": "node scripts/docs-smoke.ts"
   },
   "repository": {
     "type": "git",
