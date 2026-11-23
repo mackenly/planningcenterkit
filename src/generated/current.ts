@@ -110,7 +110,7 @@ type AssertRoot<T extends RootSchema> = T;
 type SchemaCheck = [AssertSchema<CurrentSchema>, AssertRoot<CurrentRoot>];
 
 /**
- * A Organization resource.
+ * The Planning Center organization for the authenticated person.
  *
  * @see https://api.planningcenteronline.com/docs/apps/current/versions/2018-08-01/vertices/organization
  */
@@ -123,7 +123,7 @@ export type Organization = PcoResource<OrganizationSchema>;
 export type OrganizationAttributes = OrganizationSchema['attributes'];
 
 /**
- * A Person resource.
+ * The authenticated person.
  *
  * @see https://api.planningcenteronline.com/docs/apps/current/versions/2018-08-01/vertices/person
  */

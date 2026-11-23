@@ -660,7 +660,9 @@ export interface GroupSchema {
     delete: false;
     actions: 'assign_campuses' | 'disable_chat' | 'duplicate' | 'enable_chat';
     edges: {
-        /** requests to join this group */
+        /**
+         * requests to join this group; leaders without church database access only get pending requests
+         */
         applications: { vertex: 'group_application'; many: true; filters: never; create: false };
         /** campuses assigned this group */
         campuses: { vertex: 'campus'; many: true; filters: never; create: false };
@@ -863,9 +865,10 @@ export interface MembershipSchema {
          */
         role: string | null;
     };
-    relationships: 'group' | 'person';
+    relationships: 'created_by' | 'group' | 'person';
     includes: 'group' | 'person';
     related: {
+        created_by: 'person';
         group: 'group';
         person: 'person';
     };
@@ -1215,7 +1218,9 @@ export type GroupsRoot = {
         | 'my_groups'
         | 'not_canceled'
         | 'upcoming'; create: false };
-    /** requests to join groups for this organization */
+    /**
+     * requests to join groups for this organization; leaders without church database access only get pending requests
+     */
     group_applications: { vertex: 'group_application'; many: true; filters: never; create: false };
     /** group types for this organization */
     group_types: { vertex: 'group_type'; many: true; filters: 'church_center_visible' | 'not_church_center_visible'; create: false };

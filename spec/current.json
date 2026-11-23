@@ -45,7 +45,7 @@
       ],
       "collectionOnly": false,
       "deprecated": false,
-      "description": null,
+      "description": "The Planning Center organization for the authenticated person.",
       "edges": [
         {
           "deprecated": false,
@@ -113,7 +113,7 @@
       ],
       "collectionOnly": false,
       "deprecated": false,
-      "description": null,
+      "description": "The authenticated person.",
       "edges": [
         {
           "deprecated": false,

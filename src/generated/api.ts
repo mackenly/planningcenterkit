@@ -304,7 +304,7 @@ type AssertRoot<T extends RootSchema> = T;
 type SchemaCheck = [AssertSchema<ApiSchema>, AssertRoot<ApiRoot>];
 
 /**
- * A ConnectedApplication resource.
+ * An OAuth application listed under External connections.
  *
  * @see https://api.planningcenteronline.com/docs/apps/api/versions/2026-09-24/vertices/connected_application
  */
@@ -317,7 +317,7 @@ export type ConnectedApplication = PcoResource<ConnectedApplicationSchema>;
 export type ConnectedApplicationAttributes = ConnectedApplicationSchema['attributes'];
 
 /**
- * A ConnectedApplicationPerson resource.
+ * A person who has connected this application to Planning Center.
  *
  * @see https://api.planningcenteronline.com/docs/apps/api/versions/2026-09-24/vertices/connected_application_person
  */
@@ -330,7 +330,7 @@ export type ConnectedApplicationPerson = PcoResource<ConnectedApplicationPersonS
 export type ConnectedApplicationPersonAttributes = ConnectedApplicationPersonSchema['attributes'];
 
 /**
- * A OauthApplication resource.
+ * An external application registered with Planning Center for OAuth access.
  *
  * @see https://api.planningcenteronline.com/docs/apps/api/versions/2026-09-24/vertices/oauth_application
  */
@@ -362,7 +362,7 @@ export type OauthApplicationMau = PcoResource<OauthApplicationMauSchema>;
 export type OauthApplicationMauAttributes = OauthApplicationMauSchema['attributes'];
 
 /**
- * A Organization resource.
+ * The Planning Center organization for this request.
  *
  * @see https://api.planningcenteronline.com/docs/apps/api/versions/2026-09-24/vertices/organization
  */
@@ -375,7 +375,7 @@ export type Organization = PcoResource<OrganizationSchema>;
 export type OrganizationAttributes = OrganizationSchema['attributes'];
 
 /**
- * A Person resource.
+ * A person with a profile in your Planning Center organization.
  *
  * @see https://api.planningcenteronline.com/docs/apps/api/versions/2026-09-24/vertices/person
  */
@@ -388,7 +388,7 @@ export type Person = PcoResource<PersonSchema>;
 export type PersonAttributes = PersonSchema['attributes'];
 
 /**
- * A PersonalAccessToken resource.
+ * A token that lets a person make API requests using their own Planning Center account.
  *
  * @see https://api.planningcenteronline.com/docs/apps/api/versions/2026-09-24/vertices/personal_access_token
  */

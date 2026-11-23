@@ -943,7 +943,7 @@
       "edges": [
         {
           "deprecated": false,
-          "details": "requests to join this group",
+          "details": "requests to join this group; leaders without church database access only get pending requests",
           "filters": [],
           "head": "group_application",
           "id": "groupapplication-group-applications",
@@ -1645,6 +1645,13 @@
       "relationships": [
         {
           "association": "to_one",
+          "graphType": "Person",
+          "name": "created_by",
+          "note": "The person who added this member to the group.",
+          "polymorphic": null
+        },
+        {
+          "association": "to_one",
           "graphType": "Group",
           "name": "group",
           "note": null,
@@ -1735,7 +1742,7 @@
         },
         {
           "deprecated": false,
-          "details": "requests to join groups for this organization",
+          "details": "requests to join groups for this organization; leaders without church database access only get pending requests",
           "filters": [],
           "head": "group_application",
           "id": "groupapplication-organization-group_applications",

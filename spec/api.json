@@ -45,7 +45,7 @@
       ],
       "collectionOnly": false,
       "deprecated": false,
-      "description": null,
+      "description": "An OAuth application listed under External connections.",
       "edges": [
         {
           "deprecated": false,
@@ -137,7 +137,7 @@
       ],
       "collectionOnly": false,
       "deprecated": false,
-      "description": null,
+      "description": "A person who has connected this application to Planning Center.",
       "edges": [],
       "includes": [],
       "name": "ConnectedApplicationPerson",
@@ -199,7 +199,7 @@
       ],
       "collectionOnly": false,
       "deprecated": false,
-      "description": null,
+      "description": "An external application registered with Planning Center for OAuth access.",
       "edges": [
         {
           "deprecated": false,
@@ -311,7 +311,7 @@
       ],
       "collectionOnly": false,
       "deprecated": false,
-      "description": null,
+      "description": "The Planning Center organization for this request.",
       "edges": [
         {
           "deprecated": false,
@@ -403,7 +403,7 @@
       ],
       "collectionOnly": false,
       "deprecated": false,
-      "description": null,
+      "description": "A person with a profile in your Planning Center organization.",
       "edges": [],
       "includes": [],
       "name": "Person",
@@ -474,7 +474,7 @@
       ],
       "collectionOnly": false,
       "deprecated": false,
-      "description": null,
+      "description": "A token that lets a person make API requests using their own Planning Center account.",
       "edges": [
         {
           "deprecated": false,
