@@ -22,6 +22,7 @@ npm run spec:diff      # semver impact of spec/ changes vs HEAD
 npm run test:live      # read-only live tests; needs PCO_TEST_CLIENT_ID and PCO_TEST_SECRET, never log them
 npm run seed:test-org  # WRITES test people (last name PCK-Test) to that org for the live tests; idempotent
 npm run docs:dev       # docs site locally
+npm run docs:smoke     # after docs:build: serves site/dist with wrangler dev, checks every page, link, and agent endpoint
 ```
 
 ## Rules

@@ -277,11 +277,26 @@ function escapeProse(text: string): string {
     return text.replace(/\\/g, '\\\\').replace(/[{}]/g, (c) => `\\${c}`).replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/**
+ * Sections of Planning Center's own docs that its descriptions link to as `[text](#anchor)`. Those
+ * anchors don't exist on our pages, so known ones point at Planning Center's page and the rest
+ * become plain text (`npm run docs:smoke` fails on a broken anchor).
+ */
+const PCO_ANCHORS: Record<string, string> = {
+    'file-uploads': 'https://api.planningcenteronline.com/docs/overview/file-uploads',
+};
+
+function pcoAnchors(text: string): string {
+    return text.replace(/\[([^\]]+)\]\(#([^)\s]+)\)/g, (_, label: string, anchor: string) =>
+        PCO_ANCHORS[anchor] ? `[${label}](${PCO_ANCHORS[anchor]})` : label,
+    );
+}
+
 /** Escapes inline text, leaving `code spans` as they are. */
 function inline(text: string): string {
     return text
         .split(/(`[^`]*`)/g)
-        .map((part, i) => (i % 2 === 1 ? part : escapeProse(part)))
+        .map((part, i) => (i % 2 === 1 ? part : escapeProse(pcoAnchors(part))))
         .join('');
 }
 
